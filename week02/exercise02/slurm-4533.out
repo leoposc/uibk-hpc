@@ -1,0 +1,15 @@
+N=8192
+T=4096000
+R=8
+0:PROC=n001.intern.lcc3.intra.uibk.ac.at
+1:PROC=n001.intern.lcc3.intra.uibk.ac.at
+2:PROC=n001.intern.lcc3.intra.uibk.ac.at
+3:PROC=n001.intern.lcc3.intra.uibk.ac.at
+4:PROC=n001.intern.lcc3.intra.uibk.ac.at
+5:PROC=n001.intern.lcc3.intra.uibk.ac.at
+6:PROC=n001.intern.lcc3.intra.uibk.ac.at
+7:PROC=n001.intern.lcc3.intra.uibk.ac.at
+X+++++***^^XX##%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++===::----......                                                   X
+Verification: OK
+Hash: 2358914.331088
+Time: 10.746035s

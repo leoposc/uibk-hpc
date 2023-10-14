@@ -1,0 +1,11 @@
+N=1024
+T=512000
+R=4
+0:PROC=n001.intern.lcc3.intra.uibk.ac.at
+1:PROC=n001.intern.lcc3.intra.uibk.ac.at
+2:PROC=n001.intern.lcc3.intra.uibk.ac.at
+3:PROC=n001.intern.lcc3.intra.uibk.ac.at
+X@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%#####XXXXX^^^^^^*******++++++++++========X
+Verification: OK
+Hash: 316329.140332
+Time: 0.533484s

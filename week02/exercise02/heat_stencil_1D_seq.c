@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef double value_t;
 
@@ -25,6 +26,8 @@ int main(int argc, char **argv) {
   }
   int T = N * 500;
   printf("Computing heat-distribution for room size N=%d for T=%d timesteps\n", N, T);
+
+  clock_t t_start = clock();
 
   // ---------- setup ----------
 
@@ -85,6 +88,8 @@ int main(int argc, char **argv) {
 
   releaseVector(B);
 
+  clock_t t_stop = clock();
+
   // ---------- check ----------
 
   printf("Final:\t\t");
@@ -104,6 +109,7 @@ int main(int argc, char **argv) {
 
   printf("Verification: %s\n", (success) ? "OK" : "FAILED");
   printf("Hash: %lf\n", hash);
+  printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
 
   // ---------- cleanup ----------
 

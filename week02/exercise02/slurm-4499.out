@@ -1,0 +1,23 @@
+N=256
+T=128000
+R=16
+0:PROC=n001.intern.lcc3.intra.uibk.ac.at
+1:PROC=n001.intern.lcc3.intra.uibk.ac.at
+2:PROC=n001.intern.lcc3.intra.uibk.ac.at
+3:PROC=n001.intern.lcc3.intra.uibk.ac.at
+4:PROC=n001.intern.lcc3.intra.uibk.ac.at
+5:PROC=n001.intern.lcc3.intra.uibk.ac.at
+6:PROC=n001.intern.lcc3.intra.uibk.ac.at
+7:PROC=n001.intern.lcc3.intra.uibk.ac.at
+8:PROC=n001.intern.lcc3.intra.uibk.ac.at
+9:PROC=n001.intern.lcc3.intra.uibk.ac.at
+10:PROC=n001.intern.lcc3.intra.uibk.ac.at
+11:PROC=n002.intern.lcc3.intra.uibk.ac.at
+12:PROC=n002.intern.lcc3.intra.uibk.ac.at
+13:PROC=n002.intern.lcc3.intra.uibk.ac.at
+14:PROC=n002.intern.lcc3.intra.uibk.ac.at
+15:PROC=n002.intern.lcc3.intra.uibk.ac.at
+X@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@X
+Verification: OK
+Hash: 83584.349965
+Time: 0.236452s

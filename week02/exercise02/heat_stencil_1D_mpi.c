@@ -45,6 +45,17 @@ int main(int argc, char **argv) {
   int size;
   MPI_Comm_size(comm, &size);
 
+  if (rank == 0) {
+    printf("N=%d\n", N);
+    printf("T=%d\n", T);
+    printf("R=%d\n", size);
+  }
+
+  char processor_name[MPI_MAX_PROCESSOR_NAME];
+  int name_len;
+  MPI_Get_processor_name(processor_name, &name_len);
+  printf("%d:PROC=%s\n", rank, processor_name);
+
   clock_t t_start = clock();
 
   // ----- overall simulation parameters ------
@@ -72,15 +83,6 @@ int main(int argc, char **argv) {
   if (source_offset >= 0 && source_offset < K) {
     A[source_offset + 1] = source_heat;
   }
-
-/*
-  printf("%d: intialized\n", rank);
-  printf("%d: K=%d\n", rank, K);
-  printf("%d: from=%d\n", rank, index_offset);
-  printf("%d: to=%d\n", rank, index_offset + K);
-  printf("%d: left_neighbor=%d\n", rank, left_neighbor);
-  printf("%d: right_neighbor=%d\n", rank, right_neighbor);
-*/
 
   // create a second buffer for the computation
   Vector B = createVector(K + 2);
@@ -110,12 +112,12 @@ int main(int argc, char **argv) {
       B[i] = tc + 0.2 * (tl + tr + (-2 * tc));
     }
 
-    // set the left most border
+    // set the left border for task 0 (has no left neightbor)
     if (rank == 0) {
       B[0] = B[1];
     }
     
-    // set the right most border
+    // set the right border for the last task (has no right neighbor)
     if (rank == size - 1) {
       B[K+1] = B[K];
     }
@@ -125,9 +127,7 @@ int main(int argc, char **argv) {
     A = B;
     B = H;
 
-    // ----- MPI exchange border tiles with neighbors ------
-
-    // MPI_Barrier(comm);
+    // ----- exchange border tiles with neighboring ranks ------
 
     // send the left-most value to the left neighbor
     if (left_neighbor >= 0) {
@@ -140,8 +140,6 @@ int main(int argc, char **argv) {
       double right_value = A[K];
       MPI_Send(&right_value, 1, MPI_DOUBLE, right_neighbor, rank, comm);
     }
-
-    // MPI_Barrier(comm);
 
     // wait for the right-most value of the left neighbor
     if (left_neighbor >= 0) {
@@ -158,12 +156,13 @@ int main(int argc, char **argv) {
     }
   }
 
+  // allocate memory on the root rank
   Vector final = NULL;
   if (rank == 0) {
     final = createVector(N);
   }
 
-  // collect the final results
+  // collect the final results from each rank
   MPI_Gather(&A[1], K, MPI_DOUBLE, final, K, MPI_DOUBLE, 0, comm);
 
   clock_t t_stop = clock();
