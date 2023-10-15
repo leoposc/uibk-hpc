@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
       // print the merged array on the root node
       if (rank == 0) {
         printf("Step t=%d:\t", t);
-        printTemperature(A, N);
+        printTemperature(merged, N);
         printf("\n");
       }
     }
