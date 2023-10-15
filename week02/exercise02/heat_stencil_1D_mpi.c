@@ -17,8 +17,6 @@ void releaseVector(Vector m);
 
 void printTemperature(Vector m, int N);
 
-void printNumbers(Vector m, int N);
-
 // -- simulation code ---
 
 int main(int argc, char **argv) {
@@ -45,6 +43,13 @@ int main(int argc, char **argv) {
   int size;
   MPI_Comm_size(comm, &size);
 
+  // print basic configuration
+  if (rank == 0) {
+    printf("N=%d\n", N);
+    printf("T=%d\n", T);
+    printf("R=%d\n", size);
+  }
+
   clock_t t_start = clock();
 
   // ----- overall simulation parameters ------
@@ -53,7 +58,7 @@ int main(int argc, char **argv) {
   int source_x = N / 4;
   int source_heat = base_heat + 60;
 
-  // ---------- setup (same on each node) ----------
+  // ----- setup (same on each node) -----
 
   int K = N / size;
   int index_offset = rank * K;
@@ -67,23 +72,20 @@ int main(int argc, char **argv) {
     A[i] = base_heat;
   }
 
-  // set the heat source, if present
+  // set the heat source on the current rank, if present
   long source_offset = source_x - index_offset;
   if (source_offset >= 0 && source_offset < K) {
     A[source_offset + 1] = source_heat;
   }
 
-/*
-  printf("%d: intialized\n", rank);
-  printf("%d: K=%d\n", rank, K);
-  printf("%d: from=%d\n", rank, index_offset);
-  printf("%d: to=%d\n", rank, index_offset + K);
-  printf("%d: left_neighbor=%d\n", rank, left_neighbor);
-  printf("%d: right_neighbor=%d\n", rank, right_neighbor);
-*/
-
   // create a second buffer for the computation
   Vector B = createVector(K + 2);
+
+  // allocate memory for the merged array on the root rank
+  Vector merged = NULL;
+  if (rank == 0) {
+    merged = createVector(N);
+  }
 
   // ------ actual computation ------
 
@@ -103,21 +105,21 @@ int main(int argc, char **argv) {
       value_t tc = A[i];
 
       // get temperatures of adjacent cells
-      value_t tl = A[i-1];
-      value_t tr = A[i+1];
+      value_t tl = A[i - 1];
+      value_t tr = A[i + 1];
 
       // compute new temperature at current position
       B[i] = tc + 0.2 * (tl + tr + (-2 * tc));
     }
 
-    // set the left most border
+    // set the left border for task 0 (has no left neightbor)
     if (rank == 0) {
       B[0] = B[1];
     }
-    
-    // set the right most border
+
+    // set the right border for the last task (has no right neighbor)
     if (rank == size - 1) {
-      B[K+1] = B[K];
+      B[K + 1] = B[K];
     }
 
     // swap matrices (just pointers, not content)
@@ -125,9 +127,21 @@ int main(int argc, char **argv) {
     A = B;
     B = H;
 
-    // ----- MPI exchange border tiles with neighbors ------
+    // show intermediate step
+    if (!(t % 10000)) {
 
-    // MPI_Barrier(comm);
+      // merge all sub-arrays into a single one
+      MPI_Gather(&A[1], K, MPI_DOUBLE, merged, K, MPI_DOUBLE, 0, comm);
+
+      // print the merged array on the root node
+      if (rank == 0) {
+        printf("Step t=%d:\t", t);
+        printTemperature(merged, N);
+        printf("\n");
+      }
+    }
+
+    // ----- exchange border tiles with neighboring ranks -----
 
     // send the left-most value to the left neighbor
     if (left_neighbor >= 0) {
@@ -141,44 +155,36 @@ int main(int argc, char **argv) {
       MPI_Send(&right_value, 1, MPI_DOUBLE, right_neighbor, rank, comm);
     }
 
-    // MPI_Barrier(comm);
-
     // wait for the right-most value of the left neighbor
     if (left_neighbor >= 0) {
       double left_value;
-      MPI_Recv(&left_value, 1, MPI_DOUBLE, left_neighbor, left_neighbor, comm, MPI_STATUS_IGNORE);
+      MPI_Recv(&left_value, 1, MPI_DOUBLE, left_neighbor, left_neighbor, comm,
+               MPI_STATUS_IGNORE);
       A[0] = left_value;
     }
 
     // wait for the left-most value of the right neighbor
     if (right_neighbor < size) {
       double right_value;
-      MPI_Recv(&right_value, 1, MPI_DOUBLE, right_neighbor, right_neighbor, comm, MPI_STATUS_IGNORE);
-      A[K+1] = right_value;
+      MPI_Recv(&right_value, 1, MPI_DOUBLE, right_neighbor, right_neighbor,
+               comm, MPI_STATUS_IGNORE);
+      A[K + 1] = right_value;
     }
   }
 
-  Vector final = NULL;
-  if (rank == 0) {
-    final = createVector(N);
-  }
-
-  // collect the final results
-  MPI_Gather(&A[1], K, MPI_DOUBLE, final, K, MPI_DOUBLE, 0, comm);
+  // collect the final results from each rank
+  MPI_Gather(&A[1], K, MPI_DOUBLE, merged, K, MPI_DOUBLE, 0, comm);
 
   clock_t t_stop = clock();
 
   if (rank == 0) {
-    printTemperature(final, N);
+    printf("Final:\t\t");
+    printTemperature(merged, N);
     printf("\n");
-    // printNumbers(final, N);
 
-    double hash = 0;
     int success = 1;
     for (long long i = 0; i < N; i++) {
-      value_t temp = final[i];
-      // printf("%lf\n", temp);
-      hash += temp;
+      value_t temp = merged[i];
       if (273 <= temp && temp <= 273 + 60) {
         continue;
       }
@@ -187,11 +193,10 @@ int main(int argc, char **argv) {
     }
 
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
-    printf("Hash: %lf\n", hash);
-    printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
+    printf("Time: %lfs\n", (t_stop - t_start) / (double)CLOCKS_PER_SEC);
 
     // memory clean up
-    releaseVector(final);
+    releaseVector(merged);
   }
 
   // memory clean up
@@ -210,9 +215,7 @@ Vector createVector(int N) {
   return malloc(sizeof(value_t) * N);
 }
 
-void releaseVector(Vector m) {
-  free(m);
-}
+void releaseVector(Vector m) { free(m); }
 
 void printTemperature(Vector m, int N) {
   const char *colors = " .-:=+*^X#%@";
@@ -249,10 +252,4 @@ void printTemperature(Vector m, int N) {
   }
   // right wall
   printf("X");
-}
-
-void printNumbers(Vector m, int N) {
-  for (int i = 0; i < N; i++) {
-    printf("%06.2lf\n", m[i]);
-  }
 }
