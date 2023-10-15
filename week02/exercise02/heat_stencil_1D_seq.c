@@ -97,10 +97,8 @@ int main(int argc, char **argv) {
   printf("\n");
 
   int success = 1;
-  double hash = 0.0;
   for (long long i = 0; i < N; i++) {
     value_t temp = A[i];
-    hash += temp;
     if (273 <= temp && temp <= 273 + 60)
       continue;
     success = 0;
@@ -108,7 +106,6 @@ int main(int argc, char **argv) {
   }
 
   printf("Verification: %s\n", (success) ? "OK" : "FAILED");
-  printf("Hash: %lf\n", hash);
   printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
 
   // ---------- cleanup ----------
