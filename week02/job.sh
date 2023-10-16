@@ -11,4 +11,8 @@
 # Maximum number of tasks (=processes) to start per node
 #SBATCH --ntasks-per-node=12
 
-mpiexec -np $SLURM_NTASKS ./pi_mpi 200000000
+# mpiexec -np $SLURM_NTASKS ./pi_mpi 1000000000
+
+module load openmpi/3.1.6-gcc-12.2.0-d2gmn55
+
+mpiexec -np $SLURM_NTASKS ./heat_stencil_1D_mpi 4096
