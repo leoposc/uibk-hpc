@@ -1,0 +1,27 @@
+delannoy_serial:
+num: 251595969
+time: 1.2007 seconds
+delannoy_parallel 1 Thread:
+num: 251595969
+time: 10.1045 seconds
+delannoy_parallel 2 Thread:
+num: 251595969
+time: 5.0448 seconds
+delannoy_parallel 3 Thread:
+num: 251595969
+time: 3.9009 seconds
+delannoy_parallel 4 Thread:
+num: 251595969
+time: 2.9913 seconds
+delannoy_parallel 5 Thread:
+num: 251595969
+time: 2.5092 seconds
+delannoy_parallel 6 Thread:
+num: 251595969
+time: 1.7936 seconds
+delannoy_parallel 7 Thread:
+num: 251595969
+time: 1.6825 seconds
+delannoy_parallel 8 Thread:
+num: 251595969
+time: 1.7605 seconds
