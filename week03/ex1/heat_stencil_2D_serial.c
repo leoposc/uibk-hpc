@@ -8,19 +8,16 @@
 #define RESOLUTION_WIDTH 50
 #define RESOLUTION_HEIGHT 50
 
-#define STENCIL_SIZE 3
-
-#define PERROR fprintf(stderr, "%s:%d: error: %s\n", __FILE__, __LINE__, strerror(errno))
-#define PERROR_GOTO(label) \
-	do { \
-		PERROR; \
-		goto label; \
-	} while (0)
-
-
 // -- vector utilities --
 
 #define IND(y, x) ((y) * (N) + (x))
+
+typedef double value_t;
+typedef value_t *Vector;
+
+
+Vector createVector(int N);
+void releaseVector(Vector m);
 
 double calc_nearby_heat_diff(double *m,int N, int x, int y);
 void printTemperature(double *m, int N, int M);
@@ -39,9 +36,8 @@ int main(int argc, char **argv) {
     // ---------- setup ----------
 
     // create a buffer for storing temperature fields
-    double *A =  malloc(sizeof(double) * N * N);
+    Vector A = createVector(N);
 
-    if(!A) PERROR_GOTO(error_a);
 
     // set up initial conditions in A
     for (int i = 0; i < N; i++) {
@@ -62,24 +58,23 @@ int main(int argc, char **argv) {
     // ---------- compute ----------
 
     // create a second buffer for the computation
-    double *B = malloc(sizeof(double) * N * N);
-    if(!B) PERROR_GOTO(error_b);
+    Vector B = createVector(N);
 
     // for each time step ..
 	  double startTime = MPI_Wtime();
+
     for (int t = 0; t < T; t++) {
-        // todo implement heat propagation
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N; x++) {
                 A[IND(y, x)] += calc_nearby_heat_diff(A, N, x, y);
             }
         }
         
-        // todo make sure the heat source stays the same
+        // keep heat source temp constant
         A[IND(source_x,source_y)] = 273 + 60;
 
-        // every 1000 steps show intermediate step
-        if (!(t % 1000)) {
+        // every 100 steps show intermediate step
+        if (!(t % 100)) {
             printf("Step t=%d\n", t);
             printTemperature(A, N, N);
             printf("\n");
@@ -110,11 +105,9 @@ int main(int argc, char **argv) {
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
 	  printf("time: %2.4f seconds\n", endTime-startTime);
 
-    // todo ---------- cleanup ----------
-    error_b:
-    free(B);
-    error_a:
-    free(A);
+    // cleanup
+    releaseVector(B);
+    releaseVector(A);
     return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
@@ -192,3 +185,10 @@ double calc_nearby_heat_diff(double *m,int N, int x, int y) {
 
     return temp_diff < 0 ? 0 : temp_diff;
 }
+
+Vector createVector(int N) {
+  // create data and index vector
+  return malloc(sizeof(value_t) * N * N);
+}
+
+void releaseVector(Vector m) { free(m); }
