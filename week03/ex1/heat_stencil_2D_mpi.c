@@ -34,6 +34,10 @@ int main(int argc, char **argv) {
     printf("Computing heat-distribution for room size %dX%d for T=%d timesteps\n", N, N, T);
 
     // ---------- setup ----------
+    int size, rank;
+    MPI_INIT(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     // create a buffer for storing temperature fields
     Vector A = createVector(N);
@@ -64,6 +68,7 @@ int main(int argc, char **argv) {
 	  double startTime = MPI_Wtime();
 
     for (int t = 0; t < T; t++) {
+        // TODO: add parallelization here
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N; x++) {
                 A[IND(y, x)] += calc_nearby_heat_diff(A, N, x, y);
@@ -107,6 +112,7 @@ int main(int argc, char **argv) {
     // cleanup
     releaseVector(B);
     releaseVector(A);
+    MPI_Finalize();
     return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
