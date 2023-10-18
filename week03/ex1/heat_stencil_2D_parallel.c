@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
             if (!(t % 500)) {
                 if (rank == 0) {
                     printf("Step t=%d:\n", t);
-                    printTemperature(A, num_rows, N);
+                    // printTemperature(final, N, N);
                     printf("\n");
                 }
             }
@@ -156,7 +156,6 @@ void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Co
         // send the upper row to neighbour above
         MPI_Send(A, N, MPI_DOUBLE, neighbour_above, 0, comm);
     }
-    printf("Rank %d: %f\n", rank, A[IND(0, 0)]);
 }
 
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
