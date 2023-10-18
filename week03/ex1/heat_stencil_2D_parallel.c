@@ -15,10 +15,11 @@ typedef value_t *Vector;
 Vector createVector(int N, int M);
 void releaseVector(Vector m);
 void initializeTemperature(Vector A, int M, int N);
-void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm& comm);
+void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm comm);
+void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
 void updateInterior(Vector A, Vector B, int N);
-void printTemperature(Vector A, int N);
-void calc_nearby_heat_diff(Vector A, Vector B, int N);
+void printTemperature(Vector A, int M, int N);
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
 
 int main(int argc, char **argv) {
     
@@ -66,35 +67,49 @@ int main(int argc, char **argv) {
 
 
     int num_rows = N / size;
-    Vector A = createVector(num_rows, N);
-    Vector B = createVector(num_rows, N);
+    Vector A = createVector(num_rows + 2, N);
+    Vector B = createVector(num_rows + 2, N);
 
     int source_x = N / 4;
     int source_y = N / 4;    
     // rank where the source is located
     int source_rank = source_y / num_rows;
     // local coordinates of the source, source_x stays the same
-    int local_source_y = source_y % num_rows;
+    int local_source_y = source_y % num_rows + 1;
 
 
-    initializeTemperature(A, num_rows, N);
+    initializeTemperature(A, num_rows + 2, N);
     if (rank == source_rank) {
         A[IND(local_source_y, source_x)] = 273 + 60;
     }
 
     // ------- COMPUTATION ----------
     for (int t = 0; t < T; t++) {
-        exchangeBoundaries(A, num_rows, rank, size);
-        calc_nearby_heat_diff(A, B, num_rows);
-        updateInterior(A, B, num_rows);
+        exchangeBoundaries(A, num_rows + 2, N, rank, size, comm);
+        calc_nearby_heat_diff(A, B, num_rows + 2, N);
+        // updateInterior(A, B, num_rows);
 
         // Keep the heat source temperature constant
         if (rank == source_rank) {
             A[IND(local_source_y, source_x)] = 273 + 60;
         }
+
+       
+        // collect the final vector
+        Vector final = createVector(N, N);
+        MPI_Gather(final , num_rows * N, MPI_DOUBLE, A, num_rows * N, MPI_DOUBLE, 0, comm);
+        if (rank == 0) {
+            if (!(t % 500)) {
+                if (rank == 0) {
+                    printf("Step t=%d:\n", t);
+                    printTemperature(A, num_rows, N);
+                    printf("\n");
+                }
+            }
+        }
     }
 
-    double endtime = MPI_WTime();
+    endtime = MPI_Wtime();
 
     MPI_Finalize();
 
@@ -117,32 +132,130 @@ void initializeTemperature(Vector A, int M, int N) {
     }    
 }
 
-void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm& comm) {
-    short neighbour_above = rank - 1;
-    short neighbour_underneath = rank + 1;
+void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm comm) {
+    short neighbour_above = (rank - 1 + size) % size;
+    short neighbour_underneath = (rank + 1) % size;
+    printf("before Rank %d: neighbour_above: %d, neighbour_underneath: %d, A: %.1f\n", rank, neighbour_above, neighbour_underneath, A[0]);
 
     if (rank % 2) {
         // send the upper row to neighbour above
-        MPI_Send(A, N, MPI_DOUBLE, neighbour_above, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Send(A, N, MPI_DOUBLE, neighbour_above, 0, comm);
         // receive the lower row from the neighbour above
-        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, neighbour_above, comm, MPI_STATUS_IGNORE);
+        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 0, comm, MPI_STATUS_IGNORE);
         // send the lower row to neighbour underneath
-        MPI_Send(&A[IND(M, 0)], N, MPI_DOUBLE, neighbour_underneath, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Send(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, comm);
         // receive the upper row from the neighbour underneath
-        MPI_Recv(&A[IND(M, 0)], N, MPI_DOUBLE, neighbour_underneath, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Recv(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, comm, MPI_STATUS_IGNORE);
     } else {
         // receive the upper row from the neighbour underneath
-        MPI_Recv(&A[IND(M, 0)], N, MPI_DOUBLE, neighbour_underneath, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Recv(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, comm, MPI_STATUS_IGNORE);
         // send the lower row to neighbour underneath
-        MPI_Send(&A[IND(M, 0)], N, MPI_DOUBLE, neighbour_underneath, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Send(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, comm);
         // receive the lower row from the neighbour above
-        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, neighbour_above, comm, MPI_STATUS_IGNORE);
+        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 0, comm, MPI_STATUS_IGNORE);
         // send the upper row to neighbour above
-        MPI_Send(A, N, MPI_DOUBLE, neighbour_above, rank, comm, MPI_STATUS_IGNORE);
+        MPI_Send(A, N, MPI_DOUBLE, neighbour_above, 0, comm);
     }
-
+    printf("Rank %d: %f\n", rank, A[IND(0, 0)]);
 }
 
+void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
+    // set the outer boundaries to the values next to it to 
+    // eliminate the influence of the outer boundaries
+    if (rank == 0) {
+        for (int i = 0; i < N; i++) {
+            A[IND(0, i)] = A[IND(1, i)]; 
+        }
+    } else if (rank == size - 1) {
+        for (int i = 0; i < N; i++) {
+            A[IND(M - 1, i)] = A[IND(M - 2, i)];
+        }
+    }
+    // do the same for the left and right boundaries for all processes
+    for (int i = 0; i < M; i++) {
+        A[IND(i, 0)] = A[IND(i, 1)];
+        A[IND(i, N - 1)] = A[IND(i, N - 2)];
+    }    
+}
+
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {    
+
+    for (int y = 1; y < M - 1; y++) {
+        for (int x = 1; x < N - 1; x++) {
+            double current_temp = A[IND(y, x)];
+            double temp_diff = 0;
+
+            temp_diff += A[IND(y, x + 1)] - current_temp;
+            temp_diff += A[IND(y + 1, x)] - current_temp;
+            temp_diff += A[IND(y, x - 1)] - current_temp;
+            temp_diff += A[IND(y - 1, x)] - current_temp;
+
+            temp_diff /= 5;
+
+            B[IND(y, x)] = (temp_diff < 0) ? 0 : temp_diff;
+        }
+    }
+
+    Vector H = A;
+    A = B;
+    B = H;
+}
+
+void printTemperature(double *m, int M, int N) {
+    const char *colors = " .-:=+*^X#%@";
+    const int numColors = 12;
+
+    // boundaries for temperature (for simplicity hard-coded)
+    const double max = 273 + 30;
+    const double min = 273 + 0;
+
+    // set the 'render' resolution
+    int W = RESOLUTION_WIDTH;
+    int H = RESOLUTION_HEIGHT;
+
+    // step size in each dimension
+    int sW = N / W;
+    int sH = M / H;
+    printf("step size: H: %d, W: %d\n", sH, sW);
+
+    // upper wall
+    printf("\t");
+    for (int u = 0; u < W + 2; u++) {
+        printf("X");
+    }
+    printf("\n");
+    // room
+    for (int i = 0; i < H; i++) {
+        // left wall
+        printf("\tX");
+        // actual room
+        for (int j = 0; j < W; j++) {
+            // get max temperature in this tile
+            double max_t = 0;
+            for (int x = sH * i; x < sH * i + sH; x++) {
+                for (int y = sW * j; y < sW * j + sW; y++) {
+                    max_t = (max_t < m[IND(x,y)]) ? m[IND(x,y)] : max_t;
+                }
+            }
+            double temp = max_t;
+
+            // pick the 'color'
+            int c = ((temp - min) / (max - min)) * numColors;
+            c = (c >= numColors) ? numColors - 1 : ((c < 0) ? 0 : c);
+
+            // print the average temperature
+            printf("%c", colors[c]);
+        }
+        // right wall
+        printf("X\n");
+    }
+    // lower wall
+    printf("\t");
+    for (int l = 0; l < W + 2; l++) {
+        printf("X");
+    }
+    printf("\n");
+}
 
 Vector createVector(int M, int N) {
   // create data and index vector
