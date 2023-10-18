@@ -10,6 +10,7 @@
 
 // -- vector utilities --
 
+// index method for simplification (taken from parallel programming)
 #define IND(y, x) ((y) * (N) + (x))
 
 typedef double value_t;
@@ -73,15 +74,14 @@ int main(int argc, char **argv) {
         // keep heat source temp constant
         A[IND(source_x,source_y)] = 273 + 60;
 
-        // every 100 steps show intermediate step
-        if (!(t % 100)) {
+        // every 500 steps show intermediate step
+        if (!(t % 500)) {
             printf("Step t=%d\n", t);
             printTemperature(A, N, N);
             printf("\n");
         }
     }
 	  double endTime = MPI_Wtime();
-
 
     // ---------- check ----------
 
