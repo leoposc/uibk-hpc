@@ -11,10 +11,11 @@ clean:
 	$(RM) heat_stencil_2D_serial heat_stencil_2D_parallel
 	
 heat_stencil_2D_serial: heat_stencil_2D_serial.c
-	@$(MPICC) $(CC_FLAGS) $< -o heat_stencil_2D_serial
+	@$(CC) $(CC_FLAGS) $< -o heat_stencil_2D_serial
 
-heat_stencil_2D_mpi: heat_stencil_2D_mpi.c
-	@$(MPICC) $(CC_FLAGS) $< -o heat_stencil_2D_mpi
+heat_stencil_2D_mpi: heat_stencil_2D_serial.c
+	@$(CC) $(CC_FLAGS) $< -o heat_stencil_2D_mpi
 
 heat_stencil_2D_parallel: heat_stencil_2D_parallel.c
-	@$(MPICC) $(CC_FLAGS) $< -o heat_stencil_2D_parallel
+	@$(CC) $(CC_FLAGS) $< -o heat_stencil_2D_parallel
+
