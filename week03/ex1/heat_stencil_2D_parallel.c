@@ -18,7 +18,7 @@ void initializeTemperature(Vector A, int M, int N);
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm comm);
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
 void updateInterior(Vector A, Vector B, int N);
-void printTemperature(Vector A, int M, int N);
+void printTemperature(Vector A, int N);
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
 
 int main(int argc, char **argv) {
@@ -69,6 +69,7 @@ int main(int argc, char **argv) {
     int num_rows = N / size;
     Vector A = createVector(num_rows + 2, N);
     Vector B = createVector(num_rows + 2, N);
+    Vector final = createVector(N, N);
 
     int source_x = N / 4;
     int source_y = N / 4;    
@@ -88,21 +89,23 @@ int main(int argc, char **argv) {
         exchangeBoundaries(A, num_rows + 2, N, rank, size, comm);
         calc_nearby_heat_diff(A, B, num_rows + 2, N);
         // updateInterior(A, B, num_rows);
-
+        Vector H = A;
+        A = B;
+        B = H;
+        
         // Keep the heat source temperature constant
         if (rank == source_rank) {
             A[IND(local_source_y, source_x)] = 273 + 60;
         }
-
        
         // collect the final vector
-        Vector final = createVector(N, N);
-        MPI_Gather(final , num_rows * N, MPI_DOUBLE, A, num_rows * N, MPI_DOUBLE, 0, comm);
+        
+        MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
         if (rank == 0) {
-            if (!(t % 500)) {
+            if (!(t % 250)) {
                 if (rank == 0) {
                     printf("Step t=%d:\n", t);
-                    // printTemperature(final, N, N);
+                    printTemperature(final, N);
                     printf("\n");
                 }
             }
@@ -120,6 +123,7 @@ int main(int argc, char **argv) {
 
     releaseVector(B);
     releaseVector(A);
+    releaseVector(final);
 
     return EXIT_SUCCESS;
 }
@@ -135,7 +139,7 @@ void initializeTemperature(Vector A, int M, int N) {
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, const MPI_Comm comm) {
     short neighbour_above = (rank - 1 + size) % size;
     short neighbour_underneath = (rank + 1) % size;
-    printf("before Rank %d: neighbour_above: %d, neighbour_underneath: %d, A: %.1f\n", rank, neighbour_above, neighbour_underneath, A[0]);
+    // printf("Rank %d: neighbour_above: %d, neighbour_underneath: %d, A: %.1f\n", rank, neighbour_above, neighbour_underneath, A[0]);
 
     if (rank % 2) {
         // send the upper row to neighbour above
@@ -181,26 +185,25 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {
 
     for (int y = 1; y < M - 1; y++) {
         for (int x = 1; x < N - 1; x++) {
-            double current_temp = A[IND(y, x)];
-            double temp_diff = 0;
-
-            temp_diff += A[IND(y, x + 1)] - current_temp;
-            temp_diff += A[IND(y + 1, x)] - current_temp;
-            temp_diff += A[IND(y, x - 1)] - current_temp;
-            temp_diff += A[IND(y - 1, x)] - current_temp;
-
-            temp_diff /= 5;
-
-            B[IND(y, x)] = (temp_diff < 0) ? 0 : temp_diff;
+            double tc = A[IND(y, x)];
+            
+            double tr = A[IND(y, x + 1)];
+            double tl = A[IND(y, x - 1)];
+            double td = A[IND(y + 1, x)];
+            double tu = A[IND(y - 1, x)];            
+            
+            B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
+            if (B[IND(y, x)] > 273.01) {
+                // printf("y: %d, x: %.d, B: %.2f\n", y, x, B[IND(y, x)]);
+            }
         }
     }
-
     Vector H = A;
     A = B;
     B = H;
 }
 
-void printTemperature(double *m, int M, int N) {
+void printTemperature(Vector A, int N) {
     const char *colors = " .-:=+*^X#%@";
     const int numColors = 12;
 
@@ -214,7 +217,7 @@ void printTemperature(double *m, int M, int N) {
 
     // step size in each dimension
     int sW = N / W;
-    int sH = M / H;
+    int sH = N / H;
     printf("step size: H: %d, W: %d\n", sH, sW);
 
     // upper wall
@@ -233,7 +236,7 @@ void printTemperature(double *m, int M, int N) {
             double max_t = 0;
             for (int x = sH * i; x < sH * i + sH; x++) {
                 for (int y = sW * j; y < sW * j + sW; y++) {
-                    max_t = (max_t < m[IND(x,y)]) ? m[IND(x,y)] : max_t;
+                    max_t = (max_t < A[IND(x,y)]) ? A[IND(x,y)] : max_t;
                 }
             }
             double temp = max_t;
