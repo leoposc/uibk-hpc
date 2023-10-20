@@ -76,8 +76,7 @@ int main(int argc, char **argv) {
     // rank where the source is located
     int source_rank = source_y / num_rows;
     // local coordinates of the source, source_x stays the same
-    int local_source_y = source_y % num_rows + 1;
-
+    int local_source_y = (source_y % num_rows) + 1;
 
     initializeTemperature(A, num_rows + 2, N);
     if (rank == source_rank) {
@@ -87,6 +86,7 @@ int main(int argc, char **argv) {
     // ------- COMPUTATION ----------
     for (int t = 0; t < T; t++) {
         exchangeBoundaries(A, num_rows + 2, N, rank, size, comm);
+        setOuterBoundaries(A, num_rows + 2, N, rank, size);
         calc_nearby_heat_diff(A, B, num_rows + 2, N);
         // updateInterior(A, B, num_rows);
         Vector H = A;
@@ -98,6 +98,13 @@ int main(int argc, char **argv) {
             A[IND(local_source_y, source_x)] = 273 + 60;
         }
        
+        for (int y = 1; y < num_rows + 1; y++) {
+            for (int x = 1; x < N - 1; x++) {                
+                if (B[IND(y, x)] < 273) {
+                    // printf("y: %d, x: %.d, B: %.2f\n", y, x, B[IND(y, x)]);
+                }
+            }
+        }
         // collect the final vector
         
         MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
