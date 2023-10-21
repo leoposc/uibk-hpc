@@ -7,9 +7,9 @@
 # Redirect output stream to this file
 #SBATCH --output=output.log
 # Maximum number of tasks (=processes) to start in total
-#SBATCH --ntasks=1
+#SBATCH --ntasks=20
 # Maximum number of tasks (=processes) to start per node
 # Enforce exclusive node allocation, do not share with other jobs
 #SBATCH --exclusive
 
-srun ./heat_stencil_2D_mpi 400
+srun ./heat_stencil_2D_mpi 768
