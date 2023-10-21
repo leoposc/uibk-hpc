@@ -1,0 +1,73 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n011
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   n011
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+start_line : 0 end_line : 400, rank: 0 
+Verification: OK
+time: 5.6536 seconds
+step size: H: 8, W: 8
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X         .......                                  X
+	X       ...........                                X
+	X      .............                               X
+	X     ....-------....                              X
+	X    ....---------....                             X
+	X    ...--:::::::--...                             X
+	X   ...--::=+++=::--..                             X
+	X   ...--:=+*^*+=:--...                            X
+	X   ...--:+*#%#^+::-...                            X
+	X   ...--:+^%@@^+=:-...                            X
+	X   ...--:+*#@%^+::-...                            X
+	X   ...--:=+^^^+=:--...                            X
+	X   ...--::=+++=::--..                             X
+	X    ...--:::=:::--...                             X
+	X    ....---:::---....                             X
+	X     ....-------....                              X
+	X      .............                               X
+	X       ...........                                X
+	X          .....                                   X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
