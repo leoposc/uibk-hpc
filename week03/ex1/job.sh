@@ -3,16 +3,13 @@
 # Execute job in the partition "lva" unless you have special requirements.
 #SBATCH --partition=lva
 # Name your job to be able to identify it later
-#SBATCH --job-name week02
-# Redirect output stream to to command
+#SBATCH --job-name test
+# Redirect output stream to this file
 #SBATCH --output=output.log
 # Maximum number of tasks (=processes) to start in total
-#SBATCH --ntasks=10
+#SBATCH --ntasks=1
 # Maximum number of tasks (=processes) to start per node
-#SBATCH --ntasks-per-node=10
+# Enforce exclusive node allocation, do not share with other jobs
+#SBATCH --exclusive
 
-# mpiexec -np $SLURM_NTASKS ./pi_mpi 1000000000
-
-module load openmpi/3.1.6-gcc-12.2.0-d2gmn55
-
-mpiexec -np $SLURM_NTASKS ./heat_stencil_2D_parallel
+srun ./heat_stencil_2D_mpi 400
