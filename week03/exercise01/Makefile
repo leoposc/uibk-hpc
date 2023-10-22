@@ -8,7 +8,7 @@ all: heat_stencil_2D_seq heat_stencil_2D_mpi
 heat_stencil_2D_seq: heat_stencil_2D_seq.c
 	@$(CC) $(CC_FLAGS) $< -o heat_stencil_2D_seq
 
-heat_stencil_1D_mpi: heat_stencil_2D_mpi.c
+heat_stencil_2D_mpi: heat_stencil_2D_mpi.c
 	@$(MPICC) $(CC_FLAGS) $< -o heat_stencil_2D_mpi
 
 .PHONY: clean
