@@ -13,7 +13,7 @@ typedef double value_t;
 
 typedef value_t* Matrix;
 
-Matrix createMatrix(int N);
+Matrix createMatrix(int N, int M);
 
 void releaseMatrix(Matrix m);
 
@@ -52,24 +52,54 @@ int main(int argc, char **argv) {
     printf("R=%d\n", size);
   }
 
-  clock_t t_start = clock();
+  // ---------- global setup ----------
 
-  // ---------- setup ----------
+  int absolute_source_x = N / 4;
+  int absolute_source_y = N / 4;
+  int base_heat = 273;
+  int heat_source_heat = base_heat + 60;
 
-  // create a buffer for storing temperature fields
-  Matrix A = createMatrix(N);
+  // ---------- local setup ----------
 
+  // the local problem size
+  int K = N / size;
+
+  // neighbor configuration
+  short above_neighbor = rank - 1;
+  short below_neighbor = rank + 1;
+  short has_above_neighbor = above_neighbor >= 0;
+  short has_below_neighbor = below_neighbor < size;
+
+  // heat source configuration
+  int relative_source_x = absolute_source_x;
+  int relative_source_y = absolute_source_y - K * rank;
+  int has_source = relative_source_y >= 0 && relative_source_y < K;
+
+  // create a local buffer for storing temperature fields
+  Matrix A = createMatrix(K+2, N);
+
+  // create a second local buffer for the computation
+  Matrix B = createMatrix(K+2, N);
+
+  // create the merged matrix that containls the aggregated result on the root node
+  Matrix merged = NULL;
+  if (rank == 0) {
+    merged = createMatrix(N, N);
+  }
+  
   // set up initial conditions in A
-  for (int i = 0; i < N; i++) {
+  for (int i = 0; i < K+2; i++) {
     for (int j = 0; j < N; j++) {
-      A[IDX(i, j, N)] = 273; // temperature is 0° C everywhere (273 K)
+      A[IDX(i, j, N)] = base_heat;
     }
   }
 
   // and there is a heat source in one corner
-  int source_x = N / 4;
-  int source_y = N / 4;
-  A[IDX(source_x, source_y, N)] = 273 + 60;
+  if (has_source) {
+    A[IDX(relative_source_y+1, relative_source_x, N)] = heat_source_heat;
+  }
+  
+  clock_t t_start = clock();
 
   printf("Initial:\n");
   printTemperature(A, N);
@@ -77,35 +107,70 @@ int main(int argc, char **argv) {
 
   // ---------- compute ----------
 
-  // create a second buffer for the computation
-  Matrix B = createMatrix(N);
-
   // for each time step ..
   for (int t = 0; t < T; t++) {
 
+    // --- exchange the ghost cells ---
+
+    // send top border cells to the above neighbor
+    if (has_above_neighbor) {
+      MPI_Send(&A[1], N, MPI_DOUBLE, above_neighbor, 0, comm);
+    }
+
+    // recieve top border cells from the below neighbor
+    // store them in the bottom ghost cells
+    // if there is no neighbor, replicate the border cells
+    if (has_below_neighbor) {
+      MPI_Recv(&A[K+1], N, MPI_DOUBLE, below_neighbor, 0,
+          comm, MPI_STATUS_IGNORE);
+    } else {
+      // TODO use array copy here?
+      for (int x = 0; x < N; x++) {
+        A[IDX(K+1, x, N)] = A[IDX(K, x, N)];
+      }
+    }
+
+    // send bottom border cells to the below neighbor
+    if (has_below_neighbor) {
+      MPI_Send(&A[K], N, MPI_DOUBLE, has_below_neighbor, 0, comm);
+    }
+
+    // recieve bottom border cells from the above neighbor
+    // store them in the above ghost cells
+    // if there is no neighbor, replicate the border cells
+    if (has_above_neighbor) {
+      MPI_Recv(&A[0], N, MPI_DOUBLE, has_above_neighbor, 0,
+          comm, MPI_STATUS_IGNORE);
+    } else {
+      // TODO use array copy here?
+      for (int x = 0; x < N; x++) {
+        A[IDX(0, x, N)] = A[IDX(1, x, N)];
+      }
+    }
+
     // .. we propagate the temperature over y
-    for (long long i = 0; i < N; i++) {
+    for (long long y = 1; y < K+1; y++) {
 
       // .. and over x
-      for (long long j = 0; j < N; j++) {
+      for (long long x = 0; x < N; x++) {
 
         // center stays constant (the heat is still on)
-        if (i == source_x && j == source_y) {
-          B[IDX(i, j, N)] = A[IDX(i, j, N)];
+        if (has_source && y == relative_source_y+1 && x == relative_source_x) {
+          B[IDX(y, x, N)] = A[IDX(y, x, N)];
           continue;
         }
 
         // get temperature at current position
-        value_t tc = A[IDX(i, j, N)];
+        value_t tc = A[IDX(y, x, N)];
 
         // get temperatures of adjacent cells
-        value_t tl = (j != 0) ? A[IDX(i, j-1, N)] : tc;
-        value_t tr = (j != N - 1) ? A[IDX(i, j+1, N)] : tc;
-        value_t tu = (i != 0) ? A[IDX(i-1, j, N)] : tc;
-        value_t td = (i != N - 1) ? A[IDX(i+1, j, N)] : tc;
+        value_t tl = A[IDX(y, x-1, N)];
+        value_t tr = A[IDX(y, x+1, N)];
+        value_t tu = A[IDX(y-1, x, N)];
+        value_t td = A[IDX(y+1, x, N)];
 
         // compute new temperature at current position
-        B[IDX(i, j, N)] = tc + 0.2 * (tl + tr + tu + td + (-4*tc));
+        B[IDX(y, x, N)] = tc + 0.2 * (tl + tr + tu + td + (-4*tc));
       }
     }
 
@@ -116,46 +181,54 @@ int main(int argc, char **argv) {
 
     // show intermediate step
     if (!(t % 10000)) {
-      printf("Step t=%d:\n", t);
-      printTemperature(A, N);
-      printf("\n");
+      MPI_Gather(&A[1], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
+      if (rank == 0) {
+        printf("Step t=%d:\n", t);
+        printTemperature(A, N);
+        printf("\n"); 
+      }
     }
   }
-
-  releaseMatrix(B);
 
   clock_t t_stop = clock();
 
   // ---------- check ----------
+  MPI_Gather(&A[1], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
 
-  printf("Final:\n");
-  printTemperature(A, N);
-  printf("\n");
+  if (rank == 0) {
+    printf("Final:\n");
+    printTemperature(merged, N);
+    printf("\n");
 
-  int success = 1;
-  for (long long i = 0; i < N; i++) {
-    for (long long j = 0; j < N; j++) {
-      value_t temp = A[IDX(i, j, N)];
-      if (273 <= temp && temp <= 273 + 60)
-        continue;
-      success = 0;
-      break;
+    int success = 1;
+    for (long long i = 0; i < N; i++) {
+      for (long long j = 0; j < N; j++) {
+        value_t temp = A[IDX(i, j, N)];
+        if (273 <= temp && temp <= 273 + 60)
+          continue;
+        success = 0;
+        break;
+      }
     }
+
+    printf("Verification: %s\n", (success) ? "OK" : "FAILED");
+    printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
+
+    return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+    releaseMatrix(merged);
   }
 
-  printf("Verification: %s\n", (success) ? "OK" : "FAILED");
-  printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
-
   // ---------- cleanup ----------
-
   releaseMatrix(A);
+  releaseMatrix(B);
 
   // done
-  return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+  return EXIT_SUCCESS;
 }
 
-Matrix createMatrix(int N) {
-  return malloc(sizeof(value_t) * N * N);
+Matrix createMatrix(int N, int M) {
+  return malloc(sizeof(value_t) * N * M);
 }
 
 void releaseMatrix(Matrix m) {
