@@ -13,13 +13,12 @@ typedef double value_t;
 typedef value_t *Vector;
 
 Vector createVector(int N, int M);
-void printVec(Vector vec, int M, int N, int rank);
 void releaseVector(Vector m);
 void initializeTemperature(Vector A, int M, int N);
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, MPI_Comm *comm);
-void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
+void setOuterBoundaries(Vector A, int M, int N);
 void printTemperature(Vector A, int N);
-void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, int rank);
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
 
 int main(int argc, char **argv) {
     
@@ -38,7 +37,7 @@ int main(int argc, char **argv) {
     if (argc > 1) {
         N = atoi(argv[1]);
     }
-    int T = N * 100;
+    int T = N * 50;
 
     if (N % size != 0) {
         printf("N must be divisible by the number of processes\n");
@@ -87,8 +86,8 @@ int main(int argc, char **argv) {
     // ------- COMPUTATION ----------
     for (int t = 0; t < T; t++) {
         exchangeBoundaries(A, num_rows + 2, N, rank, size, &comm);
-        calc_nearby_heat_diff(A, B, num_rows + 2, N, rank);
-        setOuterBoundaries(B, num_rows + 2, N, rank, size);
+        calc_nearby_heat_diff(A, B, num_rows + 2, N);
+        setOuterBoundaries(B, num_rows + 2, N);
         Vector H = A;
         A = B;
         B = H;        
@@ -155,31 +154,31 @@ void exchangeBoundaries(Vector A, int M, int N, int rank, int size, MPI_Comm *co
         MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 1, *comm, MPI_STATUS_IGNORE);
         // send the upper row to neighbour above
         MPI_Send(upper_row, N, MPI_DOUBLE, neighbour_above, 0, *comm);
-    } else if (rank % 2) {
+    } else if (rank % 2 == 0) {
+        // send the lower row to neighbour underneath
+        MPI_Send(lower_row, N, MPI_DOUBLE, neighbour_underneath, 1, *comm);
+        // receive the upper row from the neighbour underneath
+        MPI_Recv(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, *comm, MPI_STATUS_IGNORE);
         // send the upper row to neighbour above
         MPI_Send(upper_row, N, MPI_DOUBLE, neighbour_above, 1, *comm);
         // receive the lower row from the neighbour above
-        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 1, *comm, MPI_STATUS_IGNORE);
-        // send the lower row to neighbour underneath
-        MPI_Send(lower_row, N, MPI_DOUBLE, neighbour_underneath, 0, *comm);
-        // receive the upper row from the neighbour underneath
-        MPI_Recv(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 0, *comm, MPI_STATUS_IGNORE);
+        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 0, *comm, MPI_STATUS_IGNORE);
     } else {
+        // receive the lower row from the neighbour above
+        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 1, *comm, MPI_STATUS_IGNORE);
+        // send the upper row to neighbour above
+        MPI_Send(upper_row, N, MPI_DOUBLE, neighbour_above, 0, *comm);
         // receive the upper row from the neighbour underneath
         MPI_Recv(&A[IND(M - 1, 0)], N, MPI_DOUBLE, neighbour_underneath, 1, *comm, MPI_STATUS_IGNORE);
         // send the lower row to neighbour underneath
-        MPI_Send(lower_row, N, MPI_DOUBLE, neighbour_underneath, 1, *comm);
-        // receive the lower row from the neighbour above
-        MPI_Recv(A, N, MPI_DOUBLE, neighbour_above, 0, *comm, MPI_STATUS_IGNORE);
-        // send the upper row to neighbour above
-        MPI_Send(upper_row, N, MPI_DOUBLE, neighbour_above, 0, *comm);
+        MPI_Send(lower_row, N, MPI_DOUBLE, neighbour_underneath, 0, *comm);
     }
     
     releaseVector(upper_row);
     releaseVector(lower_row);    
 }
 
-void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
+void setOuterBoundaries(Vector A, int M, int N) {
     // set the outer boundaries to the values next to it to 
     // eliminate the influence of the outer boundaries        
     for (int i = 0; i < N; i++) {
@@ -196,7 +195,7 @@ void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
     }    
 }
 
-void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, int rank) {    
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {    
     
     for (int y = 1; y < M - 1; y++) {
         for (int x = 1; x < N - 1; x++) {
@@ -227,7 +226,6 @@ void printTemperature(Vector A, int N) {
     // step size in each dimension
     int sW = N / W;
     int sH = N / H;
-    printf("step size: H: %d, W: %d\n", sH, sW);
 
     // upper wall
     printf("\t");
@@ -274,15 +272,3 @@ Vector createVector(int M, int N) {
 }
 
 void releaseVector(Vector m) { free(m); }
-
-void printVec(Vector vec, int M, int N, int rank) {
-    return 0;
-  printf("Print vec, rank: %d\n", rank);
-  for (int j = 0; j < M; j++){
-    for (int i = 0; i < N; i++){
-        printf("%.1f ", vec[IND(j, i)]);
-    }
-    printf("\n");
-  }
-}
-  
