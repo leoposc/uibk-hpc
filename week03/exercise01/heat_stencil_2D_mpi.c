@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   if (argc > 1) {
     N = atoi(argv[1]);
   }
-  int T = N * 400;
+  int T = N * 100;
 
   // create a communbicator specifically for this application
   MPI_Comm comm;
@@ -101,12 +101,6 @@ int main(int argc, char **argv) {
   
   // TODO use MPI_Wtime()
   clock_t t_start = clock();
-
-  if (rank == 0) {
-    printf("Initial:\n");
-    printTemperature(A, N);
-    printf("\n");
-  }
 
   // ---------- compute ----------
 
@@ -218,14 +212,14 @@ int main(int argc, char **argv) {
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
     printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
 
-    return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
-
     releaseMatrix(merged);
   }
 
   // ---------- cleanup ----------
   releaseMatrix(A);
   releaseMatrix(B);
+
+  MPI_Finalize();
 
   // done
   return EXIT_SUCCESS;
