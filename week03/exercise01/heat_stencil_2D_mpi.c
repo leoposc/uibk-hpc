@@ -99,11 +99,14 @@ int main(int argc, char **argv) {
     A[IDX(relative_source_y+1, relative_source_x, N)] = heat_source_heat;
   }
   
+  // TODO use MPI_Wtime()
   clock_t t_start = clock();
 
-  printf("Initial:\n");
-  printTemperature(A, N);
-  printf("\n");
+  if (rank == 0) {
+    printf("Initial:\n");
+    printTemperature(A, N);
+    printf("\n");
+  }
 
   // ---------- compute ----------
 
@@ -114,14 +117,14 @@ int main(int argc, char **argv) {
 
     // send top border cells to the above neighbor
     if (has_above_neighbor) {
-      MPI_Send(&A[1], N, MPI_DOUBLE, above_neighbor, 0, comm);
+      MPI_Send(&A[IDX(1, 0, N)], N, MPI_DOUBLE, above_neighbor, 0, comm);
     }
 
     // recieve top border cells from the below neighbor
     // store them in the bottom ghost cells
     // if there is no neighbor, replicate the border cells
     if (has_below_neighbor) {
-      MPI_Recv(&A[K+1], N, MPI_DOUBLE, below_neighbor, 0,
+      MPI_Recv(&A[IDX(K+1, 0, N)], N, MPI_DOUBLE, below_neighbor, 0,
           comm, MPI_STATUS_IGNORE);
     } else {
       // TODO use array copy here?
@@ -132,14 +135,14 @@ int main(int argc, char **argv) {
 
     // send bottom border cells to the below neighbor
     if (has_below_neighbor) {
-      MPI_Send(&A[K], N, MPI_DOUBLE, has_below_neighbor, 0, comm);
+      MPI_Send(&A[IDX(K, 0, N)], N, MPI_DOUBLE, below_neighbor, 0, comm);
     }
 
     // recieve bottom border cells from the above neighbor
     // store them in the above ghost cells
     // if there is no neighbor, replicate the border cells
     if (has_above_neighbor) {
-      MPI_Recv(&A[0], N, MPI_DOUBLE, has_above_neighbor, 0,
+      MPI_Recv(&A[IDX(0, 0, N)], N, MPI_DOUBLE, above_neighbor, 0,
           comm, MPI_STATUS_IGNORE);
     } else {
       // TODO use array copy here?
@@ -164,8 +167,8 @@ int main(int argc, char **argv) {
         value_t tc = A[IDX(y, x, N)];
 
         // get temperatures of adjacent cells
-        value_t tl = A[IDX(y, x-1, N)];
-        value_t tr = A[IDX(y, x+1, N)];
+        value_t tl = x-1 < 0 ? tc : A[IDX(y, x-1, N)];
+        value_t tr = x+1 > N-1 ? tc : A[IDX(y, x+1, N)];
         value_t tu = A[IDX(y-1, x, N)];
         value_t td = A[IDX(y+1, x, N)];
 
@@ -181,10 +184,10 @@ int main(int argc, char **argv) {
 
     // show intermediate step
     if (!(t % 10000)) {
-      MPI_Gather(&A[1], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
+      MPI_Gather(&A[IDX(1, 0, N)], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
       if (rank == 0) {
         printf("Step t=%d:\n", t);
-        printTemperature(A, N);
+        printTemperature(merged, N);
         printf("\n"); 
       }
     }
@@ -193,7 +196,7 @@ int main(int argc, char **argv) {
   clock_t t_stop = clock();
 
   // ---------- check ----------
-  MPI_Gather(&A[1], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
+  MPI_Gather(&A[IDX(1, 0, N)], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
 
   if (rank == 0) {
     printf("Final:\n");
@@ -203,9 +206,10 @@ int main(int argc, char **argv) {
     int success = 1;
     for (long long i = 0; i < N; i++) {
       for (long long j = 0; j < N; j++) {
-        value_t temp = A[IDX(i, j, N)];
-        if (273 <= temp && temp <= 273 + 60)
+        value_t temp = merged[IDX(i, j, N)];
+        if (273 <= temp && temp <= 273 + 60) {
           continue;
+        }
         success = 0;
         break;
       }
