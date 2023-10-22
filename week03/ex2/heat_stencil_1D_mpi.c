@@ -50,8 +50,6 @@ int main(int argc, char **argv) {
     printf("R=%d\n", size);
   }
 
-  clock_t t_start = clock();
-
   // ----- overall simulation parameters ------
 
   int base_heat = 273;
@@ -61,22 +59,15 @@ int main(int argc, char **argv) {
   // ----- setup (same on each node) -----
 
   int K = N / size;
-  int index_offset = rank * K;
+  long source_offset = source_x - K * rank;
+  short has_source = source_offset >= 0 && source_offset < K;
   short left_neighbor = rank - 1;
   short right_neighbor = rank + 1;
+  short has_left_neighbor = left_neighbor >= 0;
+  short has_right_neighbor = right_neighbor < size;
 
+  // create the array containing the current values
   Vector A = createVector(K + 2);
-
-  // set up initial conditions in A
-  for (int i = 0; i < K + 2; i++) {
-    A[i] = base_heat;
-  }
-
-  // set the heat source on the current rank, if present
-  long source_offset = source_x - index_offset;
-  if (source_offset >= 0 && source_offset < K) {
-    A[source_offset + 1] = source_heat;
-  }
 
   // create a second buffer for the computation
   Vector B = createVector(K + 2);
@@ -87,17 +78,59 @@ int main(int argc, char **argv) {
     merged = createVector(N);
   }
 
+  // set up initial conditions in A
+  for (int i = 0; i < K + 2; i++) {
+    A[i] = base_heat;
+  }
+
   // ------ actual computation ------
+  clock_t t_start = clock();
 
   // for each time step ..
   for (int t = 0; t < T; t++) {
 
-    // .. we propagate the temperature
-    for (long long i = 1; i < K + 1; i++) {
+    // apply the heat source, if present
+    if (has_source) {
+      A[source_offset + 1] = source_heat;
+    }
 
-      // center stays constant (the heat is still on)
-      if (i == source_offset + 1) {
-        B[i] = A[i];
+    // --- start the non-blocking tile exchange in the background ---
+
+    // non-blocking send left-most value to the left neighbor
+    MPI_Request req_sleft;
+    if (has_left_neighbor) {
+      MPI_Isend(&A[1], 1, MPI_DOUBLE, left_neighbor, 0, comm, &req_sleft);
+    }
+
+    // non-blocking reviece of the left-most value of the right neighbor
+    MPI_Request req_rright;
+    if (has_right_neighbor) {
+      MPI_Irecv(&A[K + 1], 1, MPI_DOUBLE, right_neighbor, 0, comm, &req_rright);
+    } else {
+      A[K + 1] = A[K];
+    }
+
+    // non-blocking send the right-most value to the right neighbor
+    MPI_Request req_sright;
+    if (has_right_neighbor) {
+      MPI_Isend(&A[K], 1, MPI_DOUBLE, right_neighbor, 0, comm, &req_sright);
+    }
+
+    // non-blocking recieve of the right-most value of the left neighbor
+    MPI_Request req_rleft;
+    if (has_left_neighbor) {
+      MPI_Irecv(&A[0], 1, MPI_DOUBLE, left_neighbor, 0, comm, &req_rleft);
+    } else {
+      A[0] = A[1];
+    }
+
+    // --- compute the tiles for which we have the data ---
+
+    // .. we propagate the temperature for all tiles that do not use the border tiles
+    for (long long i = 2; i < K; i++) {
+
+      // if the array has a heat source at the current index, skip computation
+      if (has_source && i == source_offset + 1) {
         continue;
       }
 
@@ -112,15 +145,17 @@ int main(int argc, char **argv) {
       B[i] = tc + 0.2 * (tl + tr + (-2 * tc));
     }
 
-    // set the left border for task 0 (has no left neightbor)
-    if (rank == 0) {
-      B[0] = B[1];
+    // force the synchonization of the tile exchange
+    if (has_left_neighbor) {
+      MPI_Wait(&req_rleft, MPI_STATUS_IGNORE);
+    }
+    if (has_right_neighbor) {
+      MPI_Wait(&req_rright, MPI_STATUS_IGNORE);
     }
 
-    // set the right border for the last task (has no right neighbor)
-    if (rank == size - 1) {
-      B[K + 1] = B[K];
-    }
+    // recompute the border tiles using the recieved ghost cells
+    B[1] = A[1] + 0.2 * (A[0] + A[2] + (-2 * A[1]));
+    B[K] = A[K] + 0.2 * (A[K-1] + A[K+1] + (-2 * A[K]));
 
     // swap matrices (just pointers, not content)
     Vector H = A;
@@ -141,34 +176,12 @@ int main(int argc, char **argv) {
       }
     }
 
-    // ----- exchange border tiles with neighboring ranks -----
-
-    // send the left-most value to the left neighbor
-    if (left_neighbor >= 0) {
-      double left_value = A[1];
-      MPI_Send(&left_value, 1, MPI_DOUBLE, left_neighbor, rank, comm);
+    // --- make sure the sends executed corretly ---
+    if (has_left_neighbor) {
+      MPI_Wait(&req_sleft, MPI_STATUS_IGNORE);
     }
-
-    // send the right-most value to the right neighbor
-    if (right_neighbor < size) {
-      double right_value = A[K];
-      MPI_Send(&right_value, 1, MPI_DOUBLE, right_neighbor, rank, comm);
-    }
-
-    // wait for the right-most value of the left neighbor
-    if (left_neighbor >= 0) {
-      double left_value;
-      MPI_Recv(&left_value, 1, MPI_DOUBLE, left_neighbor, left_neighbor, comm,
-               MPI_STATUS_IGNORE);
-      A[0] = left_value;
-    }
-
-    // wait for the left-most value of the right neighbor
-    if (right_neighbor < size) {
-      double right_value;
-      MPI_Recv(&right_value, 1, MPI_DOUBLE, right_neighbor, right_neighbor,
-               comm, MPI_STATUS_IGNORE);
-      A[K + 1] = right_value;
+    if (has_right_neighbor) {
+      MPI_Wait(&req_sright, MPI_STATUS_IGNORE);
     }
   }
 
