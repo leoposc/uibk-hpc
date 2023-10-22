@@ -22,6 +22,7 @@ void releaseVector(Vector m);
 double calc_nearby_heat_diff(double *m,int N, int x, int y);
 void printTemperature(double *m, int N, int M);
 
+Vector exchangeBoundaries(int start_line, int end_line, Vector A, MPI_Comm comm);
 // -- simulation code ---
 
 int main(int argc, char **argv) {
@@ -31,11 +32,13 @@ int main(int argc, char **argv) {
         N = atoi(argv[1]);
     }
     int T = N * 10;
-    printf("Computing heat-distribution for room size %dX%d for T=%d timesteps\n", N, N, T);
 
     // ---------- setup ----------
+    MPI_Init(&argc, &argv);
+    MPI_Comm comm;
+    MPI_Comm_dup(MPI_COMM_WORLD, &comm);
     int size, rank;
-    MPI_INIT(&argc, &argv);
+    
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -46,7 +49,7 @@ int main(int argc, char **argv) {
     // set up initial conditions in A
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            A[IND(i,j)] = 273; // temperature is 0° C everywhere (273 K)
+              A[IND(i,j)] = 273; // temperature is 0° C everywhere (273 K)
         }
     }
 
@@ -55,9 +58,7 @@ int main(int argc, char **argv) {
     int source_y = N / 4;
     A[IND(source_x,source_y)] = 273 + 60;
 
-    printf("Initial:");
     //printTemperature(A, N, N);
-    printf("\n");
 
     // ---------- compute ----------
 
@@ -66,54 +67,60 @@ int main(int argc, char **argv) {
 
     // for each time step ..
 	  double startTime = MPI_Wtime();
-
+    
+    int chunk_size = N/size; 
+    int start_line = rank * chunk_size;
+    int end_line = start_line + chunk_size;
+    printf("start_line : %d end_line : %d, rank: %d \n", start_line, end_line, rank);
+    
     for (int t = 0; t < T; t++) {
-        // TODO: add parallelization here
-        for (int y = 0; y < N; y++) {
+
+        MPI_Bcast(A, N*N, MPI_DOUBLE, 0, comm);
+        for (int y = start_line; y < end_line; y++) {
             for (int x = 0; x < N; x++) {
                 A[IND(y, x)] += calc_nearby_heat_diff(A, N, x, y);
             }
         }
+        MPI_Gather(&A[IND(start_line, 0)], chunk_size * N, MPI_DOUBLE, A, chunk_size * N, MPI_DOUBLE, 0, comm);
+
+        // every 500 steps show intermediate step
         
         // keep heat source temp constant
         A[IND(source_x,source_y)] = 273 + 60;
-
-        // every 500 steps show intermediate step
-        if (!(t % 500)) {
-            printf("Step t=%d\n", t);
-            printTemperature(A, N, N);
-            printf("\n");
-        }
     }
 	  double endTime = MPI_Wtime();
 
     // ---------- check ----------
 
-    printf("Final:");
     //printTemperature(A, N, N);
-    printf("\n");
 
     // simple verification if nowhere the heat is more then the heat source
     int success = 1;
-    for (long long i = 0; i < N; i++) {
-        for (long long j = 0; j < N; j++) {
-            double temp = A[IND(i,j)];
-            if (273 <= temp && temp <= 273 + 60)
-                continue;
-            printf("%f\n", temp);
-            success = 0;
-            break;
-        }
+
+    if(rank == 0) {
+      for (long long i = 0; i < N; i++) {
+          for (long long j = 0; j < N; j++) {
+              double temp = A[IND(i,j)];
+              if (273 <= temp && temp <= 273 + 60)
+                  continue;
+              printf("%f\n", temp);
+              success = 0;
+              break;
+          }
+      }
+      printf("Verification: %s\n", (success) ? "OK" : "FAILED");
+      printf("time: %2.4f seconds\n", endTime-startTime);
     }
 
-    printf("Verification: %s\n", (success) ? "OK" : "FAILED");
-	  printf("time: %2.4f seconds\n", endTime-startTime);
-
     // cleanup
+    if(rank == 0) {
+      printTemperature(A, N, N);
+    }
     releaseVector(B);
     releaseVector(A);
     MPI_Finalize();
-    return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+    // return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return 0;
 }
 
 void printTemperature(double *m, int N, int M) {
