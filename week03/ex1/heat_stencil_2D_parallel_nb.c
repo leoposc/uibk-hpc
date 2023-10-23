@@ -15,12 +15,12 @@ typedef value_t *Vector;
 Vector createVector(int N, int M);
 void releaseVector(Vector m);
 void initializeTemperature(Vector A, int M, int N);
-void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm *comm);
+void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm *comm, MPI_Request *reqs);
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
 void printTemperature(Vector A, int N);
 void printTemperatureButFaster(Vector A, int N, int rank, int size);
 void printHelper(Vector A, int N, int size);
-void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request *reqs);
 
 void printMat(Vector A, int M, int N, int rank, int size);
 
@@ -93,7 +93,8 @@ int main(int argc, char **argv) {
 
     // ------- COMPUTATION ----------
     for (int t = 0; t < T; t++) {
-        exchangeBoundaries(A, num_rows + 2, N, rank, nb_a, nb_u, &comm);
+        MPI_Request reqs[4];
+        exchangeBoundaries(A, num_rows + 2, N, rank, nb_a, nb_u, &comm, reqs);
 
         // check if computation is necessary
         short compute = 1;
@@ -116,7 +117,7 @@ int main(int argc, char **argv) {
         }
 
         if (compute) {            
-            calc_nearby_heat_diff(A, B, num_rows + 2, N);
+            calc_nearby_heat_diff(A, B, num_rows + 2, N, reqs);
             setOuterBoundaries(B, num_rows + 2, N, rank, size);
 
             Vector H = A;
@@ -127,6 +128,8 @@ int main(int argc, char **argv) {
             if (rank == source_rank) {
                 A[IND(local_source_y, source_x)] = 273 + 60;
             }               
+        } else {
+            MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
         }
         
         // collect the final vector
@@ -165,9 +168,9 @@ void initializeTemperature(Vector A, int M, int N) {
     }    
 }
 
-void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm *comm) {
+void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm *comm, MPI_Request *reqs) {
     
-    MPI_Request reqs[4];
+    
     if (rank % 2 == 0) {
         // send the lower row to neighbour underneath
         MPI_Isend(&A[IND(M - 2, 0)], N, MPI_DOUBLE, nb_u, 1, *comm, &reqs[0]);
@@ -187,7 +190,7 @@ void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u
         // send the lower row to neighbour underneath
         MPI_Isend(&A[IND(M - 2, 0)], N, MPI_DOUBLE, nb_u, 0, *comm, &reqs[3]);
     }
-    MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
+    // MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
 }
 
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
@@ -209,9 +212,9 @@ void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
     }    
 }
 
-void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {    
+void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request *reqs) {    
     
-    for (int y = 1; y < M - 1; y++) {
+    for (int y = 2; y < M - 2; y++) {
         for (int x = 1; x < N - 1; x++) {
             double tc = A[IND(y, x)];
             
@@ -222,6 +225,28 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {
             
             B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));            
         }
+    }
+
+    // compute ghost cells 
+    MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
+    for (int x = 1; x < N - 1; x++) {
+        double tc = A[IND(1, x)];
+        
+        double tr = A[IND(1, x + 1)];
+        double tl = A[IND(1, x - 1)];
+        double td = A[IND(2, x)];
+        double tu = A[IND(0, x)];            
+        
+        B[IND(1, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));     
+
+        tc = A[IND(M - 2, x)];
+
+        tr = A[IND(M - 2, x + 1)];
+        tl = A[IND(M - 2, x - 1)];
+        td = A[IND(M - 1, x)];
+        tu = A[IND(M - 3, x)];
+
+        B[IND(M - 2, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
     }
 }
 
