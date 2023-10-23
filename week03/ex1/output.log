@@ -17,18 +17,18 @@ WARNING: There was an error initializing an OpenFabrics device.
 --------------------------------------------------------------------------
 N: 192, size: 2
 N: 192, size: 2
-[n001.intern.lcc3.intra.uibk.ac.at:1114454] 1 more process has sent help message help-mpi-btl-openib.txt / ib port not selected
-[n001.intern.lcc3.intra.uibk.ac.at:1114454] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
-[n001.intern.lcc3.intra.uibk.ac.at:1114454] 1 more process has sent help message help-mpi-btl-openib.txt / error in device init
+[n001.intern.lcc3.intra.uibk.ac.at:1153139] 1 more process has sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1153139] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1153139] 1 more process has sent help message help-mpi-btl-openib.txt / error in device init
 --------------------------------------------------------------------------
 ORTE has lost communication with a remote daemon.
 
-  HNP daemon   : [[123,0],0] on node n001
-  Remote daemon: [[123,0],1] on node n002
+  HNP daemon   : [[39262,0],0] on node n001
+  Remote daemon: [[39262,0],6] on node n007
 
 This is usually due to either a failure of the TCP network
 connection to the node, or possibly an internal failure of
 the daemon itself. We cannot recover from this failure, and
 therefore will terminate the job.
 --------------------------------------------------------------------------
-slurmstepd-n001: error: *** JOB 10726 ON n001 CANCELLED AT 2023-10-23T08:18:28 ***
+slurmstepd-n001: error: *** JOB 10827 ON n001 CANCELLED AT 2023-10-23T10:01:47 ***
