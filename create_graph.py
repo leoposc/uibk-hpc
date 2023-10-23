@@ -36,7 +36,7 @@ def parse_numbers_from_file_and_plot(file_path):
     
     print("Enter title")
     title = input()
-    print("what to plot? speedup(s) efficiency(e) or time(t)")
+    print("what to plot? speedup(s) efficiency(e) domain-specific(d) or time(t)")
     speedup = input()
     y_label= ""
     # Iterate through the parsed data and create traces
@@ -46,6 +46,13 @@ def parse_numbers_from_file_and_plot(file_path):
           print(values[0][1])
           y_values = [((values[0][1]/value[1])/value[0]) for value in values]
           y_label = "efficiency"
+        elif(speedup == 'd'):
+          print(var_name)
+          print("enter domain size")
+          domain_size = int(input())
+          print(values[0][1])
+          y_values = [domain_size/value[1] for value in values]
+          y_label = "domain-specific"
         elif(speedup == 's'):
           print(values[0][1])
           y_values = [(values[0][1]/value[1]) for value in values]
@@ -62,6 +69,9 @@ def parse_numbers_from_file_and_plot(file_path):
         fig.add_trace(trace)
 
     # Set layout and labels
+    if(y_label == "domain-specific"):
+      print("enter y-label")
+      y_label=input()
     fig.update_layout(
         title=title,
         xaxis=dict(title='num ranks'),
