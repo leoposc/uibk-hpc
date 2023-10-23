@@ -13,7 +13,7 @@
 #SBATCH --exclusive
 
 ns=(192 288 384 480 576 672 768)
-rs=(1 2 4 8 16 32 96)
+rs=(16 32 96)
 
 module purge
 module load openmpi/3.1.6-gcc-12.2.0-d2gmn55
