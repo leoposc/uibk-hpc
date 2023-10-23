@@ -21,7 +21,8 @@ module load openmpi/3.1.6-gcc-12.2.0-d2gmn55
 # sequential
 for n in "${ns[@]}"
 do
-    mpiexec -np 1 ./heat_stencil_2D_seq $n
+    echo "executing seq-$n"
+    sbatch --wait ./seq-job-script.slurm $n
 done
 
 # mpi
@@ -29,6 +30,7 @@ for n in "${ns[@]}"
 do
     for r in "${rs[@]}"
     do
-      mpiexec -np $r ./heat_stencil_2D_mpi $n
+        echo "executing mpi-$n-$r"
+        sbatch --wait ./mpi-job-script.slurm $n $r
     done
 done
