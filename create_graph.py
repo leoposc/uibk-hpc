@@ -31,11 +31,6 @@ def parse_numbers_from_file_and_plot(file_path):
                 data_dict[var_name] = []
             data_dict[var_name].append(numbers)
     
-    x_min = min(min(value[0] for value in values) for values in data_dict.values())
-    x_max = max(max(value[0] for value in values) for values in data_dict.values())
-    y_min = min(min(value[1] for value in values) for values in data_dict.values())
-    y_max = max(max(value[1] for value in values) for values in data_dict.values())
-    
     # Create a Plotly subplot
     fig = make_subplots(rows=1, cols=1)
     
@@ -53,8 +48,8 @@ def parse_numbers_from_file_and_plot(file_path):
     # Set layout and labels
     fig.update_layout(
         title='Data Plot',
-        xaxis=dict(title='package size'),
-        yaxis=dict(title='latency'),
+        xaxis=dict(title='num ranks'),
+        yaxis=dict(title='time'),
         width=1080,
         height=720
     )
