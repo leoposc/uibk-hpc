@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
         N = atoi(argv[1]);
     }
     int T = N * 50;
+    printf("N: %d, size: %d\n", N, size);
 
     if (N % size != 0) {
         printf("N must be divisible by the number of processes\n");
@@ -132,9 +133,9 @@ int main(int argc, char **argv) {
         }
         
         // collect the final vector
-        MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
         if (rank == 0) {
-            if (!(t % 250)) { 
+            if (!(t % 10000)) { 
+                MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
                 printf("Step t=%d:\n", t);
                 printTemperature(final, N);
                 printf("\n");            
@@ -148,7 +149,7 @@ int main(int argc, char **argv) {
 
     // ------- OUTPUT ----------
     if (rank == 0) {
-        printf("Elapsed Time: %2.4f\n", endtime - starttime);
+        printf("$!N_%d{%d, %2.4f}\n", N, size, endtime - starttime);
     }
 
     releaseVector(B);
