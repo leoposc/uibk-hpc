@@ -122,6 +122,7 @@ int main(int argc, char **argv) {
 
   printf("Verification: %s\n", (success) ? "OK" : "FAILED");
   printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
+  printf("$!N_%d{1, %2.4f}\n", N, (t_stop - t_start) / (double) CLOCKS_PER_SEC);
 
   // ---------- cleanup ----------
 
