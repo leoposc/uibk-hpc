@@ -21,7 +21,7 @@ Depending on the problem size the speedup is for all tested number of ranks huge
 
 The measurements for the non-blocking parallel program are not as consistent as for the program with blocking functions. Therefore it is difficult to evaluate the graph. Assuming we trust the numbers, the limit of performance increase by multiple processors is already reached after 32 processors for most problem sizes.
 
-![parallel-n-efficency](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-n-efficiency.png)
+![parallel-n-efficency](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-b-efficiency.png)
 
 The efficiency is between 10% and 40%. For bigger problem sizes there is no tipping point recognizable. For problem sizes below 288 8 ranks is the last step before the efficiency drastically decreases.
 
