@@ -45,6 +45,10 @@ Domain inspecific:
 
 ![parallel-nb-indomain](./parallel-nb-indomain.png)
 
+Domain-specific is more descriptive and it is easier connect that size to the acutal problem. Therefore this seems to be a more intuitive and easier to understand measure.
+Domain-specific can be used to compare different programs, but in most cases it is too "abstract" to derive meaningful information from it.
+In our case the Domain inspecific scales a lot with the N (ca N³), while the specific scales linearly with N. Therefore in our graphes in the inspecific, the program seems to be doing a lot better with higher Ns. 
+
 **How can you verify the correctness of your applications?**
 
 Print the 2D heat stencil for every 10.000 timestamp and compare if with the sequential version.
