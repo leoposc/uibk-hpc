@@ -101,6 +101,7 @@ int main(int argc, char **argv) {
   
   // TODO use MPI_Wtime()
   clock_t t_start = clock();
+  double starttime = MPI_Wtime();
 
   // ---------- compute ----------
 
@@ -188,6 +189,7 @@ int main(int argc, char **argv) {
   }
 
   clock_t t_stop = clock();
+  double endtime = MPI_Wtime();
 
   // ---------- check ----------
   MPI_Gather(&A[IDX(1, 0, N)], N * K, MPI_DOUBLE, merged, N * K, MPI_DOUBLE, 0, comm);
@@ -211,6 +213,7 @@ int main(int argc, char **argv) {
 
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
     printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
+    printf("$!N_%d{%d, %2.4f}\n", N, size, endtime - starttime);
 
     releaseMatrix(merged);
   }
