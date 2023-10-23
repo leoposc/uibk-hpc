@@ -18,13 +18,6 @@ rs=(16 32 96)
 module purge
 module load openmpi/3.1.6-gcc-12.2.0-d2gmn55
 
-# sequential
-for n in "${ns[@]}"
-do
-    echo "executing seq-$n"
-    sbatch --wait ./seq-job-script.slurm $n
-done
-
 # mpi
 for n in "${ns[@]}"
 do
