@@ -1,3 +1,4 @@
+### Team: Peter Burger, Leo Schmid, Fabian Aster
 
 # Exercise sheet week 03
 
@@ -17,9 +18,26 @@ The same applies for the parallel program with non-blocking functions. Even the 
 
 ![parallel-nb-speedup](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-nb-speedup.png)
 
+Efficiency can be seen here, it is in the expected values and decreases with the number of processes.
+
+![parallel-b-efficiency](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-b-efficiency.png)
+
+![parallel-nb-efficiency](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-nb-efficiency.png)
+
+
 **Measure and illustrate one domain-specific and one domain-inspecific performance metric. What can you observe?**
 
+Domain specific:
 
+![parallel-b-domainspec](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-b-domainspec.png)
+
+![parallel-nb-domainspec](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-nb-domainspec.png)
+
+Domain inspecific:
+
+![parallel-b-indomain](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-b-indomain.png)
+
+![parallel-nb-indomain](https://github.com/leoposc/uibk-hpc/blob/main/week03/ex1/parallel-nb-indomain.png)
 
 **How can you verify the correctness of your applications?**
 
