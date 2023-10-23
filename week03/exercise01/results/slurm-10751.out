@@ -1,0 +1,748 @@
+Computing heat-distribution for room size N=384 for T=38400 timesteps
+Initial:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                @                                                                                       X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Step t=0:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                =                                                                                       X
+X                               =@                                                                                       X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Step t=10000:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                              ....                                                                                      X
+X                          .............                                                                                 X
+X                       ..................                                                                               X
+X                     ......................                                                                             X
+X                    ........................                                                                            X
+X                  ............................                                                                          X
+X                 ..............................                                                                         X
+X                ................................                                                                        X
+X               ..................................                                                                       X
+X              ..............--------..............                                                                      X
+X             ............--------------............                                                                     X
+X            ...........------------------..........                                                                     X
+X           ...........--------------------..........                                                                    X
+X           ..........----------::-----------.........                                                                   X
+X          ..........-------::::::::::--------........                                                                   X
+X         ..........------::::::::::::::------.........                                                                  X
+X         .........------:::::::===:::::::-----........                                                                  X
+X        .........------::::==========:::::-----........                                                                 X
+X        .........-----::::============::::-----........                                                                 X
+X        ........-----::::===++++++++===::::-----.......                                                                 X
+X       .........-----:::===+++****+++===::::----.......                                                                 X
+X       .........----:::===++***^^***++===:::----........                                                                X
+X       ........-----:::==++**^^XX^^**++==:::-----.......                                                                X
+X       ........-----:::==++*^XX###X^**+===:::----.......                                                                X
+X      .........-----:::==+**^X%@@%#X^*++==:::----.......                                                                X
+X      .........----:::===+*^X#@@@@%X^*++==:::----.......                                                                X
+X      .........----:::===+*^X#@@@@%X^*++==:::----.......                                                                X
+X      .........-----::===+**^#%@@@#X^*++==:::----.......                                                                X
+X       ........-----:::==++*^X#%%#X^**+===:::----.......                                                                X
+X       ........-----:::==++**^XXXX^^*++==:::-----.......                                                                X
+X       .........----:::===++**^^^^**++===:::----........                                                                X
+X       .........-----:::===++******+++==::::----.......                                                                 X
+X       .........-----::::===++++++++====:::-----.......                                                                 X
+X        .........-----::::====++++=====::::----........                                                                 X
+X        .........-----:::::==========:::::-----........                                                                 X
+X         .........-----::::::======::::::-----........                                                                  X
+X         ..........------:::::::::::::::------........                                                                  X
+X          .........-------::::::::::::-------........                                                                   X
+X           .........---------::::::---------.........                                                                   X
+X           ...........---------------------.........                                                                    X
+X            ...........------------------..........                                                                     X
+X             ............--------------............                                                                     X
+X              ..............--------..............                                                                      X
+X               ..................................                                                                       X
+X                ................................                                                                        X
+X                  ............................                                                                          X
+X                   ..........................                                                                           X
+X                     ......................                                                                             X
+X                       ..................                                                                               X
+X                           ..........                                                                                   X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Step t=20000:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X.......................---------------.....................                                                             X
+X......................----------------.....................                                                             X
+X......................-----------------....................                                                             X
+X.....................-------------------...................                                                             X
+X....................---------------------...................                                                            X
+X...................-----------------------..................                                                            X
+X..................-------------------------.................                                                            X
+X.................---------------------------................                                                            X
+X................-----------------------------................                                                           X
+X..............--------------------------------...............                                                           X
+X.............----------------------------------..............                                                           X
+X............-----------------------------------...............                                                          X
+X...........-------------------------------------..............                                                          X
+X..........------------------:::::::--------------.............                                                          X
+X.........----------------:::::::::::::------------.............                                                         X
+X.........--------------:::::::::::::::::----------.............                                                         X
+X........-------------:::::::::::::::::::::---------............                                                         X
+X.......-------------:::::::::::::::::::::::---------...........                                                         X
+X......-------------:::::::::::====::::::::::--------............                                                        X
+X.....-------------::::::::===========::::::::--------...........                                                        X
+X....-------------:::::::===============:::::::-------...........                                                        X
+X...-------------:::::::==================:::::-------...........                                                        X
+X.---------------::::::======++++++++======:::::-------...........                                                       X
+X---------------::::::=====++++++++++++====:::::-------...........                                                       X
+X---------------:::::=====+++++****+++++====:::::------...........                                                       X
+X--------------::::::====++++*********+++====::::-------..........                                                       X
+X--------------:::::====+++****^^^^^***+++===:::::------..........                                                       X
+X--------------:::::====+++**^^^XX^^^***++===:::::------..........                                                       X
+X-------------::::::===+++**^^XX##XX^^**+++===::::------..........                                                       X
+X-------------::::::===+++**^X##%%%#X^^**++===::::------..........                                                       X
+X-------------:::::====++**^^X#@@@@%#X^**++===::::------..........                                                       X
+X-------------:::::====++**^X#%@@@@%#X^**++===::::------..........                                                       X
+X-------------:::::====++**^X#%@@@@%#X^**++===::::------..........                                                       X
+X-------------:::::====++**^^X%@@@@%#X^**++===::::------..........                                                       X
+X-------------::::::===+++*^^X#%%%%#X^^**++===::::------..........                                                       X
+X--------------:::::===+++**^^X####XX^**+++===::::------..........                                                       X
+X--------------:::::====++***^^XXXX^^***++===:::::------..........                                                       X
+X--------------::::::===+++***^^^^^^***+++===::::-------..........                                                       X
+X..-------------:::::====+++**********+++====::::------...........                                                       X
+X...------------::::::====++++******++++====:::::------..........                                                        X
+X....------------:::::=====++++++++++++====:::::-------..........                                                        X
+X.....-----------::::::======++++++++=====:::::-------...........                                                        X
+X......-----------:::::::================::::::-------..........                                                         X
+X.......-----------:::::::==============::::::-------...........                                                         X
+X........-----------:::::::::========::::::::--------...........                                                         X
+X.........-----------:::::::::::::::::::::::--------...........                                                          X
+X..........------------:::::::::::::::::::---------............                                                          X
+X............------------::::::::::::::::---------............                                                           X
+X.............-------------:::::::::::-----------.............                                                           X
+X..............---------------------------------.............                                                            X
+X................------------------------------..............                                                            X
+X.................----------------------------..............                                                             X
+X...................------------------------...............                                                              X
+X......................-------------------................                                                               X
+X.........................-------------..................                                                                X
+X.......................................................                                                                 X
+X......................................................                                                                  X
+X.....................................................                                                                   X
+X....................................................                                                                    X
+X    ...............................................                                                                     X
+X        .........................................                                                                       X
+X           ....................................                                                                         X
+X              ...............................                                                                           X
+X                  ........................                                                                              X
+X                      .................                                                                                 X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Step t=30000:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X----------------:::::::::::::::::::::::----------------.................                                                X
+X----------------:::::::::::::::::::::::----------------.................                                                X
+X---------------::::::::::::::::::::::::----------------.................                                                X
+X---------------:::::::::::::::::::::::::---------------.................                                                X
+X--------------:::::::::::::::::::::::::::---------------................                                                X
+X-------------::::::::::::::::::::::::::::---------------................                                                X
+X------------::::::::::::::::::::::::::::::--------------................                                                X
+X------------:::::::::::::::::::::::::::::::-------------................                                                X
+X-----------:::::::::::::::::::::::::::::::::-------------...............                                                X
+X----------:::::::::::::::::::::::::::::::::::------------...............                                                X
+X---------::::::::::::::::::::::::::::::::::::------------...............                                                X
+X--------::::::::::::::::::::::::::::::::::::::-----------...............                                                X
+X------:::::::::::::::::::::::::::::::::::::::::-----------..............                                                X
+X-----:::::::::::::::::::::=========:::::::::::::----------...............                                               X
+X----:::::::::::::::::::===============::::::::::----------...............                                               X
+X--:::::::::::::::::::===================:::::::::----------..............                                               X
+X::::::::::::::::::::=====================::::::::----------..............                                               X
+X:::::::::::::::::::=======================::::::::---------..............                                               X
+X::::::::::::::::::============++===========:::::::---------..............                                               X
+X:::::::::::::::::=========+++++++++++=======:::::::---------.............                                               X
+X::::::::::::::::========++++++++++++++=======::::::---------.............                                               X
+X:::::::::::::::========+++++++++++++++++=====:::::::--------.............                                               X
+X:::::::::::::::=======+++++++******++++++=====::::::--------.............                                               X
+X::::::::::::::=======+++++***********+++++====::::::--------.............                                               X
+X::::::::::::::======+++++*************++++=====::::::--------............                                               X
+X::::::::::::::======++++****^^^^^^^^***++++====::::::--------............                                               X
+X:::::::::::::======++++****^^^^XXX^^^***+++====::::::--------............                                               X
+X:::::::::::::======++++***^^XXXXXXXX^^***+++====:::::--------............                                               X
+X:::::::::::::======++++**^^XX######XX^^**+++====:::::--------............                                               X
+X:::::::::::::======+++***^^X##%@@%%#X^^**+++====:::::--------............                                               X
+X:::::::::::::=====++++***^^X#%@@@@%#XX^**+++====:::::--------............                                               X
+X:::::::::::::=====++++***^XX#@@@@@@%XX^**+++====:::::--------............                                               X
+X:::::::::::::======+++***^XX#@@@@@@%XX^**+++====:::::--------............                                               X
+X:::::::::::::======+++***^XX#%@@@@@#XX^**+++====:::::--------............                                               X
+X:::::::::::::======+++***^^X#%%@@@%#X^^**+++====:::::-------.............                                               X
+X::::::::::::::=====++++**^^XX##%%##XX^^**+++====:::::-------.............                                               X
+X::::::::::::::=====++++***^^XXXXXXXX^^**+++====::::::-------.............                                               X
+X::::::::::::::======++++***^^^XXXX^^^***+++====:::::--------............                                                X
+X:::::::::::::::======++++***^^^^^^^^***+++=====:::::--------............                                                X
+X---::::::::::::======+++++************++++====::::::-------.............                                                X
+X----::::::::::::======+++++*********+++++====::::::--------.............                                                X
+X------:::::::::::======+++++++++++++++++=====::::::--------............                                                 X
+X-------:::::::::::=======+++++++++++++======::::::--------.............                                                 X
+X--------:::::::::::========+++++++++=======::::::---------.............                                                 X
+X---------:::::::::::======================:::::::--------.............                                                  X
+X-----------:::::::::::==================::::::::---------.............                                                  X
+X------------::::::::::::===============::::::::---------..............                                                  X
+X-------------::::::::::::::=========::::::::::---------..............                                                   X
+X---------------::::::::::::::::::::::::::::::----------..............                                                   X
+X-----------------::::::::::::::::::::::::::-----------..............                                                    X
+X-------------------:::::::::::::::::::::::-----------...............                                                    X
+X---------------------:::::::::::::::::::------------...............                                                     X
+X------------------------:::::::::::::--------------................                                                     X
+X--------------------------------------------------................                                                      X
+X-------------------------------------------------................                                                       X
+X....-------------------------------------------..................                                                       X
+X........--------------------------------------..................                                                        X
+X............--------------------------------...................                                                         X
+X...............---------------------------....................                                                          X
+X...................--------------------......................                                                           X
+X........................----------..........................                                                            X
+X...........................................................                                                             X
+X..........................................................                                                              X
+X.........................................................                                                               X
+X........................................................                                                                X
+X......................................................                                                                  X
+X.....................................................                                                                   X
+X...................................................                                                                     X
+X.................................................                                                                       X
+X...............................................                                                                         X
+X............................................                                                                            X
+X.........................................                                                                               X
+X             ........................                                                                                   X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Final:
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X:::::::::::::::::::::::=======::::::::::::::::::::-------------.................                                        X
+X:::::::::::::::::::::::========:::::::::::::::::::-------------.................                                        X
+X:::::::::::::::::::::===========::::::::::::::::::-------------.................                                        X
+X::::::::::::::::::::=============:::::::::::::::::-------------.................                                        X
+X:::::::::::::::::::===============::::::::::::::::-------------.................                                        X
+X::::::::::::::::::==================:::::::::::::::------------.................                                        X
+X:::::::::::::::::====================::::::::::::::------------.................                                        X
+X:::::::::::::::=======================:::::::::::::------------.................                                        X
+X::::::::::::::=========================:::::::::::::-----------.................                                        X
+X:::::::::::::===========================::::::::::::------------................                                        X
+X::::::::::::=============================:::::::::::------------................                                        X
+X:::::::::::===============================:::::::::::-----------................                                        X
+X::::::::::=================================::::::::::-----------................                                        X
+X:::::::::===================================:::::::::-----------................                                        X
+X::::::::=====================================:::::::::----------................                                        X
+X:::::::==================++++++++++===========::::::::----------................                                        X
+X:::::::================++++++++++++++=========::::::::-----------...............                                        X
+X::::::===============++++++++++++++++++========::::::::----------...............                                        X
+X:::::===============++++++++++++++++++++=======::::::::----------...............                                        X
+X::::===============++++++++++++++++++++++=======:::::::----------...............                                        X
+X:::===============+++++++++********+++++++======::::::::---------...............                                        X
+X::===============++++++++************++++++======:::::::---------...............                                        X
+X::===============+++++++***************+++++=====:::::::---------...............                                        X
+X================+++++++******^^^^^^*****++++======::::::---------...............                                        X
+X================++++++*****^^^^^^^^^^****++++=====::::::---------...............                                        X
+X===============++++++*****^^^^XXX^^^^^***++++=====::::::---------...............                                        X
+X===============++++++****^^^XXXXXXXX^^^***+++=====::::::---------...............                                        X
+X===============+++++****^^^XXX####XXX^^***++++====:::::::--------...............                                        X
+X===============+++++****^^XX##%%%%##XX^^**++++====:::::::--------...............                                        X
+X===============+++++***^^^XX#%%@@@%#XX^^***+++====:::::::--------...............                                        X
+X:==============+++++***^^XX#%%@@@@@%#X^^***+++====:::::::--------..............                                         X
+X::=============+++++***^^XX#%@@@@@@%#X^^***+++====::::::---------..............                                         X
+X:::============+++++***^^XX#%@@@@@@%#X^^***+++====::::::---------..............                                         X
+X::::===========+++++***^^^X#%@@@@@@%#X^^***+++====::::::---------..............                                         X
+X:::::==========+++++***^^^XX#%@@@@%#XX^^***+++====::::::---------..............                                         X
+X:::::===========+++++***^^XX##%%%%##XX^^**++++====::::::--------...............                                         X
+X::::::==========+++++***^^^XXX####XXX^^***+++=====::::::--------...............                                         X
+X:::::::==========+++++***^^^XXXXXXXX^^***++++====::::::---------..............                                          X
+X::::::::=========+++++****^^^^^^^^^^^****+++=====::::::---------..............                                          X
+X:::::::::=========+++++*****^^^^^^^^****++++=====::::::--------...............                                          X
+X::::::::::=========+++++***************++++=====::::::---------...............                                          X
+X:::::::::::=========++++++***********+++++=====:::::::---------..............                                           X
+X::::::::::::=========++++++++******++++++======::::::---------...............                                           X
+X:::::::::::::=========++++++++++++++++++======:::::::---------...............                                           X
+X::::::::::::::==========++++++++++++++=======:::::::----------..............                                            X
+X:::::::::::::::============+++++++++========::::::::---------...............                                            X
+X:::::::::::::::::==========================::::::::----------...............                                            X
+X:::::::::::::::::::======================:::::::::----------...............                                             X
+X:::::::::::::::::::::===================:::::::::----------................                                             X
+X:::::::::::::::::::::::==============:::::::::::-----------...............                                              X
+X-----::::::::::::::::::::::::::::::::::::::::::-----------................                                              X
+X--------::::::::::::::::::::::::::::::::::::::-----------................                                               X
+X-----------:::::::::::::::::::::::::::::::::------------.................                                               X
+X--------------::::::::::::::::::::::::::::--------------................                                                X
+X-----------------:::::::::::::::::::::::---------------.................                                                X
+X--------------------:::::::::::::::::-----------------.................                                                 X
+X---------------------------::::---------------------..................                                                  X
+X---------------------------------------------------...................                                                  X
+X--------------------------------------------------...................                                                   X
+X------------------------------------------------....................                                                    X
+X-----------------------------------------------....................                                                     X
+X---------------------------------------------......................                                                     X
+X------------------------------------------........................                                                      X
+X.........------------------------------..........................                                                       X
+X................-------------------.............................                                                        X
+X...............................................................                                                         X
+X..............................................................                                                          X
+X............................................................                                                            X
+X...........................................................                                                             X
+X..........................................................                                                              X
+X........................................................                                                                X
+X.......................................................                                                                 X
+X.....................................................                                                                   X
+X...................................................                                                                     X
+X.................................................                                                                       X
+X...............................................                                                                         X
+X............................................                                                                            X
+X.........................................                                                                               X
+X.....................................                                                                                   X
+X..............................                                                                                          X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+X                                                                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Verification: OK
+Time: 22.885355s
+$!N_384{1, 22.8854}
