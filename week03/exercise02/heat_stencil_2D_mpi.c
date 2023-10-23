@@ -266,6 +266,7 @@ int main(int argc, char **argv) {
 
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
     printf("Time: %lfs\n", (t_stop - t_start) / (double) CLOCKS_PER_SEC);
+    printf("$!N_%d{%d, %2.4f}\n", N, size, (t_stop - t_start) / (double) CLOCKS_PER_SEC);
 
     releaseMatrix(merged);
   }
