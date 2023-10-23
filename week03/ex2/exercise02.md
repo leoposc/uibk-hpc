@@ -9,16 +9,16 @@ See `heat_stencil_2D_mpi_np.c`.
 
 > Run your programs with multiple problem and machine sizes and compare both versions.
 
-#### 1D heat stencil:
+#### 1D heat stencil
 
 ![](images/n-vs-nb-1d.png)
 
 Observations:
 
 * There is almost no difference when using 8 cores.
-* When using more cores, the non-blocking variant performs better then the blocking version, but only marginally. A reason for that could be the fact that in the 1D heat stencil application, there is not a lot of data being transferred. In that case, the time in blocking state is almost negligible.
+* When using more cores, the non-blocking variant performs better than the blocking version, but only marginally. A reason for that could be the fact that in the 1D heat stencil application, there is not a lot of data being transferred. In that case, the time in blocking state is almost negligible.
 
-#### 2D heat stencil:
+#### 2D heat stencil
 
 ![](images/n-vs-nb-2d.png)
 
