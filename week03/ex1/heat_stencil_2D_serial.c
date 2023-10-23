@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     if (argc > 1) {
         N = atoi(argv[1]);
     }
-    int T = N * 10;
+    int T = N * 100;
     printf("Computing heat-distribution for room size %dX%d for T=%d timesteps\n", N, N, T);
 
     // ---------- setup ----------
@@ -103,6 +103,7 @@ int main(int argc, char **argv) {
 
     printf("Verification: %s\n", (success) ? "OK" : "FAILED");
 	  printf("time: %2.4f seconds\n", endTime-startTime);
+    printf("$!N_%d{1, %2.4f}\n", N, endTime-startTime);
 
     // cleanup
     releaseVector(B);
