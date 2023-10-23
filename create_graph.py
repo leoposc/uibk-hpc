@@ -34,16 +34,25 @@ def parse_numbers_from_file_and_plot(file_path):
     # Create a Plotly subplot
     fig = make_subplots(rows=1, cols=1)
     
-    print("plot speedup? (y/n)")
+    print("Enter title")
+    title = input()
+    print("what to plot? speedup(s) efficiency(e) or time(t)")
     speedup = input()
+    y_label= ""
     # Iterate through the parsed data and create traces
     for var_name, values in data_dict.items():
         y_values = []
-        if(speedup == 'y'):
+        if(speedup == 'e'):
+          print(values[0][1])
+          y_values = [((values[0][1]/value[1])/value[0]) for value in values]
+          y_label = "efficiency"
+        elif(speedup == 's'):
           print(values[0][1])
           y_values = [(values[0][1]/value[1]) for value in values]
+          y_label = "speedup"
         else:
           y_values = [value[1] for value in values]
+          y_label = "time"
         x_values = [value[0] for value in values]
         print(values)
         print(x_values)
@@ -54,9 +63,9 @@ def parse_numbers_from_file_and_plot(file_path):
 
     # Set layout and labels
     fig.update_layout(
-        title="Speedup Parallel Blocking",
+        title=title,
         xaxis=dict(title='num ranks'),
-        yaxis=dict(title='speedup'),
+        yaxis=dict(title=y_label),
         width=1080,
         height=720
     )
