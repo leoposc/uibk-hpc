@@ -35,11 +35,11 @@ int main(int argc, char **argv) {
     double starttime, endtime;
     starttime = MPI_Wtime();
 
-    int N = 50;
+    int N = 768;
     if (argc > 1) {
         N = atoi(argv[1]);
     }
-    int T = N * 50;
+    int T = N * 100;
 
     if (N % size != 0) {
         printf("N must be divisible by the number of processes\n");
@@ -81,7 +81,6 @@ int main(int argc, char **argv) {
     // get index of the boundary which is more likely to have a higher temperature
     int hot_boundary = source_x < N / 2 ? 0 : N - 1;
 
-    // initializeTemperature(B, num_rows + 2, N);
     initializeTemperature(A, num_rows + 2, N);
     if (rank == source_rank) {
         A[IND(local_source_y, source_x)] = 273 + 60;
@@ -90,11 +89,7 @@ int main(int argc, char **argv) {
     // ------- COMPUTATION ----------
     for (int t = 0; t < T; t++) {
 
-        // printf("HELP ME, I'M RANK %D AND I'M STUCK! 0", rank);
         exchangeBoundaries(A, num_rows + 2, N, rank, size, &comm);
-        // printf("HELP ME, I'M RANK %D AND I'M STUCK! 1", rank);
-
-        // printMat(A, num_rows + 2, N, rank, size);
         // check if computation is necessary
         short compute = 1;
         if (rank < source_rank) {
@@ -103,7 +98,6 @@ int main(int argc, char **argv) {
             double max_t = fmax(val_1, val_2);
             if (max_t < 273.0001) {
                 // no need to compute
-                // printf("rank %d: no need to compute\nupper_if_cond\nmax_t: %f\n", rank, max_t);
                 compute = 0;
             }
         } else if (rank > source_rank) {
@@ -112,7 +106,6 @@ int main(int argc, char **argv) {
             double max_t = fmax(val_1, val_2);
             if (max_t < 273.0001) {
                 // no need to compute
-                // printf("rank %d: no need to compute\nlower_if_cond max_t: %f", rank, max_t);
                 compute = 0;
             }
         }
@@ -132,9 +125,9 @@ int main(int argc, char **argv) {
         }
         
         // collect the final vector
-        MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
-        if (rank == 0) {
-            if (!(t % 250)) { 
+        if (!(t % 10000)) { 
+            MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
+            if (rank == 0) {
                 printf("Step t=%d:\n", t);
                 printTemperature(final, N);
                 printf("\n");            
