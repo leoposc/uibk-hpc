@@ -1,3 +1,4 @@
+### Team: Peter Burger, Leo Schmid, Fabian Aster
 ## Exercise 2 (1.5 Points)
 
 > Provide an MPI implementation for the 1D and 2D heat stencil that uses non-blocking communication. If you already implemented a non-blocking version, provide a blocking version, but ensure the non-blocking version works as described below.
