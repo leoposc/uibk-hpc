@@ -18,6 +18,8 @@ void initializeTemperature(Vector A, int M, int N);
 void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm *comm);
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
 void printTemperature(Vector A, int N);
+void printTemperatureButFaster(Vector A, int N, int rank, int size);
+void printHelper(Vector A, int N, int size);
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
 
 void printMat(Vector A, int M, int N, int rank, int size);
@@ -133,6 +135,7 @@ int main(int argc, char **argv) {
             if (rank == 0) {
                 printf("Step t=%d:\n", t);
                 printTemperature(final, N);
+                // printTemperatureButFaster(A, N, rank, size);
                 printf("\n");            
             }
         }
@@ -275,6 +278,92 @@ void printTemperature(Vector A, int N) {
         printf("X");
     }
     printf("\n");
+}
+
+void printTemperatureButFaster(Vector A, int N, int rank, int size) {
+    
+    int W = RESOLUTION_WIDTH;    
+    // MPI_Comm comm2d;
+    // MPI_Comm_dup(MPI_COMM_WORLD, &comm2d);
+    if (rank == 0) {
+        printf("\t");
+        for (int u = 0; u < W + 2; u++) {
+            printf("X");
+        }
+        printf("\n");
+        printf("N: %d\n", N);
+        printHelper(A, N, size);
+
+        // send ready signal
+        MPI_Send(NULL, 0, MPI_INT, rank + 1, 0, MPI_COMM_WORLD);
+    } 
+    else if (rank == size - 1) {
+        // receive ready signal
+        MPI_Recv(NULL, 0, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        printHelper(A, N, size);
+
+        // lower wall
+        printf("\t");
+        for (int l = 0; l < W + 2; l++) {
+            printf("X");
+        }
+        printf("\n\n\n");
+        fflush(NULL);
+    } else {
+        // receive ready signal
+        MPI_Recv(NULL, 0, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        printHelper(A, N, size);
+
+        // send ready signal
+        MPI_Send(NULL, 0, MPI_INT, rank + 1, 0, MPI_COMM_WORLD);
+    }
+}
+
+void printHelper(Vector A, int N, int size) {
+    const char *colors = " .-:=+*^X#%@";
+    const int numColors = 12;
+
+    // boundaries for temperature (for simplicity hard-coded)
+    const double max = 273 + 30;
+    const double min = 273 + 0;
+
+    // set the 'render' resolution
+    int W = RESOLUTION_WIDTH;
+    int H = RESOLUTION_HEIGHT / size;
+
+    // step size in each dimension
+    int M = N / size;
+    int sW = N / W;
+    int sH = M / H;
+
+    // room
+    for (int i = 1; i < H - 1; i++) {
+        // left wall
+        printf("\tX");
+        // actual room
+        for (int j = 0; j < W; j++) {
+            // get max temperature in this tile
+            double max_t = 0;
+            for (int x = sH * i; x < sH * i + sH; x++) {
+                for (int y = sW * j; y < sW * j + sW; y++) {
+                    max_t = (max_t < A[IND(x,y)]) ? A[IND(x,y)] : max_t;
+                }
+            }
+            double temp = max_t;
+
+            // pick the 'color'
+            int c = ((temp - min) / (max - min)) * numColors;
+            c = (c >= numColors) ? numColors - 1 : ((c < 0) ? 0 : c);
+
+            // print the average temperature
+            printf("%c", colors[c]);
+        }
+        // right wall
+        printf("X\n");
+        fflush(NULL);
+    }
 }
 
 Vector createVector(int M, int N) {
