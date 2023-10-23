@@ -34,22 +34,29 @@ def parse_numbers_from_file_and_plot(file_path):
     # Create a Plotly subplot
     fig = make_subplots(rows=1, cols=1)
     
+    print("plot speedup? (y/n)")
+    speedup = input()
     # Iterate through the parsed data and create traces
     for var_name, values in data_dict.items():
-        print(values)
+        y_values = []
+        if(speedup == 'y'):
+          print(values[0][1])
+          y_values = [(values[0][1]/value[1]) for value in values]
+        else:
+          y_values = [value[1] for value in values]
         x_values = [value[0] for value in values]
+        print(values)
         print(x_values)
-        y_values = [value[1] for value in values]
         
         # Create a trace for each variable with a unique color
         trace = go.Scatter(x=x_values, y=y_values, mode='lines+markers', name=var_name)
         fig.add_trace(trace)
-    
+
     # Set layout and labels
     fig.update_layout(
-        title='Data Plot',
+        title="Speedup Parallel Blocking",
         xaxis=dict(title='num ranks'),
-        yaxis=dict(title='time'),
+        yaxis=dict(title='speedup'),
         width=1080,
         height=720
     )
