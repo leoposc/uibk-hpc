@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 
     // ------- OUTPUT ----------
     if (rank == 0) {
-        printf("Elapsed Time: %2.4f\n", endtime - starttime);
+        printf("$!N_%d{%d, %2.4f}\n", N, size, endtime - starttime);
     }
 
     releaseVector(B);
