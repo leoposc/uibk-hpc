@@ -2,15 +2,15 @@
 
 # executables
 #es=('heat_stencil_1D_mpi' 'heat_stencil_1D_mpi_nb' 'heat_stencil_2D_mpi' 'heat_stencil_2D_mpi_nb')
-es=('heat_stencil_1D_mpi')
+es=('heat_stencil_2D_mpi_nb')
 
 # ranks
 #rs=(16 32 96)
-rs=(8 16)
+rs=(2 16)
 
 # problem sizes
 #ns=(192 288 384 480 576 672 768)
-ns=(1024 2048)
+ns=(192 768)
 
 # results for this exeuction
 out_dir=$(date +%s)
