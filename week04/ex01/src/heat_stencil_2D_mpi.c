@@ -4,23 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define RESOLUTION_WIDTH 50
-#define RESOLUTION_HEIGHT 50
+#include "common/common2d.h"
 
-#define IND(y, x) ((y) * (N) + (x))
-
-typedef double value_t;
-typedef value_t* Vector;
-
-Vector createVector(int N, int M);
-void releaseVector(Vector m);
-void initializeTemperature(Vector A, int M, int N);
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, MPI_Comm* comm);
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
-void printTemperature(Vector A, int N);
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
-
-void printMat(Vector A, int M, int N, int rank, int size);
 
 int main(int argc, char** argv) {
 
@@ -150,14 +138,6 @@ int main(int argc, char** argv) {
 	return EXIT_SUCCESS;
 }
 
-void initializeTemperature(Vector A, int M, int N) {
-	for(int i = 0; i < M; i++) {
-		for(int j = 0; j < N; j++) {
-			A[IND(i, j)] = 273; // Temperature is 0°C everywhere (273 K)
-		}
-	}
-}
-
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, MPI_Comm* comm) {
 	short neighbour_above = (rank - 1 + size) % size;
 	short neighbour_underneath = (rank + 1) % size;
@@ -239,89 +219,5 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {
 
 			B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
 		}
-	}
-}
-
-void printTemperature(Vector A, int N) {
-	const char* colors = " .-:=+*^X#%@";
-	const int numColors = 12;
-
-	// boundaries for temperature (for simplicity hard-coded)
-	const double max = 273 + 30;
-	const double min = 273 + 0;
-
-	// set the 'render' resolution
-	int W = RESOLUTION_WIDTH;
-	int H = RESOLUTION_HEIGHT;
-
-	// step size in each dimension
-	int sW = N / W;
-	int sH = N / H;
-
-	// upper wall
-	printf("\t");
-	for(int u = 0; u < W + 2; u++) {
-		printf("X");
-	}
-	printf("\n");
-	// room
-	for(int i = 0; i < H; i++) {
-		// left wall
-		printf("\tX");
-		// actual room
-		for(int j = 0; j < W; j++) {
-			// get max temperature in this tile
-			double max_t = 0;
-			for(int x = sH * i; x < sH * i + sH; x++) {
-				for(int y = sW * j; y < sW * j + sW; y++) {
-					max_t = (max_t < A[IND(x, y)]) ? A[IND(x, y)] : max_t;
-				}
-			}
-			double temp = max_t;
-
-			// pick the 'color'
-			int c = ((temp - min) / (max - min)) * numColors;
-			c = (c >= numColors) ? numColors - 1 : ((c < 0) ? 0 : c);
-
-			// print the average temperature
-			printf("%c", colors[c]);
-		}
-		// right wall
-		printf("X\n");
-	}
-	// lower wall
-	printf("\t");
-	for(int l = 0; l < W + 2; l++) {
-		printf("X");
-	}
-	printf("\n");
-}
-
-Vector createVector(int M, int N) {
-	// create data and index vector
-	return malloc(sizeof(value_t) * M * N);
-}
-
-void releaseVector(Vector m) {
-	free(m);
-}
-
-void printMat(Vector A, int M, int N, int rank, int size) {
-	// do not interfere with printf's from other processes
-	if(rank) {
-		MPI_Recv(NULL, 0, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	}
-
-	printf("printMat from rank %d\n", rank);
-	for(int y = 0; y < M; y++) {
-		for(int x = 0; x < N; x++)
-			printf("%5.0lf ", A[IND(y, x)]);
-		printf("\n");
-	}
-	printf("\n");
-	fflush(NULL);
-
-	if(rank < size - 1) {
-		MPI_Send(NULL, 0, MPI_INT, rank + 1, 0, MPI_COMM_WORLD);
 	}
 }
