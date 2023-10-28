@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
 		// keep heat source temp constant
 		A[IND(source_x, source_y)] = 273 + 60;
 
-		// every 500 steps show intermediate step
-		if(!(t % 500)) {
+		// every 10000 steps show intermediate step
+		if(!(t % 10000)) {
 			printf("Step t=%d\n", t);
 			printTemperature(A, N, N);
 			printf("\n");

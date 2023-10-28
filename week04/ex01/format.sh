@@ -1,0 +1,1 @@
+find ./src -type f -name '*.c' -o -name '*.h' | xargs clang-format -i -style=file -fallback-style=none
