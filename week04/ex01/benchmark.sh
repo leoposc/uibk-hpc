@@ -2,11 +2,11 @@
 
 # executables
 #es=('heat_stencil_1D_mpi' 'heat_stencil_1D_mpi_nb' 'heat_stencil_2D_mpi' 'heat_stencil_2D_mpi_nb')
-es=('heat_stencil_2D_mpi_nb')
+es=('heat_stencil_2D_mpi')
 
 # ranks
 #rs=(16 32 96)
-rs=(2 16)
+rs=(2 16 96)
 
 # problem sizes
 #ns=(192 288 384 480 576 672 768)

@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "common/common2d.h"
+#include "common/common2d_int.h"
 
+void calc_nearby_heat_diff_int(Vector A, Vector B, int M, int N);
 void exchangeBoundaries(Vector A, int M, int N, int rank, int size, MPI_Comm* comm);
 void setOuterBoundaries(Vector A, int M, int N, int rank, int size);
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N);
@@ -22,6 +23,7 @@ int main(int argc, char** argv) {
 	MPI_Comm_size(comm, &size);
 	double starttime, endtime;
 	starttime = MPI_Wtime();
+	printf("started");
 
 	int N = 768;
 	if(argc > 1) {
@@ -66,52 +68,43 @@ int main(int argc, char** argv) {
 	// local coordinates of the source, source_x stays the same
 	int local_source_y = (source_y % num_rows) + 1;
 	// get index of the boundary which is more likely to have a higher temperature
-	int hot_boundary = source_x < N / 2 ? 0 : N - 1;
 
 	initializeTemperature(A, num_rows + 2, N);
+  printf("a: %ld\n", A[IND(4,4)]);
 	if(rank == source_rank) {
-		A[IND(local_source_y, source_x)] = 273 + 60;
+		A[IND(local_source_y, source_x)] = double_to_int(273 + 60);
 	}
 
+
+	double test = 273 + M_PI;
+	printf("normal calc: %lf\n", ( test + 0.25 * (test + test + 300 + test - (4 * test))));
+	printf("before conversion: %f\n", test);
+	u_int64_t converted = double_to_int(test);
+
+  converted = converted + ((converted + converted + double_to_int(300) + converted - (converted << 2)) >> 2);
+	printf("int val: %ld\n", converted);
+	test = int_to_double(converted);
+	printf("after conversion: %f\n", test);
 	// ------- COMPUTATION ----------
 	for(int t = 0; t < T; t++) {
 
 		exchangeBoundaries(A, num_rows + 2, N, rank, size, &comm);
 		// check if computation is necessary
-		short compute = 1;
-		if(rank < source_rank) {
-			double val_1 = A[IND(num_rows + 1, source_x)];
-			double val_2 = A[IND(num_rows + 1, hot_boundary)];
-			double max_t = fmax(val_1, val_2);
-			if(max_t < 273.0001) {
-				// no need to compute
-				compute = 0;
-			}
-		} else if(rank > source_rank) {
-			double val_1 = A[IND(0, source_x)];
-			double val_2 = A[IND(0, hot_boundary)];
-			double max_t = fmax(val_1, val_2);
-			if(max_t < 273.0001) {
-				// no need to compute
-				compute = 0;
-			}
-		}
 
-		if(compute) {
-			calc_nearby_heat_diff(A, B, num_rows + 2, N);
-			setOuterBoundaries(B, num_rows + 2, N, rank, size);
+		calc_nearby_heat_diff_int(A, B, num_rows + 2, N);
+		setOuterBoundaries(B, num_rows + 2, N, rank, size);
 
-			Vector H = A;
-			A = B;
-			B = H;
+		Vector H = A;
+		A = B;
+		B = H;
 
-			// Keep the heat source temperature constant
-			if(rank == source_rank) {
-				A[IND(local_source_y, source_x)] = 273 + 60;
-			}
+		// Keep the heat source temperature constant
+		if(rank == source_rank) {
+			A[IND(local_source_y, source_x)] = double_to_int(273 + 60);
 		}
 
 		// collect the final vector
+    // printMat(A, num_rows + 2, N, 0, size);
 		if(!(t % 10000)) {
 			MPI_Gather(&A[N], num_rows * N, MPI_DOUBLE, final, num_rows * N, MPI_DOUBLE, 0, comm);
 			if(rank == 0) {
@@ -203,6 +196,22 @@ void setOuterBoundaries(Vector A, int M, int N, int rank, int size) {
 		A[IND(i, 0)] = A[IND(i, 1)];
 		// right
 		A[IND(i, N - 1)] = A[IND(i, N - 2)];
+	}
+}
+
+void calc_nearby_heat_diff_int(Vector A, Vector B, int M, int N) {
+
+	for(int y = 1; y < M - 1; y++) {
+		for(int x = 1; x < N - 1; x++) {
+			u_int64_t tc = A[IND(y, x)];
+
+			u_int64_t tr = A[IND(y, x + 1)];
+			u_int64_t tl = A[IND(y, x - 1)];
+			u_int64_t td = A[IND(y + 1, x)];
+			u_int64_t tu = A[IND(y - 1, x)];
+
+      B[IND(y, x)] = tc + ((tr + tl + td + tu - (tc << 2)) >> 2);
+		}
 	}
 }
 
