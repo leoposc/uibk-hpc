@@ -70,21 +70,10 @@ int main(int argc, char** argv) {
 	// get index of the boundary which is more likely to have a higher temperature
 
 	initializeTemperature(A, num_rows + 2, N);
-  printf("a: %ld\n", A[IND(4,4)]);
 	if(rank == source_rank) {
 		A[IND(local_source_y, source_x)] = double_to_int(273 + 60);
 	}
 
-
-	double test = 273 + M_PI;
-	printf("normal calc: %lf\n", ( test + 0.25 * (test + test + 300 + test - (4 * test))));
-	printf("before conversion: %f\n", test);
-	u_int64_t converted = double_to_int(test);
-
-  converted = converted + ((converted + converted + double_to_int(300) + converted - (converted << 2)) >> 2);
-	printf("int val: %ld\n", converted);
-	test = int_to_double(converted);
-	printf("after conversion: %f\n", test);
 	// ------- COMPUTATION ----------
 	for(int t = 0; t < T; t++) {
 
