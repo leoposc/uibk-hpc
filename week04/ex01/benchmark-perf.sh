@@ -1,7 +1,7 @@
 #!/bin/bash
 
 executable="heat_stencil_2D_mpi"
-ranks=64
+ranks=96
 n=768
 
 sbatch \
