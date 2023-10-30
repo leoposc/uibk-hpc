@@ -157,7 +157,7 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs) 
 			double td = A[IND(y + 1, x)];
 			double tu = A[IND(y - 1, x)];
 
-			B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
+			B[IND(y, x)] = 0.2 * (tr + tl + td + tu + tc);
 		}
 	}
 
@@ -171,7 +171,7 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs) 
 		double td = A[IND(2, x)];
 		double tu = A[IND(0, x)];
 
-		B[IND(1, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
+		B[IND(1, x)] = 0.2 * (tr + tl + td + tu + tc);
 
 		tc = A[IND(M - 2, x)];
 
@@ -180,7 +180,7 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs) 
 		td = A[IND(M - 1, x)];
 		tu = A[IND(M - 3, x)];
 
-		B[IND(M - 2, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
+		B[IND(M - 2, x)] = 0.2 * (tr + tl + td + tu + tc);
 	}
 }
 

@@ -217,7 +217,7 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N) {
 			double td = A[IND(y + 1, x)];
 			double tu = A[IND(y - 1, x)];
 
-			B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));
+			B[IND(y, x)] = 0.2 * (tr + tl + td + tu + tc);
 		}
 	}
 }
