@@ -1,6 +1,6 @@
 #!/bin/bash
 
-executable="heat_stencil_2D_mpi"
+executable="heat_stencil_2D_mpi_int"
 ranks=96
 n=768
 
