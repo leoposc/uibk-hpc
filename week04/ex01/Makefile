@@ -1,6 +1,6 @@
 MPICC=mpicc
 GCC=gcc
-CFLAGS=-O3 -std=gnu11 -Wall -Wextra -pedantic -lm -lmpi
+CFLAGS=-O3 -std=gnu11 -Wall -Wextra -pedantic -lm -lmpi -ffast-math
 
 SRCDIR=src
 BINDIR=bin

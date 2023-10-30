@@ -72,6 +72,8 @@ Step 1 - Improvements to `compute_nearby_heat_diff`:
 
 To reduce the number of operations required to compute `B[IND(y, x)] = tc + 0.2 * (tr + tl + td + tu - (4 * tc));`, we shortened it to `B[IND(y, x)] = 0.2 * (tr + tl + td + tu + tc)`. Although we thought that this change would be done by the compiler automatically, this was not the case. We achieved a speed up of about 1.15 to 1.20. However, one could still argue if this solution is really better, as for different heat coefficients the code has to be rewritten.
 
+We also tried using the `-fast-math` flag of the `gcc` compiler, but the improvements seem to be negligible.
+
 TODO
 
 **Insert the final walltime and speedup of the 2D stencil for 96 cores for N=768x768 and T=768x768x100 into the comparison spreadsheet: https://docs.google.com/spreadsheets/d/18WIigEWPM3htroCkLbLoiVKf2x4J2PtxDbtuYUPTRQQ/edit**
