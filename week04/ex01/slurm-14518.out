@@ -1,21 +1,4 @@
---------------------------------------------------------------------------
-By default, for Open MPI 4.0 and later, infiniband ports on a device
-are not used by default.  The intent is to use UCX for these devices.
-You can override this policy by setting the btl_openib_allow_ib MCA parameter
-to true.
-
-  Local host:              n005
-  Local adapter:           mlx4_0
-  Local port:              1
-
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-WARNING: There was an error initializing an OpenFabrics device.
-
-  Local host:   n005
-  Local device: mlx4_0
---------------------------------------------------------------------------
-Step t=0:
+startedStep t=0:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	X                                                  X
 	X                                                  X
@@ -78,18 +61,18 @@ Step t=10000:
 	X                                                  X
 	X                                                  X
 	X                                                  X
-	X                                                  X
-	X          ......                                  X
-	X         ..----..                                 X
-	X        ..-:=::-..                                X
-	X        .-:+^*=:..                                X
-	X        .-=^@@+:-.                                X
-	X        .-:*@@+:-.                                X
-	X        .-:=++=-..                                X
-	X        ..-:::--.                                 X
-	X         ...--...                                 X
-	X          .....                                   X
-	X                                                  X
+	X           ....                                   X
+	X         ........                                 X
+	X        ..------..                                X
+	X        .-::==:-..                                X
+	X       ..-:+^^+:-.                                X
+	X       ..-=^@@*:-..                               X
+	X       ..-=^@@+:-..                               X
+	X       ..-:+*+=:-.                                X
+	X        .--::::-..                                X
+	X        ...----..                                 X
+	X         .......                                  X
+	X            ..                                    X
 	X                                                  X
 	X                                                  X
 	X                                                  X
@@ -123,9 +106,6 @@ Step t=10000:
 	X                                                  X
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-[n001.intern.lcc3.intra.uibk.ac.at:98872] 95 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
-[n001.intern.lcc3.intra.uibk.ac.at:98872] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
-[n001.intern.lcc3.intra.uibk.ac.at:98872] 95 more processes have sent help message help-mpi-btl-openib.txt / error in device init
 Step t=20000:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	X                                                  X
@@ -133,21 +113,21 @@ Step t=20000:
 	X                                                  X
 	X                                                  X
 	X                                                  X
-	X                                                  X
-	X          ......                                  X
-	X        ..........                                X
-	X       ...------..                                X
-	X       ..--::::--..                               X
-	X      ..--:=++=:-..                               X
-	X      ..-:=*^^+=--..                              X
-	X      ..-:+^@@*=:-..                              X
-	X      ..-:+^@@*=:-..                              X
-	X      ..-:=+**+:--..                              X
-	X      ..--:===::-..                               X
-	X       ..---::--...                               X
-	X       ....----...                                X
+	X          .....                                   X
+	X        .........                                 X
+	X       .....--.....                               X
+	X      ...-------...                               X
+	X      ..--::::::-...                              X
+	X     ...-:==++=:--..                              X
+	X     ...-:=*XX*=:-..                              X
+	X     ..--:+X@@*=:-..                              X
+	X     ..--:+X@@*=:-..                              X
+	X     ...-:=***+=:-..                              X
+	X      ..-::====:--..                              X
+	X      ...--::::--...                              X
+	X       ...------...                               X
+	X       ...........                                X
 	X         ........                                 X
-	X           ....                                   X
 	X                                                  X
 	X                                                  X
 	X                                                  X
@@ -185,25 +165,25 @@ Step t=30000:
 	X                                                  X
 	X                                                  X
 	X                                                  X
-	X                                                  X
-	X            ..                                    X
-	X         ........                                 X
+	X           ....                                   X
+	X        .........                                 X
+	X       ............                               X
+	X      .....---......                              X
+	X     ....--------....                             X
+	X    ....--:::::---...                             X
+	X    ...--::====::-...                             X
+	X    ...-::=++++=:--...                            X
+	X   ...--:=+^XX*+::-...                            X
+	X   ...--:=+X@@^+::-...                            X
+	X   ...--:=+X@@^+::-...                            X
+	X   ....-:=+*^^*=:--...                            X
+	X    ...--:=+++==:--...                            X
+	X    ...--:::::::--...                             X
+	X     ...---:::---....                             X
+	X     .....------....                              X
+	X      .............                               X
 	X       ...........                                X
-	X      ....------...                               X
-	X      ...---::---...                              X
-	X     ...--::==::--...                             X
-	X     ..--:=+++==:-...                             X
-	X     ..--:+^XX*=:--..                             X
-	X    ...-:=+X@@^+:--..                             X
-	X    ...-:=+X@@^=:--..                             X
-	X     ..--:=*^^+=:--..                             X
-	X     ..--:==+==::-...                             X
-	X     ...--::::::--..                              X
-	X      ...--------...                              X
-	X       ....----....                               X
-	X        ..........                                X
-	X         .......                                  X
-	X                                                  X
+	X          ......                                  X
 	X                                                  X
 	X                                                  X
 	X                                                  X
@@ -235,60 +215,6 @@ Step t=30000:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 Step t=40000:
-	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X         .......                                  X
-	X        ..........                                X
-	X      .............                               X
-	X     .....-----.....                              X
-	X     ....--------....                             X
-	X    ....--:::::---...                             X
-	X   ....--::====::--...                            X
-	X   ...--::=+*++=:--...                            X
-	X   ...--:=+^XX*+::-...                            X
-	X   ...--:=*X@@^+=:-...                            X
-	X   ...--:=+X@@^+=:-...                            X
-	X   ...--:=+*^^*=::-...                            X
-	X   ....--:=+++==:--...                            X
-	X    ...--:::==::--....                            X
-	X    ....---::::---...                             X
-	X     ....-------.....                             X
-	X      ..............                              X
-	X       ............                               X
-	X         ........                                 X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	X                                                  X
-	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-Step t=50000:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	X          .....                                   X
 	X         ........                                 X
@@ -342,31 +268,31 @@ Step t=50000:
 	X                                                  X
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-Step t=60000:
+Step t=50000:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	X     ..............                               X
-	X     ...............                              X
+	X    ................                              X
 	X    ................                              X
 	X   ..................                             X
-	X  .........---........                            X
-	X.........--------.....                            X
+	X  ...................                             X
+	X..........-----.......                            X
+	X........---------......                           X
 	X.......-----------.....                           X
 	X......----::::::---....                           X
-	X......--:::===:::---....                          X
-	X.....---::==++==::--....                          X
-	X.....--::=+***++=:--....                          X
-	X....---:==*X##^+=::--...                          X
-	X....---:=+*#@@X+=::--...                          X
-	X....---:=+*#@@X+=::--...                          X
-	X.....--::=+^XX*+=:---...                          X
-	X.....--::=+++++==:--....                          X
-	X.....---::======:---....                          X
-	X......---:::::::---....                           X
-	X.......----:::----.....                           X
-	X .......---------.....                            X
-	X   ........----......                             X
-	X    ................                              X
-	X      .............                               X
+	X.....---:::====::---....                          X
+	X.....---:==+++==::--....                          X
+	X....---::=+****+=:---...                          X
+	X....---:=+*X##^+=::--...                          X
+	X....---:=+*#@@X*=::--...                          X
+	X....---:=+*#@@X*=::--...                          X
+	X....---:==*^XX*+=::--...                          X
+	X.....--::=++**+==:--....                          X
+	X.....---::======::--....                          X
+	X......---::::::::--....                           X
+	X.......----::::----....                           X
+	X........---------.....                            X
+	X  ........-----.......                            X
+	X    .................                             X
+	X     ..............                               X
 	X        .........                                 X
 	X                                                  X
 	X                                                  X
@@ -396,33 +322,33 @@ Step t=60000:
 	X                                                  X
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-Step t=70000:
+Step t=60000:
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	X.....................                             X
 	X......................                            X
 	X......................                            X
-	X...........---.........                           X
-	X........---------......                           X
-	X.......-----------.....                           X
-	X......-----::::----.....                          X
-	X.....----::::::::---....                          X
-	X....----::=====:::--.....                         X
-	X....---::==++++=::---....                         X
-	X...----:==+****+=::--....                         X
-	X...---::=+*X##^+=::--....                         X
-	X...---::=+*#@@X*=::--....                         X
-	X...---::=+*#@@X*=::--....                         X
+	X.......................                           X
+	X.........-------.......                           X
+	X.......-----------......                          X
+	X......-------------.....                          X
+	X.....-----:::::-----....                          X
+	X....----:::::::::---.....                         X
+	X....---:::=====:::---....                         X
+	X...----::==++++==::--....                         X
+	X...---::==+****+=::--....                         X
+	X...---::=+*X##^*==:--....                         X
+	X...---::=+*#@@X*+=:--....                         X
+	X...---::=+*#@@X*==:--....                         X
 	X...---::=+*^XX^+=::--....                         X
-	X....---::=++**+==::--....                         X
-	X....---:::======::--....                          X
-	X.....---:::::::::---....                          X
-	X......----::::::---.....                          X
-	X.......-----------.....                           X
-	X.........-------......                            X
+	X...----:==+***++=::--....                         X
+	X....---::===+===::---....                         X
+	X....----:::===:::---.....                         X
+	X.....----:::::::----....                          X
+	X......-------------.....                          X
+	X........---------......                           X
+	X......................                            X
 	X ....................                             X
-	X   .................                              X
-	X      .............                               X
-	X        ........                                  X
+	X    ................                              X
+	X       ...........                                X
 	X                                                  X
 	X                                                  X
 	X                                                  X
@@ -450,4 +376,60 @@ Step t=70000:
 	X                                                  X
 	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-$!N_768{96, 30.5969}
+Step t=70000:
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	X........--------........                          X
+	X.......---------........                          X
+	X......-----------........                         X
+	X.....-------------.......                         X
+	X....---------------......                         X
+	X...-------:::::-----.....                         X
+	X..------:::::::::----.....                        X
+	X.------::::===::::---.....                        X
+	X------:::=======:::---....                        X
+	X------::==+++++==::---....                        X
+	X-----:::=+**^^*+==:---....                        X
+	X-----::==+*X##^*+=::--....                        X
+	X-----::==+^#@@X*+=::--....                        X
+	X-----::==+^#@@X*+=::--....                        X
+	X-----:::=+*^XX^*+=:---....                        X
+	X------::==+****+=::---....                        X
+	X.-----:::==++++==::--.....                        X
+	X...----:::=====:::---.....                        X
+	X....----:::::::::---.....                         X
+	X.....------:::-----......                         X
+	X......------------......                          X
+	X........--------.......                           X
+	X......................                            X
+	X.....................                             X
+	X  ..................                              X
+	X      ............                                X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+startedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstarted$!N_768{96, 2.7984}
+startedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstartedstarted[ perf record: Woken up 36 times to write data ]
+[ perf record: Captured and wrote 10.145 MB perf.data (147251 samples) ]

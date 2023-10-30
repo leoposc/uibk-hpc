@@ -74,6 +74,17 @@ To reduce the number of operations required to compute `B[IND(y, x)] = tc + 0.2 
 
 We also tried using the `-fast-math` flag of the `gcc` compiler, but the improvements seem to be negligible.
 
+Different approach to improve compute_nearby_heat_diff even further:
+
+Since this function consists of a lot of floating point operations, that handle `*4` and `*0.2` we thought that it might speed the process up, if we
+convert them to int, and change the `*0.2` to `*0.25`. 
+This changes the heat coefficient wich might not make sense in a real Simulation but should have improved the performance a lot.
+So we changed the double to u_int64_t, and used 2 bytes for the numbers, and 2 bytes for the comma values.
+This is simply done by multiplying and dividing the double value by `2^32`.
+With int the big hope for improvement came from exchanging `x * 0.25` to `x << 2` and `x*4` to `x >> 2`.
+But in the end the measurements showed that this version takes about 2 sec to execute and is thereby by about 0.2 sec slower than
+working with float number.
+
 TODO
 
 **Insert the final walltime and speedup of the 2D stencil for 96 cores for N=768x768 and T=768x768x100 into the comparison spreadsheet: https://docs.google.com/spreadsheets/d/18WIigEWPM3htroCkLbLoiVKf2x4J2PtxDbtuYUPTRQQ/edit**

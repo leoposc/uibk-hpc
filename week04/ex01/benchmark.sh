@@ -2,7 +2,7 @@
 
 # executables
 #es=('heat_stencil_1D_mpi' 'heat_stencil_1D_mpi_nb' 'heat_stencil_2D_mpi' 'heat_stencil_2D_mpi_nb')
-es=('heat_stencil_2D_mpi' 'heat_stencil_2D_mpi_nb' 'heat_stencil_2D_mpi_int')
+es=('heat_stencil_2D_mpi_nb_int' 'heat_stencil_2D_mpi' 'heat_stencil_2D_mpi_nb' 'heat_stencil_2D_mpi_int')
 
 # ranks
 #rs=(16 32 96)

@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "common/common2d.h"
+#include "common/common2d_int.h"
 
+void calc_nearby_heat_diff_int(Vector A, Vector B, int M, int N);
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs);
 void exchangeBoundaries(Vector A, int M, int N, int rank, short nb_a, short nb_u, MPI_Comm* comm,
                         MPI_Request* reqs);
@@ -74,7 +75,7 @@ int main(int argc, char** argv) {
 
 	initializeTemperature(A, num_rows + 2, N);
 	if(rank == source_rank) {
-		A[IND(local_source_y, source_x)] = 273 + 60;
+		A[IND(local_source_y, source_x)] = double_to_int(273 + 60);
 	}
 
 	// ------- COMPUTATION ----------
@@ -88,7 +89,7 @@ int main(int argc, char** argv) {
 			double val_1 = A[IND(num_rows + 1, source_x)];
 			double val_2 = A[IND(num_rows + 1, hot_boundary)];
 			double max_t = fmax(val_1, val_2);
-			if(max_t < 273.0001) {
+			if(max_t < double_to_int(273.0001)) {
 				// no need to compute
 				compute = 0;
 			}
@@ -96,7 +97,7 @@ int main(int argc, char** argv) {
 			double val_1 = A[IND(0, source_x)];
 			double val_2 = A[IND(0, hot_boundary)];
 			double max_t = fmax(val_1, val_2);
-			if(max_t < 273.0001) {
+			if(max_t < double_to_int(273.0001)) {
 				// no need to compute
 				compute = 0;
 			}
@@ -112,7 +113,7 @@ int main(int argc, char** argv) {
 
 			// Keep the heat source temperature constant
 			if(rank == source_rank) {
-				A[IND(local_source_y, source_x)] = 273 + 60;
+				A[IND(local_source_y, source_x)] = double_to_int(273 + 60);
 			}
 		} else {
 			MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
@@ -146,32 +147,48 @@ int main(int argc, char** argv) {
 	return EXIT_SUCCESS;
 }
 
+void calc_nearby_heat_diff_int(Vector A, Vector B, int M, int N) {
+
+	for(int y = 1; y < M - 1; y++) {
+		for(int x = 1; x < N - 1; x++) {
+			u_int64_t tc = A[IND(y, x)];
+
+			u_int64_t tr = A[IND(y, x + 1)];
+			u_int64_t tl = A[IND(y, x - 1)];
+			u_int64_t td = A[IND(y + 1, x)];
+			u_int64_t tu = A[IND(y - 1, x)];
+
+      B[IND(y, x)] = tc + ((tr + tl + td + tu - (tc << 2)) >> 2);
+		}
+	}
+}
+
 void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs) {
 
 	for(int y = 2; y < M - 2; y++) {
 		for(int x = 1; x < N - 1; x++) {
-			double tc = A[IND(y, x)];
+			u_int64_t tc = A[IND(y, x)];
 
-			double tr = A[IND(y, x + 1)];
-			double tl = A[IND(y, x - 1)];
-			double td = A[IND(y + 1, x)];
-			double tu = A[IND(y - 1, x)];
+			u_int64_t tr = A[IND(y, x + 1)];
+			u_int64_t tl = A[IND(y, x - 1)];
+			u_int64_t td = A[IND(y + 1, x)];
+			u_int64_t tu = A[IND(y - 1, x)];
 
-			B[IND(y, x)] = 0.2 * (tr + tl + td + tu + tc);
+      B[IND(y, x)] = tc + ((tr + tl + td + tu - (tc << 2)) >> 2);
 		}
 	}
 
 	// compute ghost cells
 	MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
 	for(int x = 1; x < N - 1; x++) {
-		double tc = A[IND(1, x)];
+		u_int64_t tc = A[IND(1, x)];
 
-		double tr = A[IND(1, x + 1)];
-		double tl = A[IND(1, x - 1)];
-		double td = A[IND(2, x)];
-		double tu = A[IND(0, x)];
+		u_int64_t tr = A[IND(1, x + 1)];
+		u_int64_t tl = A[IND(1, x - 1)];
+		u_int64_t td = A[IND(2, x)];
+		u_int64_t tu = A[IND(0, x)];
 
-		B[IND(1, x)] = 0.2 * (tr + tl + td + tu + tc);
+    B[IND(1, x)] = tc + ((tr + tl + td + tu - (tc << 2)) >> 2);
 
 		tc = A[IND(M - 2, x)];
 
@@ -180,7 +197,7 @@ void calc_nearby_heat_diff(Vector A, Vector B, int M, int N, MPI_Request* reqs) 
 		td = A[IND(M - 1, x)];
 		tu = A[IND(M - 3, x)];
 
-		B[IND(M - 2, x)] = 0.2 * (tr + tl + td + tu + tc);
+    B[IND(M-2, x)] = tc + ((tr + tl + td + tu - (tc << 2)) >> 2);
 	}
 }
 
