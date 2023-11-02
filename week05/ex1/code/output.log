@@ -1,0 +1,22 @@
+program 1
+Using prebuild mode1-layer2
+[MUST] MUST configuration ... centralized checks with fall-back application crash handling (very slow)
+[MUST] Information: overwritting old intermediate data in directory "/home/cb76/cb761012/uibk-hpc/week05/ex1/code/must_temp"!
+[MUST] Using prebuilt infrastructure at /home/cb76/cb761012/.cache/must/prebuilds/b62ed64425437f6c696454be27e2071b
+[MUST] Weaver ... success
+[MUST] Generating P^nMPI configuration ... success
+[MUST] Search for linked P^nMPI ... not found ... using LD_PRELOAD to load P^nMPI ... success
+[MUST] Executing application:
+==1024730==ASan runtime does not come first in initial library list; you should either link runtime to your application or manually preload it with LD_PRELOAD.
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[60554,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+[MUST-ERROR] Execution finished, but no output found at /home/cb76/cb761012/uibk-hpc/week05/ex1/code/MUST_Output.html

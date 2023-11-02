@@ -10,7 +10,6 @@
 int main(int argc, char** argv) {
 	int nprocs; /* the number of processes in the task */
 	int myrank; /* my rank */
-    int i;
 	const int count = 10;
 	int tag = 42;  /* tag used for all communication */
 	int tag2 = tag + 1; /* extra tag used for what ever you want */

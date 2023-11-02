@@ -1,5 +1,5 @@
 CC=mpicc
-CC_FLAGS=-std=gnu11
+CC_FLAGS=-std=gnu11 -Wall -Wextra -pedantic -lm -lmpi -ffast-math -g -fsanitize=undefined,address
 
 .PHONY: all
 all: example_1 example_2
