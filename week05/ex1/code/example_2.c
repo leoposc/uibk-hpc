@@ -50,6 +50,9 @@ int main(int argc, char** argv) {
 	// Say bye bye
 	printf("Signing off, rank %d. \n", rank);
 
+	// FIXED: added this line to prevent memory leaks
+	MPI_Type_free(&newType);
+
 	MPI_Finalize();
 	return 0;
 }
