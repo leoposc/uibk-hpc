@@ -1,0 +1,328 @@
+Step t=0:
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                =                                 X
+	X               =@                                 X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	X                                                  X
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Step t=10000:
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	X------------------------...........               X
+	X--------------------------..........              X
+	X----------:::::::----------.........              X
+	X------:::::::::::::::-------.........             X
+	X:::::::::::::::::::::::------.........            X
+	X::::::::::::::::::::::::------........            X
+	X::::::::::==========:::::------.......            X
+	X:::::::===============::::-----........           X
+	X::::::======+++++++====::::-----.......           X
+	X::::======+++++++++++===:::-----.......           X
+	X:::======+++*******+++===:::----........          X
+	X========+++***^^^^**+++==:::-----.......          X
+	X=======+++**^^XXXX^^*++===:::----.......          X
+	X=======++**^^X####X^**++==:::----.......          X
+	X======+++**^X#%@@@#X^*++==:::----.......          X
+	X======+++**^X#@@@@%X^*++==:::----.......          X
+	X======+++**^X#@@@@%X^*++==:::----.......          X
+	X======+++**^X#@@@@#X^*++==:::----.......          X
+	X======+++**^^X#%%#X^^*++==:::----.......          X
+	X=======+++**^^XXXX^^**+===:::----.......          X
+	X========+++**^^^^^^**++==:::-----.......          X
+	X::======++++********++===:::----........          X
+	X::::=====+++++***++++===::::----.......           X
+	X:::::======+++++++++===::::-----.......           X
+	X:::::::===============::::-----........           X
+	X:::::::::============::::------........           X
+	X::::::::::::======::::::------........            X
+	X:::::::::::::::::::::::------.........            X
+	X----:::::::::::::::::--------........             X
+	X--------:::::::::::---------.........             X
+	X--------------------------..........              X
+	X-------------------------..........               X
+	X-----------------------............               X
+	X---------------------.............                X
+	X.-----------------...............                 X
+	X................................                  X
+	X...............................                   X
+	X..............................                    X
+	X.............................                     X
+	X...........................                       X
+	X..........................                        X
+	X........................                          X
+	X.......................                           X
+	X.....................                             X
+	X...................                               X
+	X.................                                 X
+	X................                                  X
+	X...............                                   X
+	X...............                                   X
+	X...............                                   X
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+$!N_192{2, 4.9990}
+
+=================================================================
+
+=================================================================
+==2366341==ERROR: LeakSanitizer: detected memory leaks
+==2366340==ERROR: LeakSanitizer: detected memory leaks
+
+
+Direct leak of 16384 byte(s) in 1 object(s) allocated from:
+Direct leak of 16384 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c1505978f0 in mlx4_store_qp (/lib64/libmlx4-rdmav2.so+0x1a8f0)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147acc2978f0 in mlx4_store_qp (/lib64/libmlx4-rdmav2.so+0x1a8f0)
+
+Direct leak of 384 byte(s) in 6 object(s) allocated from:
+Direct leak of 384 byte(s) in 6 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1582e3cb4 in ompi_attr_create_keyval_impl (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x56cb4)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad3f40cb4 in ompi_attr_create_keyval_impl (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x56cb4)
+
+Direct leak of 304 byte(s) in 2 object(s) allocated from:
+Direct leak of 304 byte(s) in 2 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c15058896d in mlx4_alloc_db (/lib64/libmlx4-rdmav2.so+0xb96d)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147acc28896d in mlx4_alloc_db (/lib64/libmlx4-rdmav2.so+0xb96d)
+
+Direct leak of 231 byte(s) in 12 object(s) allocated from:
+Direct leak of 231 byte(s) in 12 object(s) allocated from:
+    #0 0x14c158b0112b in __interceptor_strdup /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_interceptors.cpp:439
+    #1 0x14c1557130b3 in parse_line.isra.0 (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xc20b3)
+
+    #0 0x147ad475e12b in __interceptor_strdup /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_interceptors.cpp:439
+    #1 0x147ad13700b3 in parse_line.isra.0 (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xc20b3)
+
+Direct leak of 120 byte(s) in 1 object(s) allocated from:
+Direct leak of 120 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1557059d2 in btl_openib_component_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xb49d2)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad13629d2 in btl_openib_component_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xb49d2)
+
+Direct leak of 72 byte(s) in 1 object(s) allocated from:
+Direct leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1582e8b1a in ompi_comm_set_nb (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x5bb1a)
+
+Direct leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad3f45ee6 in ompi_comm_dup_with_info (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x5bee6)
+    #2 0x3030303030302c2f  (<unknown module>)
+
+Direct leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1582e8ee6 in ompi_comm_dup_with_info (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x5bee6)
+    #2 0x3030303030302c2f  (<unknown module>)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad3f45b1a in ompi_comm_set_nb (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x5bb1a)
+
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c155739e5a in mca_mpool_hugepage_open (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xe8e5a)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad1396e5a in mca_mpool_hugepage_open (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xe8e5a)
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1556ca524 in mca_base_component_find (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x79524)
+
+Direct leak of 26 byte(s) in 1 object(s) allocated from:
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad1327524 in mca_base_component_find (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x79524)
+
+Direct leak of 26 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c157503c77 in vasprintf (/lib64/libc.so.6+0x8ec77)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad3160c77 in vasprintf (/lib64/libc.so.6+0x8ec77)
+
+Direct leak of 24 byte(s) in 1 object(s) allocated from:
+Direct leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1557575d5 in pmix_bfrops_base_copy_value (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x1065d5)
+    #2 0x60d00000683f  (<unknown module>)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad13b45d5 in pmix_bfrops_base_copy_value (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x1065d5)
+    #2 0x60d00000683f  (<unknown module>)
+
+Indirect leak of 65536 byte(s) in 1 object(s) allocated from:
+Indirect leak of 65536 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c15059b57b in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1e57b)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147acc29b57b in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1e57b)
+
+Indirect leak of 32768 byte(s) in 1 object(s) allocated from:
+Indirect leak of 32768 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c15059b6c0 in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1e6c0)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147acc29b6c0 in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1e6c0)
+
+Indirect leak of 992 byte(s) in 1 object(s) allocated from:
+Indirect leak of 992 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c1556a6bba in opal_hash_table_init2 (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x55bba)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147ad1303bba in opal_hash_table_init2 (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x55bba)
+
+Indirect leak of 768 byte(s) in 2 object(s) allocated from:
+Indirect leak of 768 byte(s) in 2 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c1505994c6 in mlx4_create_cq (/lib64/libmlx4-rdmav2.so+0x1c4c6)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147acc2994c6 in mlx4_create_cq (/lib64/libmlx4-rdmav2.so+0x1c4c6)
+
+Indirect leak of 640 byte(s) in 1 object(s) allocated from:
+Indirect leak of 640 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c15059ad2e in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1dd2e)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147acc29ad2e in mlx4_exp_create_qp (/lib64/libmlx4-rdmav2.so+0x1dd2e)
+
+Indirect leak of 384 byte(s) in 6 object(s) allocated from:
+Indirect leak of 384 byte(s) in 6 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1582e51bf in ompi_attr_copy_all (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x581bf)
+
+Indirect leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad3f421bf in ompi_attr_copy_all (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libmpi.so.40+0x581bf)
+
+Indirect leak of 296 byte(s) in 1 object(s) allocated from:
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad13b5f3c in pmix_bfrops_base_value_xfer (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x107f3c)
+
+Indirect leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c1556e96c6 in info_constructor (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x986c6)
+    #2 0x3030303030302c2f  (<unknown module>)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c150598977 in mlx4_alloc_pd (/lib64/libmlx4-rdmav2.so+0x1b977)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad13466c6 in info_constructor (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x986c6)
+    #2 0x3030303030302c2f  (<unknown module>)
+
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c1556ab4bb in opal_pointer_array_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x5a4bb)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147acc298977 in mlx4_alloc_pd (/lib64/libmlx4-rdmav2.so+0x1b977)
+
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c15522bf8b in ibv_create_comp_channel (/lib64/libibverbs.so.1+0xdf8b)
+
+    #0 0x147ad47a638f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x147ad0e88f8b in ibv_create_comp_channel (/lib64/libibverbs.so.1+0xdf8b)
+
+Indirect leak of 15 byte(s) in 1 object(s) allocated from:
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b0112b in __interceptor_strdup /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_interceptors.cpp:439
+    #1 0x14c155739eb1 in mca_mpool_hugepage_open (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xe8eb1)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147ad13084bb in opal_pointer_array_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x5a4bb)
+
+Indirect leak of 8 byte(s) in 1 object(s) allocated from:
+Indirect leak of 15 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b48d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x14c1556ab4d9 in opal_pointer_array_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x5a4d9)
+
+    #0 0x147ad475e12b in __interceptor_strdup /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_interceptors.cpp:439
+    #1 0x147ad1396eb1 in mca_mpool_hugepage_open (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0xe8eb1)
+
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+Indirect leak of 8 byte(s) in 1 object(s) allocated from:
+    #0 0x14c158b4938f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x14c155758f3c in pmix_bfrops_base_value_xfer (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x107f3c)
+
+    #0 0x147ad47a5d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x147ad13084d9 in opal_pointer_array_init (/usr/site/hpc/spack/v0.19-lcc3-20230919/opt/spack/linux-rocky8-westmere/gcc-12.2.0/openmpi-3.1.6-d2gmn55g7hoinwfuk2lc3ibz6odzujak/lib/libopen-pal.so.40+0x5a4d9)
+
+SUMMARY: AddressSanitizer: 118964 byte(s) leaked in 47 allocation(s).
+SUMMARY: AddressSanitizer: 119256 byte(s) leaked in 47 allocation(s).
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[22007,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
