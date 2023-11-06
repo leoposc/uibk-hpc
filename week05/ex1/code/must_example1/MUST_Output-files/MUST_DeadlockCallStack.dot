@@ -1,0 +1,7 @@
+digraph DeadlockCallStack {
+graph [bgcolor=transparent]
+compound=true;
+Node1 [label="MPI_Send", shape=box];
+Node0 [label="main@/home/cb76/cb761012/uibk-hpc/week05/ex1/code/example_1.c:33", shape=box];
+Node0->Node1 [label="Ranks: 0"];
+}

@@ -1,0 +1,21 @@
+digraph Deadlock {
+graph [bgcolor=transparent]
+
+{
+rank=same;
+l2x0[label="MPI_Sendrecv:send", shape=box];
+}
+{
+rank=same;
+l1x0[label="MPI_Type_contiguous(count=2)", shape=box];
+l1x1[label="MPI_Sendrecv:recv", shape=box];
+l1x0->l1x1[style=invis];
+}
+{
+rank=same;
+l0x0[label="<t0>MPI_INT | <t1> MPI_BYTE", shape=record];
+}
+l1x0->l0x0:t0[label="[0]", style=solid, color=red]
+l2x0->l1x0[label="", style=solid, color=red]
+l1x1->l0x0:t1[label="", style=solid, color=red]
+}
