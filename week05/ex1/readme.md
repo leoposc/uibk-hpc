@@ -144,3 +144,5 @@ After doing some research, this appears to be quite common. They are often consi
 * https://github.com/open-mpi/ompi/issues/10048
 * https://stackoverflow.com/questions/52096355/leaksanitizer-finds-leak-in-simple-mpi-program
 * https://www.open-mpi.org/faq/?category=debugging#valgrind_clean
+
+Mustrun somehow always got stuck on MPI_Init in our heat stencil implementation.
