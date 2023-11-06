@@ -21,10 +21,10 @@ This exercise consists in comparing blocking and non-blocking communication for 
 ## Problems notices by executing the programs
 Both code examples seem to run into a deadlock or something similar, since they dont finish.
 
-## Enabling compiler warinings
+## Enabling compiler warnings
 
 To enable the compiler warnings we added the following flags to the compilation cycle.
-This already showed two warning, in example1 a unused variable and in example2 a assignment to a variable inside a function
+This already showed two warnings, in example1 a unused variable and in example2 a assignment to a variable inside a function
 call. So in example2 this leads definetly to a unexpected behaviour.
 
 Added flags:
@@ -51,7 +51,66 @@ example_2.c:32:28: warning: operation on 'rank' may be undefined [-Wsequence-poi
 After fixing the issues of the compiler warinings and running the code after compiling with sanitizers it lead to no additional warnings/issues.
 Flags for sanitizer: `-fsanitize=undefined,address `
 
+After fixing all the issues, the sanitizers kept outputing the following errors,
+that are caused by mpi itself.
+More to this at the end of this file.
+
+Errors:
+```
+Direct leak of 16384 byte(s) in 1 object(s) allocated from:
+==2649803==ERROR: LeakSanitizer: detected memory leaks
+    #0 0x154344fb9d77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x15433ca978f0 in mlx4_store_qp (/lib64/libmlx4-rdmav2.so+0x1a8f0)
+
+
+Direct leak of 304 byte(s) in 2 object(s) allocated from:
+Direct leak of 16384 byte(s) in 1 object(s) allocated from:
+    #0 0x148e9441ed77 in __interceptor_calloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x148e8be978f0 in mlx4_store_qp (/lib64/libmlx4-rdmav2.so+0x1a8f0)
+
+    #0 0x154344fba38f in __interceptor_malloc /tmp/hpc-inst/spack-v0.19-lcc3-20230919-stage/spack-stage-gcc-12.2.0-p4pe45vebc7w5leppo2eeesyakewpbxf/spack-src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x15433ca8896d in mlx4_alloc_db (/lib64/libmlx4-rdmav2.so+0xb96d)
+```
+
 ## Running with mustrun
+
+### example1
+Mustrun found 1 error in example1, and that is a deadlock.
+
+![Deadlock error](code/must_example1/deadlock_details.png)
+
+So here is a deadlock, it arises from sending a message to itself, instead of sending it to the next rank.
+Another bug was that the tags didnt match.
+
+### example2
+In example2 mustrun found two errors, one type mismatch and one deadlock.
+
+
+![Both errors](code/must_example2/bothErrors.png)
+
+Details about the type mismatch show the following graph:
+
+![type error details](code/must_example2/bothErrors.png)
+
+Details about the deadlock look like this:
+
+![deadlock error details](code/must_example2/deadlockError.png)
+
+## Fixed Bugs
+
+### example1
+
+- removed tag2
+- improved readability by adding brackets and reformatting
+- fixed sending to itself
+- fixed receiving from wrong tag
+
+### example2
+
+- fixed datatype from MPI_BYTE to MPI_INT
+- replaced `(rank = 1 + size)` with `(rank - 1 + size)`
+- fixed deadlock from communication of rec and send -> splitted that to `rank % 2`
+- added `MPI_Type_free(&newType);` to prevent memory leak
 
 ## Debugging our 2D non-blocking heat stencil implementation
 
