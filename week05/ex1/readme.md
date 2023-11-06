@@ -1,3 +1,4 @@
+### Team: Peter Burger, Leo Schmid, Fabian Aster
 # Assignment 5
 
 The goal of this assignment is to try some MPI debugging.
