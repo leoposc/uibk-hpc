@@ -1,5 +1,5 @@
 CFLAGS= -std=gnu11 -lm -Wall -Wextra -O3 -pedantic -g3 -fopenmp 
-LFLAGS = -pthread
+LFLAGS = -pthread -lm
 
 .PHONY: all
 all: Nbody Nbody_par

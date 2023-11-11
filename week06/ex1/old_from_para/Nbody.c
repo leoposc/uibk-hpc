@@ -1,10 +1,10 @@
 #include <pthread.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
 
-#define MIN_DISTANCE 100
+#define MIN_DISTANCE 0.1
 #define G 1
 #define FILE_NAME "data.dat"
 #define MAX_CORDINATE 100
@@ -32,34 +32,19 @@ double getDistanceSquared(Partciles partcile1, Partciles partcile2) {
   double deltaY = partcile1.positions.y - partcile2.positions.y;
   double deltaZ = partcile1.positions.z - partcile2.positions.z;
 
-  return square(deltaX) + square(deltaY) + square(deltaZ);
+  return sqrt(square(deltaX) + square(deltaY) + square(deltaZ));
 }
 
-bool checkValidty(Partciles partcile1, Partciles partcile2) {
-  bool validity = true;
-
-  if (getDistanceSquared(partcile1, partcile2) < MIN_DISTANCE) {
-    validity = false;
-  }
-
-  return validity;
-}
-
-Coordinates getUnitVector(Partciles partcile1, Partciles partcile2) {
-  Coordinates directionVec;
-
+void updateUnitVector(Coordinates* unit_vec_address, Partciles partcile1, Partciles partcile2) {
   double deltaX = partcile2.positions.x - partcile1.positions.x;
   double deltaY = partcile2.positions.y - partcile1.positions.y;
   double deltaZ = partcile2.positions.z - partcile1.positions.z;
 
-  double sumOfDelta = deltaX + deltaY + deltaZ;
+  double sumOfDelta = sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);
 
-  directionVec.x = deltaX / sumOfDelta;
-  directionVec.y = deltaY / sumOfDelta;
-  directionVec.z = deltaZ / sumOfDelta;
-
-
-  return directionVec;
+  (*unit_vec_address).x = deltaX / sumOfDelta;
+  (*unit_vec_address).y = deltaY / sumOfDelta;
+  (*unit_vec_address).z = deltaZ / sumOfDelta;
 }
 
 void storePositions(Partciles* partciles, size_t num_particles, FILE* fp) {
@@ -73,13 +58,17 @@ void storePositions(Partciles* partciles, size_t num_particles, FILE* fp) {
 }
 
 int main(int argc, char* argv[]) {
+  size_t num_particles;
+  size_t time_steps;
   if (argc != 3) {
-    printf("wrong amount of parameters\n");
-    return -1;
+    num_particles = 2;
+    time_steps = 20;
+  }
+  else {
+    num_particles = atoi(argv[1]);
+    time_steps = atoi(argv[2]);
   }
 
-  size_t num_particles = atoi(argv[1]);
-  size_t time_steps = atoi(argv[2]);
 
   FILE *fp = fopen(FILE_NAME, "w");
   if (fp == NULL) {
@@ -98,30 +87,30 @@ int main(int argc, char* argv[]) {
     particles[i].force.y = 0;
     particles[i].force.z = 0;
 
-    particles[i].mass = 100;
+    particles[i].mass = 1;
 
     particles[i].positions.x = rand() % MAX_CORDINATE;
     particles[i].positions.y = rand() % MAX_CORDINATE;
     particles[i].positions.z = rand() % MAX_CORDINATE;
   }
 
-  double startTime = omp_get_wtime();
 
+  Coordinates unitVector;
   for (size_t t = 0; t < time_steps; t++) {
-    //storePositions(particles, num_particles, fp);
+    storePositions(particles, num_particles, fp);
     for (size_t i = 0; i < num_particles; i++) {
       particles[i].force.x = 0;
       particles[i].force.y = 0;
       particles[i].force.z = 0;
       for (size_t j = 0; j < num_particles; j++) {
         //adjust force of particle i impacted by all other particles
-        if(i == j || checkValidty(particles[i], particles[j])) {
+        if(i == j) {
           // skip itslef, or particle on its place
           continue;
         }
         //avoid dividing by 0
         // fix direciton with last multiplyer
-        Coordinates unitVector = getUnitVector(particles[i], particles[j]);
+        updateUnitVector(&unitVector, particles[i], particles[j]);
         double distance = getDistanceSquared(particles[i], particles[j]);
 
         particles[i].force.x += (G * particles[i].mass * particles[j].mass * unitVector.x) / distance;
@@ -143,8 +132,6 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  double endTime = omp_get_wtime();
-  printf("time: %f\n", endTime-startTime);
 
   fclose(fp);
   return 0; 
