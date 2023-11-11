@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MIN_DISTANCE 0.1
+#define MIN_DISTANCE 1
 #define G 1
 #define FILE_NAME "data.dat"
 #define MAX_CORDINATE 100
@@ -19,7 +19,6 @@ typedef struct {
 typedef struct {
   Coordinates positions;
   Coordinates velocity;
-  Coordinates force;
   double mass;
 } Partciles;
 
@@ -32,7 +31,8 @@ double getDistanceSquared(Partciles partcile1, Partciles partcile2) {
   double deltaY = partcile1.positions.y - partcile2.positions.y;
   double deltaZ = partcile1.positions.z - partcile2.positions.z;
 
-  return sqrt(square(deltaX) + square(deltaY) + square(deltaZ));
+  double distance = square(deltaX) + square(deltaY) + square(deltaZ);
+  return (distance > MIN_DISTANCE ? distance : MIN_DISTANCE);
 }
 
 void updateUnitVector(Coordinates* unit_vec_address, Partciles partcile1, Partciles partcile2) {
@@ -51,7 +51,7 @@ void storePositions(Partciles* partciles, size_t num_particles, FILE* fp) {
   for (size_t i = 0; i < num_particles; i++) {
     fprintf(fp, "%f ", partciles[i].positions.x);
     fprintf(fp, "%f ", partciles[i].positions.y);
-    fprintf(fp, "%f\n", partciles[i].positions.y);
+    fprintf(fp, "%f\n", partciles[i].positions.z);
   }
   fprintf(fp, "\n");
   fprintf(fp, "\n");
@@ -83,29 +83,25 @@ int main(int argc, char* argv[]) {
     particles[i].velocity.y = 0;
     particles[i].velocity.z = 0;
 
-    particles[i].force.x = 0;
-    particles[i].force.y = 0;
-    particles[i].force.z = 0;
-
     particles[i].mass = 1;
 
-    particles[i].positions.x = rand() % MAX_CORDINATE;
-    particles[i].positions.y = rand() % MAX_CORDINATE;
-    particles[i].positions.z = rand() % MAX_CORDINATE;
+    particles[i].positions.x = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;
+    particles[i].positions.z = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;
+    particles[i].positions.y = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;
   }
 
 
   Coordinates unitVector;
+  Coordinates force;
   for (size_t t = 0; t < time_steps; t++) {
     storePositions(particles, num_particles, fp);
     for (size_t i = 0; i < num_particles; i++) {
-      particles[i].force.x = 0;
-      particles[i].force.y = 0;
-      particles[i].force.z = 0;
+      force.x = 0;
+      force.y = 0;
+      force.z = 0;
       for (size_t j = 0; j < num_particles; j++) {
         //adjust force of particle i impacted by all other particles
         if(i == j) {
-          // skip itslef, or particle on its place
           continue;
         }
         //avoid dividing by 0
@@ -113,18 +109,13 @@ int main(int argc, char* argv[]) {
         updateUnitVector(&unitVector, particles[i], particles[j]);
         double distance = getDistanceSquared(particles[i], particles[j]);
 
-        particles[i].force.x += (G * particles[i].mass * particles[j].mass * unitVector.x) / distance;
-
-        particles[i].force.y += (G * particles[i].mass * particles[j].mass * unitVector.y) / distance;
-
-        particles[i].force.z += (G * particles[i].mass * particles[j].mass * unitVector.z) / distance;
+        force.x += (G * particles[i].mass * particles[j].mass * unitVector.x) / distance;
+        force.y += (G * particles[i].mass * particles[j].mass * unitVector.y) / distance;
+        force.z += (G * particles[i].mass * particles[j].mass * unitVector.z) / distance;
       }
-      particles[i].force.x /= num_particles;
-      particles[i].force.y /= num_particles;
-      particles[i].force.z /= num_particles;
-      particles[i].velocity.x += particles[i].force.x / particles[i].mass;
-      particles[i].velocity.y += particles[i].force.y / particles[i].mass;
-      particles[i].velocity.z += particles[i].force.z / particles[i].mass;
+      particles[i].velocity.x += force.x / particles[i].mass;
+      particles[i].velocity.y += force.y / particles[i].mass;
+      particles[i].velocity.z += force.z / particles[i].mass;
 
       particles[i].positions.x += particles[i].velocity.x;
       particles[i].positions.y += particles[i].velocity.y;
