@@ -8,11 +8,19 @@
 typedef float* Vector;
 
 /**
+ * @brief   initialize the position, velocity and mass of the particles
+ * @param   A  array of length P * 7 (x-coord, y-coord, z-coord,
+ *              velocity_x, veloctiy_y, velocity_z, m)
+ * @param   P  number of particles
+ */ 
+void initialize(float *A, const unsigned int P);
+
+/**
  * @brief   compute distance between two particles in a 3D space
- * @param   p_1 coordinates of particle 1 stored in a float array of length 3
- * @param   p_2 coordinates of particle 2 stored in a float array of length 3
- * @param   distance distance between the two particles
- * @param   direction_vector direction vector between the two particles
+ * @param   p_1 coordinates of particle 1 stored in a float array of length 3 (input)
+ * @param   p_2 coordinates of particle 2 stored in a float array of length 3 (input)
+ * @param   distance distance between the two particles (output)
+ * @param   direction_vector direction vector between the two particles (output)
  */
 void compute_distance(const float *p_1, const float *p_2,
     float *distance, float *direction_vector);
@@ -35,22 +43,19 @@ void compute_force(const float *m_1, const float *m_2, const float *r, float *fo
  * @param   m   mass 
  */
 void compute_velocity(float *velocity, const float *m,
-    const float *f, const float *direction_vector)
+    const float *f, const float *direction_vector);
 
 /**
- * @brief   update the position of a particle in a three dimensional space
- * @param   p   position of the particle (x, y, z)
- * @param   v   velocity of the particle
- * @param   d   direction vector of the particle
+ * @brief   update the position of particle
+ * @param   pos position
+ * @param   v   velocity
  */
-void update_position(const float *pos, const float *v, const float *direction_vector, float *updated_pos);
+void compute_position(float *pos, const float *v);
 
 /**
- * @brief   initialize the position and velocity of a particle
- * @param   A   array of length 7 * P containing the position, velocity and mass of a particle
- * @param   B   array of length 7 * P containing the position, velocity and mass of a particle
- */ 
-void initialize(const float *A, float *B, int P);
+ * 
+ */
+void save_position(const float *pos, const unsigned int P);
 
 /**
  * @brief   create a vector of length N * 5
@@ -69,8 +74,8 @@ void releaseVector(Vector m);
 int main(int argc, char** argv) {
 
     // parsing optional input parameter (problem size)
-    int T = 100;
-    int P = 500;
+    unsigned int T = 10;
+    unsigned int P = 5;
     if(argc > 1) {
         P = atoi(argv[1]);
     }
@@ -78,19 +83,20 @@ int main(int argc, char** argv) {
     // create the arrays
     Vector A = createVector(P);
     Vector B = createVector(P);
-
-    // TODO: initialize the arrays with random values
-
     
-    // --------------------------- COMPUTATION --------------------------    
+    // --------------------------- INITIALIZATION -----------------------------
+    // initialize the position, velocity and mass of the particles
+    initialize(B, P);
+    
+    // --------------------------- COMPUTATION --------------------------------   
     // simulate the time steps
-    for(int t = 0; t < T; t++) {
+    for(unsigned int t = 0; t < T; t++) {
         // loop through particles
-        for(int i = 0; i < P; i++) {
-            //copy data from A to B
-            memcpy(B, A, P * 7 * sizeof(float));
+        for(unsigned int i = 0; i < P * 7; i += 7) {
+            //copy data from B to A
+            memcpy(A, B, P * 7 * sizeof(float));
             // loop through particles
-            for(int j = 0; j < P; j++) {
+            for(unsigned int j = 0; j < P * 7; j += 7) {
                 // skip if particle is the same
                 if(i == j) {
                     continue;
@@ -100,35 +106,47 @@ int main(int argc, char** argv) {
                 float force;
                 float distance;
                 float direction_vector[3];
+                // use the old position of particle i and j to compute the distance
                 compute_distance(&A[i], &A[j], &distance, direction_vector);
 
-                // compute force between particles
+                // compute force between particles using the constant mass (A or B)
                 compute_force(&B[i + 6], &B[j + 6], &distance, &force);
 
-                // compute velocity of particle i
+                // compute velocity of particle i using the updated (B) Velocity and the constant mass (A or B)
                 compute_velocity(&B[i + 3], &B[i + 6], &force, direction_vector);
 
-                // update position of particle i
-                compute_position(&B[i], &B[i + 3]);
+                // update position of particle i using the updated (B) position and velocity
+                compute_position(&B[i], &B[i + 3]);                
+            }            
+        }       
 
-                // TODO: update velocity of particle i
-            }
-        }
-
-        // swap arrays
-        Vector tmp = A;
-        A = B;
-        B = tmp;
+        // save the position of the particles in a file
+        save_position(B, P);
     }
 
+
+    releaseVector(A);
+    releaseVector(B);
 
     return 0;
 }
 
 // ----------------------------------------------------------------------
-void initialize(const float *A, float *B, int P) {
-    // copy data from A to B
-    memcpy(B, A, P * 7 * sizeof(float));
+void initialize(float *A, const unsigned int P) {
+    for(unsigned int i = 0; i < P * 7; i += 7) {
+        // delete any "data.dat" file
+        remove("data.dat");
+        // initialize position with random numbers between 0 and 1000
+        A[i] = rand() % 1000;
+        A[i + 1] = rand() % 1000;
+        A[i + 2] = rand() % 1000;
+        // initiliaze velocity with 0
+        A[i + 3] = 0;
+        A[i + 4] = 0;
+        A[i + 5] = 0;
+        // initialize mass with random numbers between 1 and 100
+        A[i + 6] = rand() % 100 + 1;
+    }
 }
 
 // ----------------------------------------------------------------------
@@ -136,7 +154,7 @@ void compute_distance(const float *p_1, const float *p_2,
     float *distance, float *direction_vector) {
         
     float x = p_1[0] - p_2[0];
-    float y = p_1[1] - p_2[2];
+    float y = p_1[1] - p_2[1];
     float z = p_1[2] - p_2[2];
     float xy = sqrt(x * x + y * y);
     *distance = sqrt(xy * xy + z * z);
@@ -159,12 +177,6 @@ void compute_velocity(float *velocity, const float *m,
     velocity[2] += ((*f) / (*m)) * direction_vector[2];
 }
 
-// void update_velocity(const float *old_pos, const float *new_pos, float *velocity) {
-//     float velocity[0] = new_pos[0] - old_pos[0];
-//     float velocity[1] = new_pos[1] - old_pos[1];
-//     float velocity[2] = new_pos[2] - old_pos[2];
-// }
-
 // ----------------------------------------------------------------------
 void compute_position(float *pos, const float *v) {
     pos[0] += v[0];
@@ -173,8 +185,20 @@ void compute_position(float *pos, const float *v) {
 }
 
 // ----------------------------------------------------------------------
+void save_position(const float *pos, const unsigned int P) {
+    // append the position of the particles to the file
+    FILE *fp = fopen("data.dat", "a");
+    for(unsigned int i = 0; i < P * 7; i += 7) {
+        fprintf(fp, "%f %f %f\n", pos[i], pos[i + 1], pos[i + 2]);
+    }
+    fprintf(fp, "\n\n");
+    fclose(fp);
+}
+
+
+// ----------------------------------------------------------------------
 Vector createVector(int N) {
-    return malloc(sizeof(float) * N * 5);
+    return malloc(sizeof(float) * N * 7);
 }
 
 // ----------------------------------------------------------------------
