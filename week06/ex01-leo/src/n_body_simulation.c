@@ -137,9 +137,9 @@ void initialize(float *A, const unsigned int P) {
         // delete any "data.dat" file
         remove("data.dat");
         // initialize position with random numbers between 0 and 1000
-        A[i] = rand() % 1000;
-        A[i + 1] = rand() % 1000;
-        A[i + 2] = rand() % 1000;
+        A[i] = rand() % 100;
+        A[i + 1] = rand() % 100;
+        A[i + 2] = rand() % 100;
         // initiliaze velocity with 0
         A[i + 3] = 0;
         A[i + 4] = 0;
