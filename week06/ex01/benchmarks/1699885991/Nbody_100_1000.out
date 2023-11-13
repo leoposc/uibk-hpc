@@ -1,0 +1,3 @@
+num_particles: 1000
+time_steps: 100
+$!timestamp_100{1000, 5.365290}
