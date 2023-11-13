@@ -1,0 +1,1 @@
+[MUST-ERROR] Could not determine number of MPI tasks, use "--must:np <NP-SWITCH>" to tip me.

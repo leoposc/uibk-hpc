@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
   clock_t end_time = clock();
   double elapsed_time = (end_time - start_time) / (double) CLOCKS_PER_SEC;
 
-  printf("time (s): %lf\n", elapsed_time);
+  printf("$!timesteps_%ld{%ld, %lf}\n", time_steps, num_particles, elapsed_time);
 
 #ifndef BENCHMARK
   fclose(fp);

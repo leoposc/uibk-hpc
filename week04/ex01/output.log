@@ -1,0 +1,10 @@
+Using prebuild /home/cb76/cb761012/.cache/must/prebuilds/b62ed64425437f6c696454be27e2071b
+Using prebuild /home/cb76/cb761012/.cache/must/prebuilds/b62ed64425437f6c696454be27e2071b
+[MUST] MUST configuration ... centralized checks with fall-back application crash handling (very slow)
+[MUST] Information: overwritting old intermediate data in directory "/home/cb76/cb761012/uibk-hpc/week04/ex01/must_temp"!
+[MUST] Using prebuilt infrastructure at /home/cb76/cb761012/.cache/must/prebuilds/b62ed64425437f6c696454be27e2071b
+[MUST] Weaver ... success
+[MUST] Generating P^nMPI configuration ... success
+[MUST] Search for linked P^nMPI ... not found ... using LD_PRELOAD to load P^nMPI ... success
+[MUST] Executing application:
+slurmstepd-n011: error: *** JOB 15749 ON n011 CANCELLED AT 2023-11-06T13:33:29 ***
