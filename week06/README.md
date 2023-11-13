@@ -1,4 +1,14 @@
+### Team: Peter Burger, Leo Schmid, Fabian Aster
 # Assignment 5
+
+## Exercise 1
+
+Our serial implementation run with the following benchmarks:
+
+![Benchmarks](ex01-fabi/Benchmarks.png)
+
+You can see here, that it scales linearly with the timestemps,
+but seems to scale with O(n²) with the particle count, which makes sense since all particle effect each other.
 
 ## Exercise 2 (1 Point)
 
