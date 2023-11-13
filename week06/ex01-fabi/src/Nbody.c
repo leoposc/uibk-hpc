@@ -14,36 +14,36 @@
 #define BENCHMARK
 
 typedef struct {
-  double x;
-  double y;
-  double z;
+  float x;
+  float y;
+  float z;
 } Coordinates;
 
 typedef struct {
   Coordinates positions;
   Coordinates velocity;
-  double mass;
+  float mass;
 } Partciles;
 
-double square(double num) {
+float square(float num) {
   return num * num;
 }
 
-double getDistanceSquared(Partciles partcile1, Partciles partcile2) {
-  double deltaX = partcile1.positions.x - partcile2.positions.x;
-  double deltaY = partcile1.positions.y - partcile2.positions.y;
-  double deltaZ = partcile1.positions.z - partcile2.positions.z;
+float getDistanceSquared(Partciles partcile1, Partciles partcile2) {
+  float deltaX = partcile1.positions.x - partcile2.positions.x;
+  float deltaY = partcile1.positions.y - partcile2.positions.y;
+  float deltaZ = partcile1.positions.z - partcile2.positions.z;
 
-  double distance = square(deltaX) + square(deltaY) + square(deltaZ);
+  float distance = square(deltaX) + square(deltaY) + square(deltaZ);
   return (distance > MIN_DISTANCE ? distance : MIN_DISTANCE);
 }
 
 void updateUnitVector(Coordinates* unit_vec_address, Partciles partcile1, Partciles partcile2) {
-  double deltaX = partcile2.positions.x - partcile1.positions.x;
-  double deltaY = partcile2.positions.y - partcile1.positions.y;
-  double deltaZ = partcile2.positions.z - partcile1.positions.z;
+  float deltaX = partcile2.positions.x - partcile1.positions.x;
+  float deltaY = partcile2.positions.y - partcile1.positions.y;
+  float deltaZ = partcile2.positions.z - partcile1.positions.z;
 
-  double sumOfDelta = sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);
+  float sumOfDelta = sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);
 
   (*unit_vec_address).x = deltaX / sumOfDelta;
   (*unit_vec_address).y = deltaY / sumOfDelta;
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
         }
 
         updateUnitVector(&unitVector, particles[i], particles[j]);
-        double distance = getDistanceSquared(particles[i], particles[j]);
+        float distance = getDistanceSquared(particles[i], particles[j]);
 
         force.x += (G * particles[i].mass * particles[j].mass * unitVector.x) / distance;
         force.y += (G * particles[i].mass * particles[j].mass * unitVector.y) / distance;
