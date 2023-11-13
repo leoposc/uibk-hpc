@@ -83,7 +83,7 @@ def parse_numbers_from_file_and_plot(directory_path):
       y_label=input()
     fig.update_layout(
         title=title,
-        xaxis=dict(title='num ranks'),
+        xaxis=dict(title='N'),
         yaxis=dict(title=y_label),
         width=1080,
         height=720
