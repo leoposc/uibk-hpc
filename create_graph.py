@@ -1,4 +1,5 @@
 import re
+import os
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as py
@@ -35,6 +36,10 @@ def parse_numbers_from_file_and_plot(directory_path):
                     data_dict[var_name] = []
                 data_dict[var_name].append(numbers)
     
+    # Sort the data_dict
+    for var_name in data_dict:
+        data_dict[var_name].sort(key=lambda x: x[0])
+
     # Create a Plotly subplot
     fig = make_subplots(rows=1, cols=1)
     
