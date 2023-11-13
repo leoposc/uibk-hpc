@@ -3,12 +3,15 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define MIN_DISTANCE 1
 #define G 1
 #define FILE_NAME "data.dat"
 #define MAX_CORDINATE 100
 #define MAX_MASS 10
+
+#define BENCHMARK
 
 typedef struct {
   double x;
@@ -69,12 +72,17 @@ int main(int argc, char* argv[]) {
     time_steps = atoi(argv[2]);
   }
 
-
+#ifndef BENCHMARK
   FILE *fp = fopen(FILE_NAME, "w");
   if (fp == NULL) {
     printf("file opening failed\n");
     return -1;
   }
+#else
+  printf("num_particles: %ld\ntime_steps: %ld\n", num_particles, time_steps);
+#endif
+
+  clock_t start_time = clock();
 
   Partciles particles[num_particles];
 
@@ -90,22 +98,24 @@ int main(int argc, char* argv[]) {
     particles[i].positions.y = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;
   }
 
-
   Coordinates unitVector;
   Coordinates force;
   for (size_t t = 0; t < time_steps; t++) {
+
+#ifndef BENCHMARK
     storePositions(particles, num_particles, fp);
+#endif
+
     for (size_t i = 0; i < num_particles; i++) {
       force.x = 0;
       force.y = 0;
       force.z = 0;
       for (size_t j = 0; j < num_particles; j++) {
-        //adjust force of particle i impacted by all other particles
+
         if(i == j) {
           continue;
         }
-        //avoid dividing by 0
-        // fix direciton with last multiplyer
+
         updateUnitVector(&unitVector, particles[i], particles[j]);
         double distance = getDistanceSquared(particles[i], particles[j]);
 
@@ -113,6 +123,7 @@ int main(int argc, char* argv[]) {
         force.y += (G * particles[i].mass * particles[j].mass * unitVector.y) / distance;
         force.z += (G * particles[i].mass * particles[j].mass * unitVector.z) / distance;
       }
+
       particles[i].velocity.x += force.x / particles[i].mass;
       particles[i].velocity.y += force.y / particles[i].mass;
       particles[i].velocity.z += force.z / particles[i].mass;
@@ -123,7 +134,14 @@ int main(int argc, char* argv[]) {
     }
   }
 
+  clock_t end_time = clock();
+  double elapsed_time = (end_time - start_time) / (double) CLOCKS_PER_SEC;
 
+  printf("time (s): %lf\n", elapsed_time);
+
+#ifndef BENCHMARK
   fclose(fp);
+#endif
+
   return 0; 
 }
