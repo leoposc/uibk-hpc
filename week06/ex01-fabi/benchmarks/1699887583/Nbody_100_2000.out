@@ -1,3 +1,0 @@
-num_particles: 2000
-time_steps: 100
-$!timesteps_100{2000, 3.182359}
