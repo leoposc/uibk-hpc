@@ -11,6 +11,8 @@
 #define MAX_CORDINATE 100.0
 #define MAX_MASS 10.0
 
+// #define BENCHMARK
+
 typedef struct {
   float mass;
   float px;
@@ -69,8 +71,6 @@ int main(int argc, char* argv[]) {
     printf("file opening failed\n");
     return EXIT_FAILURE;
   }
-#else
-  printf("num_particles: %ld\ntime_steps: %ld\n", num_particles, time_steps);
 #endif
 
   // define the particle_t struct type
@@ -104,13 +104,6 @@ int main(int argc, char* argv[]) {
   const size_t K = N / R;
 
   const size_t offset = K*rank;
-
-  if (rank == ROOT) {
-    printf("N: %ld\n", N);  
-    printf("T: %ld\n", T);
-    printf("R: %ld\n", R);
-    printf("K: %ld\n", K);
-  }
 
   // allocate memory for the collected particles on each rank
   particle_t *collected_particles = create_particles(N);
@@ -220,7 +213,6 @@ int main(int argc, char* argv[]) {
   if (rank == ROOT) {
     clock_t end_time = clock();
     double elapsed_time = (end_time - start_time) / (double) CLOCKS_PER_SEC;
-
     printf("$!timesteps_%ld{%d, %ld, %lf}\n", time_steps, size, num_particles, elapsed_time);
   }
 
