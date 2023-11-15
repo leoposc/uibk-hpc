@@ -118,8 +118,6 @@ int main(int argc, char* argv[]) {
   // allocate memory for the local particles on each rank
   particle_t *local_particles = create_particles(K);
 
-  srand(0);
-
   // initialize the collected particles only on the root node
   // otherwise there might be problems with the random numbers
   if (rank == ROOT) {
@@ -188,15 +186,18 @@ int main(int argc, char* argv[]) {
         // compute the regular distance
         float distance = sqrt(distance_sqr);
 
-        // compute the unit displacement verctor
+        // compute the magnitude of the force
+        float f_mag = G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr;
+
+        // compute the unit verctor for the displacement
         float ux = dx / distance;
         float uy = dy / distance;
         float uz = dz / distance;
 
         // update the forces using the equation of gravity
-        fx += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * ux;
-        fy += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * uy;
-        fz += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * uz;
+        fx += f_mag * ux;
+        fy += f_mag * uy;
+        fz += f_mag * uz;
       }
 
       // update the velocities accordingly
