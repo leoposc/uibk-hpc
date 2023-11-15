@@ -5,7 +5,7 @@
 #include <time.h>
 #include <string.h>
 
-#define MIN_DISTANCE 1.0
+#define MIN_DISTANCE_SQR 1.0
 #define G 1.0
 #define FILE_NAME "data.dat"
 #define MAX_CORDINATE 100.0
@@ -182,25 +182,20 @@ int main(int argc, char* argv[]) {
         float distance_sqr = square(dx) + square(dy) + square(dz);
 
         // avoid division by 0 and reduce the effects of floating point errors
-        if (distance_sqr < square(MIN_DISTANCE)) {
-          distance_sqr = square(MIN_DISTANCE);
+        if (distance_sqr < MIN_DISTANCE_SQR) {
+          distance_sqr = MIN_DISTANCE_SQR;
         }
-
-        // compute the regular distance
-        float distance = sqrt(distance_sqr);
 
         // compute the magnitude of the force
         float f_mag = G * p_i.mass * p_j.mass / distance_sqr;
 
-        // compute the unit verctor for the displacement
-        float ux = dx / distance;
-        float uy = dy / distance;
-        float uz = dz / distance;
+        // compute the regular distance
+        float distance = sqrt(distance_sqr);
 
         // update the forces using the equation of gravity
-        fx += f_mag * ux;
-        fy += f_mag * uy;
-        fz += f_mag * uz;
+        fx += f_mag * dx / distance;
+        fy += f_mag * dy / distance;
+        fz += f_mag * dz / distance;
       }
 
       // update the velocities accordingly
