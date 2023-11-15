@@ -170,10 +170,13 @@ int main(int argc, char* argv[]) {
           continue;
         }
 
+        particle_t p_i = collected_particles[i];
+        particle_t p_j = collected_particles[j];
+
         // compute the displacement between two particles
-        float dx = collected_particles[j].px - collected_particles[i].px;
-        float dy = collected_particles[j].py - collected_particles[i].py;
-        float dz = collected_particles[j].pz - collected_particles[i].pz;
+        float dx = p_j.px - p_i.px;
+        float dy = p_j.py - p_i.py;
+        float dz = p_j.pz - p_i.pz;
 
         // compute the squared distance
         float distance_sqr = square(dx) + square(dy) + square(dz);
@@ -187,7 +190,7 @@ int main(int argc, char* argv[]) {
         float distance = sqrt(distance_sqr);
 
         // compute the magnitude of the force
-        float f_mag = G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr;
+        float f_mag = G * p_i.mass * p_j.mass / distance_sqr;
 
         // compute the unit verctor for the displacement
         float ux = dx / distance;
