@@ -154,32 +154,35 @@ int main(int argc, char* argv[]) {
 #endif
 
     // for every local particle...
-    for (size_t i = 0; i < K; i++) {
+    for (size_t k = 0; k < K; k++) {
 
       // initialize the forces
       float fx = 0;
       float fy = 0;
       float fz = 0;
 
+      // compute the corresponding index for i in the collected particles
+      size_t i = offset + k;
+
       // for every state of the previous particles...
       for (size_t j = 0; j < N; j++) {
 
         // do not compute interaction with itself
-        if(offset + i == j) {
+        if(i == j) {
           continue;
         }
 
         // compute the displacement between two particles
-        float dx = collected_particles[j].px - collected_particles[offset + i].px;
-        float dy = collected_particles[j].py - collected_particles[offset + i].py;
-        float dz = collected_particles[j].pz - collected_particles[offset + i].pz;
+        float dx = collected_particles[j].px - collected_particles[i].px;
+        float dy = collected_particles[j].py - collected_particles[i].py;
+        float dz = collected_particles[j].pz - collected_particles[i].pz;
 
         // compute the squared distance
         float distance_sqr = square(dx) + square(dy) + square(dz);
 
         // avoid division by 0 and reduce the effects of floating point errors
-        if (distance_sqr < MIN_DISTANCE*MIN_DISTANCE) {
-          distance_sqr = MIN_DISTANCE*MIN_DISTANCE;
+        if (distance_sqr < square(MIN_DISTANCE)) {
+          distance_sqr = square(MIN_DISTANCE);
         }
 
         // compute the regular distance
@@ -191,26 +194,26 @@ int main(int argc, char* argv[]) {
         float uz = dz / distance;
 
         // update the forces using the equation of gravity
-        fx += (G * collected_particles[offset + i].mass * collected_particles[j].mass / distance_sqr) * ux;
-        fy += (G * collected_particles[offset + i].mass * collected_particles[j].mass / distance_sqr) * uy;
-        fz += (G * collected_particles[offset + i].mass * collected_particles[j].mass / distance_sqr) * uz;
+        fx += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * ux;
+        fy += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * uy;
+        fz += (G * collected_particles[i].mass * collected_particles[j].mass / distance_sqr) * uz;
       }
 
       // update the velocities accordingly
-      local_particles[i].vx += fx / local_particles[i].mass;
-      local_particles[i].vy += fy / local_particles[i].mass;
-      local_particles[i].vz += fz / local_particles[i].mass;
+      local_particles[k].vx += fx / local_particles[k].mass;
+      local_particles[k].vy += fy / local_particles[k].mass;
+      local_particles[k].vz += fz / local_particles[k].mass;
 
       // update the positions accordingly
-      local_particles[i].px += local_particles[i].vx;
-      local_particles[i].py += local_particles[i].vy;
-      local_particles[i].pz += local_particles[i].vz;
+      local_particles[k].px += local_particles[k].vx;
+      local_particles[k].py += local_particles[k].vy;
+      local_particles[k].pz += local_particles[k].vz;
     }
 
-    // gather the results from all the nodes
+    // gather the local results from all ranks
     MPI_Gather(local_particles, K, particle_type, collected_particles, K, particle_type, ROOT, comm);
 
-    // broadcast the collected particles to every node in the system
+    // broadcast the updated collected particles back to the ranks
     MPI_Bcast(collected_particles, N, particle_type, ROOT, comm);
   }
 
