@@ -1,5 +1,5 @@
 CC := gcc
-CC_FLAGS := -O0 -g3 -std=gnu11 -Wall -Wextra -pedantic -lm
+CC_FLAGS := -O0 -g3 -std=gnu11 -Wall -Wextra -pedantic -lm -lmpi
 
 SRCDIR=src
 BINDIR=bin
