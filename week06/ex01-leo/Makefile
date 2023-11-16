@@ -1,6 +1,5 @@
 CC := gcc
-MPICC := mpicc
-CC_FLAGS := -O3 -g -std=gnu11 -Wall -Wextra -pedantic -lm
+CC_FLAGS := -O0 -g3 -std=gnu11 -Wall -Wextra -pedantic -lm
 
 SRCDIR=src
 BINDIR=bin
@@ -12,9 +11,10 @@ executables=$(patsubst $(SRCDIR)/%.c,$(BINDIR)/%,$(cfiles))
 
 all: $(executables) 
 
-$(BINDIR)/%: $(SRCDIR)/*.c
+$(BINDIR)/%: $(SRCDIR)/%.c
 	mkdir -p $(BINDIR)
 	$(CC) $< -o $@ $(CC_FLAGS)
+	
 
 clean:
 	$(RM) -r -f $(BINDIR)
