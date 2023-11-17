@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # executables
-es=('n_body_collective_mpi')
+es=('n_body_collective_mpi' 'n_body_p2p_mpi')
 
 # ranks
-rs=(96)
+rs=(1 12 48 96)
 
 # time steps
 ts=(100)
 
 # problem sizes
-ns=(4992)
+ns=(1248 2496 4992 9984)
 
 # results for this exeuction
 out_dir=$(date +%s)
