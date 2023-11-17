@@ -234,11 +234,25 @@ int main(int argc, char* argv[]) {
       local_position_buffer[k].z = local_particles[k].p.z;
     }
 
-    // gather the local results from all ranks
-    MPI_Gather(local_position_buffer, K, vect_mpi_type, global_positions, K, vect_mpi_type, ROOT, comm);
+    // --- MPI EXCHANGE ---
 
-    // broadcast the updated collected particles back to the ranks
-    MPI_Bcast(global_positions, N, vect_mpi_type, ROOT, comm);
+    MPI_Request send_reqs[R];
+    MPI_Request recv_reqs[R];
+
+    // send local updated positions to every other rank
+    for (size_t r = 0; r < R; r++) {
+      MPI_Isend(local_position_buffer, K, vect_mpi_type, r, 0, comm, &send_reqs[r]);
+    }
+
+    // receive updated positions from every other rank
+    for (size_t r = 0; r < R; r++) {
+      MPI_Irecv(&global_positions[K * r], K, vect_mpi_type, r, 0, comm, &recv_reqs[r]);
+    }
+
+    MPI_Waitall(R, recv_reqs, MPI_STATUSES_IGNORE);
+    MPI_Waitall(R, send_reqs, MPI_STATUSES_IGNORE);
+
+    // ---------------------------
   }
 
   // print the benchmark information
