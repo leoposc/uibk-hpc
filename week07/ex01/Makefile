@@ -1,20 +1,18 @@
-CC := gcc
-MPICC := mpicc
-CC_FLAGS := -O3 -g -std=gnu11 -Wall -Wextra -pedantic -lm -ffast-math
+MPICC = mpicc
+CFLAGS = -O3 -g -std=gnu11 -Wall -Wextra -pedantic -lm -ffast-math
 
-SRCDIR=src
-BINDIR=bin
+SRCDIR = src
+BINDIR = bin
 
-cfiles=$(wildcard $(SRCDIR)/*.c)
-executables=$(patsubst $(SRCDIR)/%.c,$(BINDIR)/%,$(cfiles))
+SOURCES := $(wildcard $(SRCDIR)/*.c)
+EXECS := $(patsubst $(SRCDIR)/%.c,$(BINDIR)/%,$(SOURCES))
 
-.PHONY: all clean
+all: $(EXECS)
 
-all: $(executables) 
-
-$(BINDIR)/%: $(SRCDIR)/*.c
-	mkdir -p $(BINDIR)
-	$(MPICC) $< -o $@ $(CC_FLAGS)
+$(BINDIR)/%: $(SRCDIR)/%.c
+	$(MPICC) $(CFLAGS) $< -o $@
 
 clean:
-	$(RM) -r -f $(BINDIR)
+	rm -f $(EXECS)
+
+.PHONY: all clean
