@@ -103,10 +103,14 @@ int main(int argc, char* argv[]) {
 
 #ifndef BENCHMARK
   const char *OUT_FILE = "data.dat";
-  FILE *fp = fopen(OUT_FILE, "w");
-  if (fp == NULL) {
-    printf("file opening failed\n");
-    return EXIT_FAILURE;
+  FILE *fp = NULL;
+  if (rank == ROOT) {
+    fp = fopen(OUT_FILE, "w");
+    if (fp == NULL) {
+      printf("file opening failed\n");
+      MPI_Finalize();
+      return EXIT_FAILURE;
+    }
   }
 #endif
 
@@ -138,8 +142,8 @@ int main(int argc, char* argv[]) {
     local_particles[k].p.y = global_positions[local_offset + k].y;
     local_particles[k].p.z = global_positions[local_offset + k].z;
     local_particles[k].v.x = 0.0;
-    local_particles[k].v.x = 0.0;
-    local_particles[k].v.x = 0.0;
+    local_particles[k].v.y = 0.0;
+    local_particles[k].v.z = 0.0;
   }
   // ------------------------------
 
@@ -252,7 +256,9 @@ int main(int argc, char* argv[]) {
   MPI_Type_free(&vect_mpi_type);
 
 #ifndef BENCHMARK
-  fclose(fp);
+  if (rank == ROOT) {
+    fclose(fp);
+  }
 #endif
 
   MPI_Finalize();
