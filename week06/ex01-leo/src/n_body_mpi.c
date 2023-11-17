@@ -7,10 +7,11 @@
 #include <mpi.h>
 
 
+#define TIMESTEPS 100
+#define NUM_PARTICLES 1000
 #define MIN_DISTANCE 0.00000001
 #define MAX_COORDINATE 100
 #define MASS 0.1
-
 
 typedef struct {
     float x;
@@ -96,17 +97,6 @@ void save_position(const Particle* p, const unsigned int num_particles, FILE* fp
 
 
 int main(int argc, char** argv) {
-    // ----parameters setup------------
-    size_t num_particles;
-    size_t time_steps;
-    if (argc != 3) {
-        num_particles = 1000;
-        time_steps = 100;
-    } else {
-        num_particles = atoi(argv[1]);
-        time_steps = atoi(argv[2]);
-    }
-    // --------------------------------
 
     // --------- I/ O setup ------------
     FILE *fp = fopen("data.dat", "w");
@@ -124,6 +114,7 @@ int main(int argc, char** argv) {
     int rank, size;
     MPI_Comm_rank(comm, &rank);
     MPI_Comm_size(comm, &size);
+    MPI_Request request;
     // introduce MPI to the defined structures
     MPI_Datatype MPI_COORDINATES;
     MPI_Datatype MPI_PARTICLE;
@@ -132,8 +123,23 @@ int main(int argc, char** argv) {
     MPI_Type_contiguous(6, MPI_FLOAT, &MPI_PARTICLE);
     MPI_Type_commit(&MPI_PARTICLE);
     // ----------------------------------
+    
+    // ----parameters setup------------
+    size_t num_particles;
+    size_t time_steps;
+    if (argc != 3) {
+        num_particles = NUM_PARTICLES / size;
+        time_steps = TIMESTEPS;
+    } else {
+        num_particles = atoi(argv[1]) / size;
+        time_steps = atoi(argv[2]);
+    }
+    // --------------------------------
 
     // ---------setup particles----------
+    Vector broadcast_buf = createVector(num_particles);
+    // Vector all_particles = createVector(num_particles * size);
+
     Vector particlesA = createVector(num_particles);
     Vector particlesB = createVector(num_particles);
     initialize(particlesA, num_particles);    
@@ -141,49 +147,72 @@ int main(int argc, char** argv) {
     // ----------------------------------
 
     for (size_t t = 0; t < time_steps; t++) {
-        save_position(particlesA, num_particles, fp);
+        if (rank == 0) {
+            // TODO: Save all particles, not only the ones of rank 0
+            save_position(particlesA, num_particles, fp);
+        }
 
-        for (size_t i = 0; i < num_particles; i++) {
-            float total_force_x = 0.0;
-            float total_force_y = 0.0;
-            float total_force_z = 0.0;
+        // TODO: Broadcast particles
+        memcpy(broadcast_buf, particlesA, sizeof(Particle) * num_particles);
 
-            for (size_t j = 0; j < num_particles; j++) {
-                if (j == i) {
-                    continue;
-                }
+        for (int r = 0; r < size; r++) {
 
-                float force, distance;
-                Coordinates direction_vector;
-                compute_distance(&particlesA[i], &particlesA[j], &distance, &direction_vector);
+            MPI_Ibcast(broadcast_buf, num_particles, MPI_PARTICLE, r, comm, &request);
 
-                if (distance < MIN_DISTANCE) {
-                    continue;
-                }
+            for (size_t i = 0; i < num_particles; i++) {
+                float total_force_x = 0.0;
+                float total_force_y = 0.0;
+                float total_force_z = 0.0;
 
-                // float mass1 = particles[i].mass;
-                // float mass2 = particles[j].mass;
+                for (size_t j = 0; j < num_particles; j++) {
+                    if (j == i) { // not correct anymore?
+                        continue;
+                    }
 
-                compute_force(&particlesA[i].mass, &particlesA[j].mass, &distance, &force);
+                    float force, distance;
+                    Coordinates direction_vector;
+                    compute_distance(&particlesA[i], &particlesA[j], &distance, &direction_vector);
 
-                // Accumulate forces
-                total_force_x += force * direction_vector.x;
-                total_force_y += force * direction_vector.y;
-                total_force_z += force * direction_vector.z;
-            }
+                    if (distance < MIN_DISTANCE) {
+                        continue;
+                    }
+
+                    compute_force(&particlesA[i].mass, &particlesA[j].mass, &distance, &force);
+
+                    // Accumulate forces
+                    total_force_x += force * direction_vector.x;
+                    total_force_y += force * direction_vector.y;
+                    total_force_z += force * direction_vector.z;
+                } // end of particle j loop
 
             // Update velocity and position after computing all forces
             compute_velocity(&particlesB[i], &total_force_x, &total_force_y, &total_force_z);
             compute_position(&particlesB[i]);
-        }
+
+
+            } // end of particle i loop
+    
+                // Wait for broadcast to finish
+            MPI_Wait(&request, MPI_STATUS_IGNORE);
+
+            // copy broadcast_buf to particlesA
+            memcpy(particlesA, broadcast_buf, sizeof(Particle) * num_particles);
+            
+        } // end of rank loop
 
         // copy particlesB to particlesA
         memcpy(particlesA, particlesB, sizeof(Particle) * num_particles);
-    }
 
+    } // end of time step loop
+
+    // --------------clean up--------------------
     fclose(fp);
     releastVector(particlesA);
     releastVector(particlesB);
+    MPI_Type_free(&MPI_COORDINATES);
+    MPI_Type_free(&MPI_PARTICLE);
+    MPI_Finalize();
+    // ------------------------------------------
     return 0;
 
 }
