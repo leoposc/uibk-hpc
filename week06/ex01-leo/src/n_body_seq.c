@@ -139,8 +139,6 @@ int main(int argc, char** argv) {
                     continue;
                 }
 
-                // float mass1 = particles[i].mass;
-                // float mass2 = particles[j].mass;
 
                 compute_force(&particlesA[i].mass, &particlesA[j].mass, &distance, &force);
 
