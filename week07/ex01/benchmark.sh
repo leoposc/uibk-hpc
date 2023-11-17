@@ -4,13 +4,13 @@
 es=('n_body_collective_mpi')
 
 # ranks
-rs=(10)
+rs=(96)
 
 # time steps
 ts=(100)
 
 # problem sizes
-ns=(5000)
+ns=(4992)
 
 # results for this exeuction
 out_dir=$(date +%s)
