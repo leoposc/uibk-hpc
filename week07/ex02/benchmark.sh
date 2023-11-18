@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # executables
-es=('n_body_p2p_mpi') #_improved
+es=('n_body_p2p_mpi' 'n_body_p2p_improved_mpi' 'n_body_collective_mpi') #_improved
 
 # ranks
 rs=(96)

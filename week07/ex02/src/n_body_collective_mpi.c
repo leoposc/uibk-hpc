@@ -241,7 +241,7 @@ int main(int argc, char* argv[]) {
   if (rank == ROOT) {
     clock_t end_time = clock();
     double elapsed_time = (end_time - start_time) / (double) CLOCKS_PER_SEC;
-    printf("$!timesteps_%ld{%d, %ld, %lf}\n", time_steps, size, num_particles, elapsed_time);
+    printf("$!%s_%ld_timesteps_%ld_size{%d, %lf}\n", balanced_init ? "balanced" : "unbalanced", time_steps, num_particles, size, elapsed_time);
   }
 
   // clean up
