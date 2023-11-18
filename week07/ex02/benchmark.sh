@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # executables
-es=('n_body_p2p_improved_mpi')
+es=('n_body_p2p_mpi') #_improved
 
 # ranks
 rs=(96)
@@ -31,7 +31,7 @@ do
                     --output=$out \
                     --ntasks=$r \
                     --wait \
-                    "./job.slurm" "./bin/${e}" $n $t
+                    "./job.slurm" "./bin/${e}" $n $t 1
             done
         done
     done

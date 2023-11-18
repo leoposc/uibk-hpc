@@ -3,27 +3,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
+#include "common/n_body_types.h"
+#include "common/init_functions.h"
 
 #define BENCHMARK
 
-typedef float scalar_t;
+// --- global MPI setup ---
+const size_t ROOT = 0;
+// ------------------------
+// --- global simulation constants ---
+const scalar_t G = 1.0;
+const scalar_t MASS = 1.0;
+const scalar_t MAX_COORDINATE = 100.0;
+const scalar_t MIN_DISTANCE_SQR = 1.0;
+// ----------------------------
 
-typedef struct {
-  scalar_t x;
-  scalar_t y;
-  scalar_t z;
-} vector_t;
 
-typedef struct {
-  scalar_t mass;
-  vector_t p;
-  vector_t v;
-} particle_t;
-
-// sample a scalar from a uniform distribution
-inline scalar_t runif(scalar_t min, scalar_t max) {
-  return min + (rand() / (scalar_t) RAND_MAX) * (max - min);
-}
 
 // compute the square of a scalar
 inline scalar_t square(scalar_t num) {
@@ -73,12 +69,15 @@ int main(int argc, char* argv[]) {
   // --- parameter setup ---
   size_t num_particles;
   size_t time_steps;
-  if (argc != 3) {
+  bool balanced_init;
+  if (argc != 4) {
     num_particles = 2;
     time_steps = 20;
+    balanced_init = 1;
   } else {
     num_particles = atoi(argv[1]);
     time_steps = atoi(argv[2]);
+    balanced_init = atoi(argv[3]);
   }
   // -----------------------
 
@@ -120,13 +119,10 @@ int main(int argc, char* argv[]) {
 
   // initialize the collected positions and masses (only on the root node)
   // otherwise there might be problems with the random numbers
-  if (rank == ROOT) {
-    for (size_t i = 0; i < N; i++) {
-      global_masses[i] = MASS;
-      global_positions[i].x = runif(0, MAX_COORDINATE);
-      global_positions[i].y = runif(0, MAX_COORDINATE);
-      global_positions[i].z = runif(0, MAX_COORDINATE);
-    }
+  if (balanced_init == 1){
+    initialize_positions_Uniform(global_masses, global_positions, N, rank, MAX_COORDINATE, MASS);
+  } else {
+    initialize_positions_Unbalanced(global_masses, global_positions, N, rank, MAX_COORDINATE, MASS);
   }
 
   // exchange collected states

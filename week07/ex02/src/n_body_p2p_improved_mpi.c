@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
+#include "common/n_body_types.h"
+#include "common/init_functions.h"
 
 
-
-typedef float scalar_t;
 
 // --- global simulation constants ---
 const scalar_t G = 1.0;
@@ -19,19 +20,6 @@ const size_t ROOT = 0;
 // ------------------------
 
 
-typedef struct {
-  scalar_t x;
-  scalar_t y;
-  scalar_t z;
-} vector_t;
-
-typedef struct {
-  scalar_t mass;
-  vector_t p;
-  vector_t v;
-} particle_t;
-
-#include "common/init_functions.h"
 
 // compute the square of a scalar
 inline scalar_t square(scalar_t num) {
@@ -81,12 +69,15 @@ int main(int argc, char* argv[]) {
   // --- parameter setup ---
   size_t num_particles;
   size_t time_steps;
-  if (argc != 3) {
+  bool balanced_init;
+  if (argc != 4) {
     num_particles = 2;
     time_steps = 20;
+    balanced_init = 1;
   } else {
     num_particles = atoi(argv[1]);
     time_steps = atoi(argv[2]);
+    balanced_init = atoi(argv[3]);
   }
   // -----------------------
 
@@ -117,7 +108,11 @@ int main(int argc, char* argv[]) {
   scalar_t *global_masses = create_scalars(N);
   vector_t *global_positions = create_vects(N);
 
-  initialize_positions_Uniform(global_masses, global_positions, N, rank);
+  if (balanced_init == 1){
+    initialize_positions_Uniform(global_masses, global_positions, N, rank, MAX_COORDINATE, MASS);
+  } else {
+    initialize_positions_Unbalanced(global_masses, global_positions, N, rank, MAX_COORDINATE, MASS);
+  }
 
   // exchange collected states
   MPI_Bcast(global_masses, N, MPI_FLOAT, ROOT, comm);

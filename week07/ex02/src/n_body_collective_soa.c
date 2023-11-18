@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BENCHMARK
+//#define BENCHMARK
 
 typedef float scalar_t;
 typedef scalar_t *Vector;
@@ -42,6 +42,17 @@ void customfree(particles p){
   free(p.v_xs);
   free(p.v_ys);
   free(p.v_zs);
+}
+
+
+// store the collected positions to the simulation data
+void store_positions(particles p, size_t num_particles, FILE* fp) {
+  for (size_t i = 0; i < num_particles; i++) {
+    fprintf(fp, "%f ", p.p_xs[i]);
+    fprintf(fp, "%f ", p.p_ys[i]);
+    fprintf(fp, "%f\n", p.p_zs[i]);
+  }
+  fprintf(fp, "\n\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -152,7 +163,7 @@ int main(int argc, char* argv[]) {
 #ifndef BENCHMARK   
     // write the current state to the disc 
     if (rank == ROOT) {
-      store_positions(global_positions, N, fp);
+      store_positions(globalParticles, N, fp);
     }
 #endif
     // for every local particle...
