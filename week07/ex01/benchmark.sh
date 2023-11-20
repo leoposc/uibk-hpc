@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # executables
-es=('n_body_collective_soa')
+es=('n_body_collective_mpi')
 
 # ranks
 rs=(2 4 8 16 32 96)
