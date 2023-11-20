@@ -3,25 +3,24 @@
 
 ## Exercise 1
 
-We have 3 different implementations, two collective_mpi that work with a simple mpi_bradcast, one of them uses a AOS and one a SOA.
+We have 3 different implementations, two collective_mpi that work with a simple mpi_brodcast, one of them uses a AOS and one a SOA.
 The third approach uses point to point communication, so not everything is gathered in one rank and redistributed, but the individual ranks communicate between each other to update the positions.
 
-Measurements:
+We compared the speedup and efficiency of our implementations in two different scenarios. First we measure the speedup with a fixed problem size (4992) and changing ranks:
 
-Collective AOS:
-![Benchmarks](ex01/collective_time_ranks.png)
-![Benchmarks](ex01/collective_speedup_ranks.png)
+![Benchmarks](ex01/speedup_fixed_problem_size.png)
 
-Collective SOA:
+![Benchmarks](ex01/efficiency_fixed_problem_size.png)
 
-![Benchmarks](ex01/soa_time_ranks.png)
-![Benchmarks](ex01/soa_speedup_ranks.png)
+Secondly we looked at the speedup for a fixed number of ranks (96) and while varying the problem size:
 
-P2P:
+![Benchmarks](ex01/speedup_fixed_number_of_ranks.png)
 
-![Benchmarks](ex01/p2p_time_ranks.png)
-![Benchmarks](ex01/p2p_speedup_ranks.png)
+![Benchmarks](ex01/efficiency_fixed_number_of_ranks.png)
 
+Looking at these graphs we clearly observe, that all our three implementations have a certain sweet spot where the problem size is great for the selected number of ranks. In the varying problem size comparison we see that the increase in particles benifits the efficiency and speedup. This would indicate that our bottleneck is the communication in all three implementations. Further proof for this claim is the drop in efficiency for a constant problem size when increasing the ranks.
+
+The Array of Structs implementation using MPI collectives outperforms both counterparts (Struct of Array with MPI Collectives) and the AOS P2P implementation across the board.
 
 ## Exercise 2
 
