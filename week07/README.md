@@ -3,6 +3,25 @@
 
 ## Exercise 1
 
+We have 3 different implementations, two collective_mpi that work with a simple mpi_bradcast, one of them uses a AOS and one a SOA.
+The third approach uses point to point communication, so not everything is gathered in one rank and redistributed, but the individual ranks communicate between each other to update the positions.
+
+Measurements:
+
+Collective AOS:
+![Benchmarks](ex01/collective_time_ranks.png)
+![Benchmarks](ex01/collective_speedup_ranks.png)
+
+Collective SOA:
+
+![Benchmarks](ex01/soa_time_ranks.png)
+![Benchmarks](ex01/soa_speedup_ranks.png)
+
+P2P:
+
+![Benchmarks](ex01/p2p_time_ranks.png)
+![Benchmarks](ex01/p2p_speedup_ranks.png)
+
 
 ## Exercise 2
 
