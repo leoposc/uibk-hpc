@@ -33,7 +33,7 @@ Vector createVector(int P) {
     return malloc(sizeof(Particle) * P);
 }
 
-void releastVector(Vector v) {
+void releaseVector(Vector v) {
     free(v);
 }
 
@@ -41,7 +41,7 @@ float square(float num) {
     return num * num;
 }
 
-void initialize(Particle* particles, unsigned int num_particles, unsigned int rank) {
+void initialize(Particle* particles, Coordinates* forces, unsigned int num_particles, unsigned int rank) {
     srand(time(NULL) + rank);
     for (size_t i = 0; i < num_particles; i++) {
         particles[i].position.x = (rand() / (1.0 * RAND_MAX)) * MAX_COORDINATE;
@@ -52,6 +52,9 @@ void initialize(Particle* particles, unsigned int num_particles, unsigned int ra
         particles[i].velocity.z = 0;
         // particles[i].mass = rand() % MASS;
         particles[i].mass = MASS;
+        forces[i].x = 0;
+        forces[i].y = 0;
+        forces[i].z = 0;
     }
 }
 
@@ -75,10 +78,10 @@ void compute_force(const float* mass1, const float* mass2, const float* distance
 }
 
 
-void compute_velocity(Particle* particle, const float* tot_x, const float* tot_y, const float* tot_z) {
-    particle->velocity.x += (*tot_x) / particle->mass;
-    particle->velocity.y += (*tot_y) / particle->mass;
-    particle->velocity.z += (*tot_z) / particle->mass;    
+void compute_velocity(Particle* particle, const Coordinates* force) {
+    particle->velocity.x += force->x / particle->mass;
+    particle->velocity.y += force->y / particle->mass;
+    particle->velocity.z += force->z / particle->mass;    
 }
 
 void compute_position(Particle* particle) {
@@ -155,7 +158,9 @@ int main(int argc, char** argv) {
     // save particles from other ranks in particles_external 
     // (first iteration it still contains the own particles)
     Vector particles_external = createVector(num_particles);
-    initialize(particlesA, num_particles, rank);    
+    // create forces
+    Coordinates* total_force = malloc(sizeof(Coordinates) * num_particles);
+    initialize(particlesA, total_force, num_particles, rank);    
     memcpy(particlesB, particlesA, sizeof(Particle) * num_particles);
     // ----------------------------------
 
@@ -194,10 +199,7 @@ int main(int argc, char** argv) {
 
 
             // Compute forces
-            for (size_t i = 0; i < num_particles; i++) {
-                float total_force_x = 0.0;
-                float total_force_y = 0.0;
-                float total_force_z = 0.0;
+            for (size_t i = 0; i < num_particles; i++) {                
 
                 for (size_t j = 0; j < num_particles; j++) {
 
@@ -216,15 +218,10 @@ int main(int argc, char** argv) {
                     compute_force(&particlesA[i].mass, &particles_external[j].mass, &distance, &force);
 
                     // Accumulate forces
-                    total_force_x += force * direction_vector.x;
-                    total_force_y += force * direction_vector.y;
-                    total_force_z += force * direction_vector.z;
+                    total_force[i].x += force * direction_vector.x;
+                    total_force[i].y += force * direction_vector.y;
+                    total_force[i].z += force * direction_vector.z;
                 } // end of particle j loop
-
-                // Update velocity and position after computing all forces
-                compute_velocity(&particlesB[i], &total_force_x, &total_force_y, &total_force_z);
-                compute_position(&particlesB[i]);
-
 
             } // end of particle i loop
     
@@ -240,9 +237,18 @@ int main(int argc, char** argv) {
             // copy particlesB to broadcast_buf
             memcpy(broadcast_buf, particlesB, sizeof(Particle) * num_particles);
 
-            
         } // end of rank loop
 
+        // Compute forces
+        for (size_t i = 0; i < num_particles; i++) {
+            // Update velocity and position after computing all forces
+            compute_velocity(&particlesB[i], &total_force[i]);
+            compute_position(&particlesB[i]);
+            total_force[i].x = 0.0;
+            total_force[i].y = 0.0;
+            total_force[i].z = 0.0;
+        }   
+         
     } // end of time step loop
 
     // -------------benchmarking-----------------
@@ -258,8 +264,11 @@ int main(int argc, char** argv) {
         fclose(fp);
     }
 #endif
-    releastVector(particlesA);
-    releastVector(particlesB);
+    free(total_force);
+    releaseVector(particlesA);
+    releaseVector(particlesB);
+    releaseVector(broadcast_buf);
+    releaseVector(particles_external);
     MPI_Type_free(&MPI_COORDINATES);
     MPI_Type_free(&MPI_PARTICLE);
     MPI_Finalize();
