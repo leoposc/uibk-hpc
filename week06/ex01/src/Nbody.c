@@ -89,11 +89,7 @@ int main(int argc, char* argv[]) {
     particles[i].velocity.y = 0;
     particles[i].velocity.z = 0;
 
-<<<<<<< HEAD
-    particles[i].mass = 0.04;
-=======
     particles[i].mass = 1;
->>>>>>> 66485774d3b86b1f2e5c0279a14a251419cdbf73
 
     particles[i].positions.x = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;
     particles[i].positions.z = rand() / (1.0 * RAND_MAX) * MAX_CORDINATE;

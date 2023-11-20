@@ -44,6 +44,16 @@ void customfree(particles p){
   free(p.v_zs);
 }
 
+// store the collected positions to the simulation data
+void store_positions(particles p, size_t num_particles, FILE* fp) {
+  for (size_t i = 0; i < num_particles; i++) {
+    fprintf(fp, "%f ", p.p_xs[i]);
+    fprintf(fp, "%f ", p.p_ys[i]);
+    fprintf(fp, "%f\n", p.p_zs[i]);
+  }
+  fprintf(fp, "\n\n");
+}
+
 int main(int argc, char* argv[]) {
 	
   // --- MPI setup ---
@@ -132,16 +142,22 @@ int main(int argc, char* argv[]) {
   localParticles.v_zs = create_scalars(K);
   localParticles.masses = create_scalars(K);
 
+
+  MPI_Bcast(globalParticles.p_xs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+  MPI_Bcast(globalParticles.p_ys, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+  MPI_Bcast(globalParticles.p_zs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+  MPI_Bcast(globalParticles.masses, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+
   for (size_t i = 0; i < K; i++) {
       localParticles.masses[i] = MASS;
+      localParticles.p_xs[i] = globalParticles.p_xs[local_offset + i];
+      localParticles.p_ys[i]= globalParticles.p_ys[local_offset + i];
+      localParticles.p_zs[i] = globalParticles.p_zs[local_offset + i];
       localParticles.v_xs[i] = 0.0;
       localParticles.v_ys[i] = 0.0;
       localParticles.v_zs[i] = 0.0;
     }
 
-  MPI_Bcast(globalParticles.p_xs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-  MPI_Bcast(globalParticles.p_ys, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-  MPI_Bcast(globalParticles.p_zs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
 
   // start measuring the time
   clock_t start_time = clock();
@@ -152,7 +168,7 @@ int main(int argc, char* argv[]) {
 #ifndef BENCHMARK   
     // write the current state to the disc 
     if (rank == ROOT) {
-      store_positions(global_positions, N, fp);
+      store_positions(globalParticles, N, fp);
     }
 #endif
     // for every local particle...
@@ -182,7 +198,7 @@ int main(int argc, char* argv[]) {
         scalar_t d_x = globalParticles.p_xs[j] - globalParticles.p_xs[i];
         scalar_t d_y = globalParticles.p_ys[j] - globalParticles.p_ys[i];
         scalar_t d_z = globalParticles.p_zs[j] - globalParticles.p_zs[i];
-
+        // printf("%d:(%zu,%zu): %f\n",rank,j,i, d_x);
         scalar_t distance_sqr = square(d_x) + square(d_y) + square(d_z);
 
         // avoid division by 0 and reduce the effects of floating point errors
@@ -200,18 +216,18 @@ int main(int argc, char* argv[]) {
         f_x += f_mag * d_x / distance;
         f_y += f_mag * d_y / distance;
         f_z += f_mag * d_z / distance;
+        
       }
 
       // update the local velocities accordingly
       localParticles.v_xs[k] += f_x / localParticles.masses[k];
       localParticles.v_ys[k] += f_y / localParticles.masses[k];
       localParticles.v_zs[k] += f_z / localParticles.masses[k];
-
+      
       // update the local positions accordingly
       localParticles.p_xs[k] += localParticles.v_xs[k];
       localParticles.p_ys[k] += localParticles.v_ys[k];
       localParticles.p_zs[k] += localParticles.v_zs[k];
-
     }
 
     // gather the local results from all ranks
@@ -229,7 +245,7 @@ int main(int argc, char* argv[]) {
   if (rank == ROOT) {
     clock_t end_time = clock();
     double elapsed_time = (end_time - start_time) / (double) CLOCKS_PER_SEC;
-    printf("$!timesteps_%ld{%d, %ld, %lf}\n", time_steps, size, num_particles, elapsed_time);
+    printf("$!%ld_timesteps_%ld_size{%d, %lf}\n", time_steps, num_particles, size, elapsed_time);
   }
 
   // clean up
