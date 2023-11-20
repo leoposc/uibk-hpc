@@ -53,12 +53,16 @@ def parse_numbers_from_file_and_plot(directory_path):
         y_values = []
         if(speedup == 'e'):
           print(values[0][1])
-          y_values = [((values[0][1]/value[1])/value[0]) for value in values]
+          print("input base speed for:")
+          print(var_name)
+          domain_size = float(input())
+          print(value[0])
+          y_values = [((values[0][1]/domain_size)/value[0]) for value in values]
           y_label = "efficiency"
         elif(speedup == 'd'):
           print(var_name)
           print("enter domain size")
-          domain_size = int(input())
+          domain_size = float(input())
           print(values[0][1])
           y_values = [domain_size/value[1] for value in values]
           y_label = "domain-specific"
@@ -83,11 +87,7 @@ def parse_numbers_from_file_and_plot(directory_path):
       y_label=input()
     fig.update_layout(
         title=title,
-<<<<<<< HEAD
         xaxis=dict(title='rank'),
-=======
-        xaxis=dict(title='N'),
->>>>>>> 66485774d3b86b1f2e5c0279a14a251419cdbf73
         yaxis=dict(title=y_label),
         width=1080,
         height=720
