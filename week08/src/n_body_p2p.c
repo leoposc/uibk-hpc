@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BENCHMARK
+// #define BENCHMARK
 
 typedef float scalar_t;
 
@@ -115,8 +115,18 @@ int main(int argc, char* argv[]) {
 #endif
 
   // --- global simulation setup ---
+
+  // allocate and create window for the global masses
+  MPI_Win masses_win;
   scalar_t *global_masses = create_scalars(N);
+  MPI_Win_create(global_masses, N * sizeof(scalar_t), sizeof(scalar_t),
+      MPI_INFO_NULL, comm, &masses_win);
+
+  // allocate and create window for the global positions
+  MPI_Win positions_win;
   vector_t *global_positions = create_vects(N);
+  MPI_Win_create(global_positions, N * sizeof(vector_t), sizeof(vector_t),
+      MPI_INFO_NULL, comm, &positions_win);
 
   // initialize the collected positions and masses (only on the root node)
   // otherwise there might be problems with the random numbers
@@ -129,9 +139,19 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // exchange collected states
-  MPI_Bcast(global_masses, N, MPI_FLOAT, ROOT, comm);
-  MPI_Bcast(global_positions, N, vect_mpi_type, ROOT, comm);
+  // get the masses from the root rank
+  MPI_Win_fence(0, masses_win);
+  if (rank != ROOT) {
+    MPI_Get(global_masses, N, MPI_FLOAT, ROOT, 0, N, MPI_FLOAT, masses_win);
+  }
+  MPI_Win_fence(0, masses_win);
+
+  // put the positions to the other ranks
+  MPI_Win_fence(0, positions_win);
+  if (rank != ROOT) {
+    MPI_Get(global_positions, N, vect_mpi_type, ROOT, 0, N, vect_mpi_type, positions_win);
+  }
+  MPI_Win_fence(0, positions_win);
   // ------------------------------
 
   // --- local simulation setup ---
@@ -146,8 +166,6 @@ int main(int argc, char* argv[]) {
     local_particles[k].v.z = 0.0;
   }
   // ------------------------------
-
-  vector_t *local_position_buffer = create_vects(K);
 
   // start measuring the time
   clock_t start_time = clock();
@@ -228,29 +246,24 @@ int main(int argc, char* argv[]) {
       local_particles[k].p.y += local_particles[k].v.y;
       local_particles[k].p.z += local_particles[k].v.z;
 
-      // set the element in the local position buffer
-      local_position_buffer[k].x = local_particles[k].p.x;
-      local_position_buffer[k].y = local_particles[k].p.y;
-      local_position_buffer[k].z = local_particles[k].p.z;
+      // update the elements in the global positions window
+      global_positions[i].x = local_particles[k].p.x;
+      global_positions[i].y = local_particles[k].p.y;
+      global_positions[i].z = local_particles[k].p.z;
     }
 
-    // --- MPI EXCHANGE ---
+    // --- MPI exchange ---
 
-    MPI_Request send_reqs[R];
-    MPI_Request recv_reqs[R];
-
-    // send local updated positions to every other rank
+    // fetch the positions of the local particles from the other ranks and
+    // store them in the local window
+    MPI_Win_fence(0, positions_win);
     for (size_t r = 0; r < R; r++) {
-      MPI_Isend(local_position_buffer, K, vect_mpi_type, r, 0, comm, &send_reqs[r]);
+      if (r != (size_t) rank) {
+        MPI_Get(global_positions + r*K, K, vect_mpi_type, r, r*K, K,
+          vect_mpi_type, positions_win);
+      }
     }
-
-    // receive updated positions from every other rank
-    for (size_t r = 0; r < R; r++) {
-      MPI_Irecv(&global_positions[K * r], K, vect_mpi_type, r, 0, comm, &recv_reqs[r]);
-    }
-
-    MPI_Waitall(R, recv_reqs, MPI_STATUSES_IGNORE);
-    MPI_Waitall(R, send_reqs, MPI_STATUSES_IGNORE);
+    MPI_Win_fence(0, positions_win);
 
     // ---------------------------
   }
@@ -264,9 +277,8 @@ int main(int argc, char* argv[]) {
 
   // clean up
   free(local_particles);
-  free(local_position_buffer);
-  free(global_masses);
-  free(global_positions);
+  MPI_Win_free(&masses_win);
+  MPI_Win_free(&positions_win);
   MPI_Type_free(&vect_mpi_type);
 
 #ifndef BENCHMARK

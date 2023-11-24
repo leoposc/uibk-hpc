@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # executables
-es=('n_body_collective_aos')
+es=('n_body_p2p')
 
 # ranks
-rs=(2 4 8 16 32 96)
+rs=(96)
 
 # time steps
-ts=(10000)
+ts=(100)
 
 # problem sizes
-ns=(184)
+ns=(4992)
 
 # results for this exeuction
 out_dir=$(date +%s)
