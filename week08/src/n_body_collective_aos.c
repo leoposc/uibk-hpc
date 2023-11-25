@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BENCHMARK
 
 typedef float scalar_t;
 
@@ -115,8 +114,16 @@ int main(int argc, char* argv[]) {
 #endif
 
   // --- global simulation setup ---
+  MPI_Win masses_win;
   scalar_t *global_masses = create_scalars(N);
+  MPI_Win_create(global_masses, N * sizeof(scalar_t), sizeof(scalar_t),
+      MPI_INFO_NULL, comm, &masses_win);
+
+  // allocate and create window for the global positions
+  MPI_Win positions_win;
   vector_t *global_positions = create_vects(N);
+  MPI_Win_create(global_positions, N * sizeof(vector_t), sizeof(vector_t),
+      MPI_INFO_NULL, comm, &positions_win);
 
   // initialize the collected positions and masses (only on the root node)
   // otherwise there might be problems with the random numbers
@@ -129,9 +136,19 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // exchange collected states
-  MPI_Bcast(global_masses, N, MPI_FLOAT, ROOT, comm);
-  MPI_Bcast(global_positions, N, vect_mpi_type, ROOT, comm);
+  // get masses from rank 0
+  MPI_Win_fence(0, masses_win);
+  if (rank != ROOT) {
+    MPI_Get(global_masses, N, MPI_FLOAT, ROOT, 0, N, MPI_FLOAT, masses_win);
+  }
+  MPI_Win_fence(0, masses_win);
+
+  // get positions from rank 0
+  MPI_Win_fence(0, positions_win);
+  if (rank != ROOT) {
+    MPI_Get(global_positions, N, vect_mpi_type, ROOT, 0, N, vect_mpi_type, positions_win);
+  }
+  MPI_Win_fence(0, positions_win);
   // ------------------------------
 
   // --- local simulation setup ---
@@ -234,11 +251,22 @@ int main(int argc, char* argv[]) {
       local_position_buffer[k].z = local_particles[k].p.z;
     }
 
-    // gather the local results from all ranks
-    MPI_Gather(local_position_buffer, K, vect_mpi_type, global_positions, K, vect_mpi_type, ROOT, comm);
+    // put all the positions into rank 0 window
+    MPI_Win_fence(0, positions_win);
+    if(rank != ROOT) {
+     MPI_Put(local_particles, K, vect_mpi_type, 0, rank*K, K, vect_mpi_type, positions_win);
+    }
+    MPI_Win_fence(0, positions_win);
+
+    // get all positions from rank 0 window
+    MPI_Win_fence(0, positions_win);
+    if(rank != ROOT) {
+        MPI_Get(global_positions, N, vect_mpi_type, 0, 0, N, vect_mpi_type, positions_win);
+    }
+    MPI_Win_fence(0, positions_win);
 
     // broadcast the updated collected particles back to the ranks
-    MPI_Bcast(global_positions, N, vect_mpi_type, ROOT, comm);
+    // MPI_Bcast(global_positions, N, vect_mpi_type, ROOT, comm);
   }
 
   // print the benchmark information

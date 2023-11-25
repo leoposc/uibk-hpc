@@ -1,0 +1,4 @@
+<layout-info num-layers="2">
+<layer id="0" size="2" place-name="mpi_app"><to>1</to></layer>
+<layer id="1" size="1" place-name="mpi_place"></layer>
+</layout-info>

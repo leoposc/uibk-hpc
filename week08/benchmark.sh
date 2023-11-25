@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # executables
-es=('n_body_p2p')
+es=('n_body_collective_aos')
 
 # ranks
 rs=(96)

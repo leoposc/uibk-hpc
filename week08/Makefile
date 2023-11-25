@@ -1,5 +1,5 @@
 MPICC = mpicc
-CFLAGS = -O3 -std=gnu11 -Wall -Wextra -pedantic -lm -ffast-math
+CFLAGS = -O3 -std=gnu11 -Wall -Wextra -pedantic -lm -ffast-math -g
 
 SRCDIR = src
 BINDIR = bin
