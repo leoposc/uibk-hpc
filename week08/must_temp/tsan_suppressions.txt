@@ -1,4 +1,0 @@
-# see https://github.com/google/sanitizers/wiki/ThreadSanitizerSuppressions for details
-
-# avoid crash when running with UCX
-called_from_lib:libucm.so*

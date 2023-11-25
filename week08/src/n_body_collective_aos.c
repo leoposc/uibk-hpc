@@ -253,9 +253,7 @@ int main(int argc, char* argv[]) {
 
     // put all the positions into rank 0 window
     MPI_Win_fence(0, positions_win);
-    if(rank != ROOT) {
-     MPI_Put(local_particles, K, vect_mpi_type, 0, rank*K, K, vect_mpi_type, positions_win);
-    }
+     MPI_Put(local_position_buffer, K, vect_mpi_type, 0, rank*K, K, vect_mpi_type, positions_win);
     MPI_Win_fence(0, positions_win);
 
     // get all positions from rank 0 window
@@ -281,6 +279,8 @@ int main(int argc, char* argv[]) {
   free(local_position_buffer);
   free(global_masses);
   free(global_positions);
+  MPI_Win_free(&masses_win);
+  MPI_Win_free(&positions_win);
   MPI_Type_free(&vect_mpi_type);
 
 #ifndef BENCHMARK
