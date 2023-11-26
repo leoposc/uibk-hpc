@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # executables
-es=('n_body_collective_soa')
+es=('n_body_p2p_mpi')
 
 # ranks
-rs=(2 4 8 16 32 96)
+rs=(96)
 
 # time steps
-ts=(100)
+ts=(20000)
 
 # problem sizes
-ns=(4992)
+ns=(1920)
 
 # results for this exeuction
 out_dir=$(date +%s)

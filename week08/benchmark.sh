@@ -7,13 +7,13 @@ es=('n_body_p2p')
 rs=(96)
 
 # time steps
-ts=(100)
+ts=(100 1000 5000 10000 20000)
 
 # problem sizes
-ns=(4992)
+ns=(1920)
 
 # benchmark (0 = no, 1 = yes)
-b=0
+b=1
 
 # results for this exeuction
 out_dir=$(date +%s)
