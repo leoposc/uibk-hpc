@@ -269,11 +269,11 @@ int main(int argc, char* argv[]) {
     }
 
     // fetch the positions from the other processes
-    MPI_Win_fence(0, pos_win);
+    MPI_Win_fence(MPI_MODE_NOPRECEDE | MPI_MODE_NOSTORE, pos_win);
     for (size_t r = 0; r < R; r++) {
       MPI_Get(global_positions + r*K, K, vect_mpi_type, r, 0, K, vect_mpi_type, pos_win);
     }
-    MPI_Win_fence(0, pos_win);
+    MPI_Win_fence(MPI_MODE_NOSUCCEED | MPI_MODE_NOPUT, pos_win);
   }
 
   // print the benchmark information
