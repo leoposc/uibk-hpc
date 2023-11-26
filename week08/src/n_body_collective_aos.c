@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 typedef float scalar_t;
 
 typedef struct {
@@ -72,12 +71,15 @@ int main(int argc, char* argv[]) {
   // --- parameter setup ---
   size_t num_particles;
   size_t time_steps;
-  if (argc != 3) {
+  int do_benchmark;
+  if (argc != 4) {
     num_particles = 2;
     time_steps = 20;
+    do_benchmark = 0;
   } else {
     num_particles = atoi(argv[1]);
     time_steps = atoi(argv[2]);
+    do_benchmark = atoi(argv[3]);
   }
   // -----------------------
 
@@ -98,12 +100,11 @@ int main(int argc, char* argv[]) {
   const scalar_t MASS = 1.0;
   const scalar_t MAX_COORDINATE = 100.0;
   const scalar_t MIN_DISTANCE_SQR = 1.0;
+  const char *OUT_FILE = "data.dat";
   // ----------------------------
 
-#ifndef BENCHMARK
-  const char *OUT_FILE = "data.dat";
   FILE *fp = NULL;
-  if (rank == ROOT) {
+  if (!do_benchmark && rank == ROOT) {
     fp = fopen(OUT_FILE, "w");
     if (fp == NULL) {
       printf("file opening failed\n");
@@ -111,7 +112,6 @@ int main(int argc, char* argv[]) {
       return EXIT_FAILURE;
     }
   }
-#endif
 
   // --- global simulation setup ---
   MPI_Win masses_win;
@@ -172,12 +172,10 @@ int main(int argc, char* argv[]) {
   // for every time step...
   for (size_t t = 0; t < T; t++) {
 
-#ifndef BENCHMARK   
     // write the current state to the disc 
-    if (rank == ROOT) {
+    if (!do_benchmark && rank == ROOT) {
       store_positions(global_positions, N, fp);
     }
-#endif
 
     // for every local particle...
     for (size_t k = 0; k < K; k++) {
@@ -283,11 +281,9 @@ int main(int argc, char* argv[]) {
   MPI_Win_free(&positions_win);
   MPI_Type_free(&vect_mpi_type);
 
-#ifndef BENCHMARK
-  if (rank == ROOT) {
+  if (!do_benchmark && rank == ROOT) {
     fclose(fp);
   }
-#endif
 
   MPI_Finalize();
 

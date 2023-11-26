@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # executables
-es=('n_body_p2p_2')
+es=('n_body_p2p')
 
 # ranks
 rs=(96)
@@ -11,6 +11,9 @@ ts=(100)
 
 # problem sizes
 ns=(4992)
+
+# benchmark (0 = no, 1 = yes)
+b=0
 
 # results for this exeuction
 out_dir=$(date +%s)
@@ -23,7 +26,7 @@ do
         do
             for t in "${ts[@]}"
             do
-                name="${e}_${r}_${n}_${t}"
+                name="${e}_${r}_${n}_${t}_${b}"
                 out="./benchmarks/${out_dir}/${name}.out"
                 echo "executing $name"
                 sbatch \
@@ -31,7 +34,7 @@ do
                     --output=$out \
                     --ntasks=$r \
                     --wait \
-                    "./job.slurm" "./bin/${e}" $n $t
+                    "./job.slurm" "./bin/${e}" $n $t $b
             done
         done
     done
