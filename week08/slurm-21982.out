@@ -1,0 +1,8 @@
+[n012:2550128] *** An error occurred in MPI_Win_fence
+[n012:2550128] *** reported by process [3333160961,80]
+[n012:2550128] *** on communicator MPI_COMM_WORLD
+[n012:2550128] *** MPI_ERR_WIN: invalid window
+[n012:2550128] *** MPI_ERRORS_ARE_FATAL (processes in this communicator will now abort,
+[n012:2550128] ***    and potentially your MPI job)
+[n006.intern.lcc3.intra.uibk.ac.at:3070814] 95 more processes have sent help message help-mpi-errors.txt / mpi_errors_are_fatal
+[n006.intern.lcc3.intra.uibk.ac.at:3070814] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages

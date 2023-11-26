@@ -148,6 +148,12 @@ int main(int argc, char* argv[]) {
   MPI_Bcast(globalParticles.p_zs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
   MPI_Bcast(globalParticles.masses, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
 
+  MPI_Win window_x, window_y, window_z;
+  // expose globalParticles
+  MPI_Win_create(globalParticles.p_xs, N * sizeof(float), sizeof(float), MPI_INFO_NULL, MPI_COMM_WORLD, &window_x);
+  MPI_Win_create(globalParticles.p_ys, N * sizeof(float), sizeof(float), MPI_INFO_NULL, MPI_COMM_WORLD, &window_y);
+  MPI_Win_create(globalParticles.p_zs, N * sizeof(float), sizeof(float), MPI_INFO_NULL, MPI_COMM_WORLD, &window_z);
+
   for (size_t i = 0; i < K; i++) {
       localParticles.masses[i] = MASS;
       localParticles.p_xs[i] = globalParticles.p_xs[local_offset + i];
@@ -230,15 +236,24 @@ int main(int argc, char* argv[]) {
       localParticles.p_zs[k] += localParticles.v_zs[k];
     }
 
-    // gather the local results from all ranks
-    MPI_Gather(localParticles.p_xs, K, MPI_FLOAT, globalParticles.p_xs, K, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-    MPI_Gather(localParticles.p_ys, K, MPI_FLOAT, globalParticles.p_ys, K, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-    MPI_Gather(localParticles.p_zs, K, MPI_FLOAT, globalParticles.p_zs, K, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPRECEDE, window_x);
+    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPRECEDE, window_y);
+    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPRECEDE, window_z);
 
-    // broadcast the updated collected particles back to the ranks
-    MPI_Bcast(globalParticles.p_xs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-    MPI_Bcast(globalParticles.p_ys, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
-    MPI_Bcast(globalParticles.p_zs, N, MPI_FLOAT, ROOT, MPI_COMM_WORLD);
+    // Put data into the memory of each rank
+    for (size_t r = 0; r < R; r++) {
+      MPI_Put(localParticles.p_xs, K, MPI_FLOAT, r, K * rank, K, MPI_FLOAT, window_x);
+      MPI_Put(localParticles.p_ys, K, MPI_FLOAT, r, K * rank, K, MPI_FLOAT, window_y);
+      MPI_Put(localParticles.p_zs, K, MPI_FLOAT, r, K * rank, K, MPI_FLOAT, window_z);
+    }
+
+    MPI_Win_fence(MPI_MODE_NOPUT | MPI_MODE_NOSUCCEED, window_x);
+    MPI_Win_fence(MPI_MODE_NOPUT | MPI_MODE_NOSUCCEED, window_y);
+    MPI_Win_fence(MPI_MODE_NOPUT | MPI_MODE_NOSUCCEED, window_z);
+    MPI_Win_free(&window_x);
+    MPI_Win_free(&window_y);
+    MPI_Win_free(&window_z);
+
   }
 
   // print the benchmark information
