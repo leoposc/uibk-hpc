@@ -22,3 +22,7 @@ At last we compared the measurement for an increasing number of timesteps.
 ![Benchmarks](assets/efficiency_timesteps.png)
 
 ![Benchmarks](assets/speedup_timesteps.png)
+
+First of all it is clear to say, that the program did any performance improvement from one sided communication. The opposite is actually the case. In most cases the curve of the one sided communication is similar to two sided communication, just slighty slower.
+
+The computation complexity increases linearly with the number of timestamps, while it grows quadratic when increasing the problem size. 
