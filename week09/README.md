@@ -7,6 +7,7 @@ In order to find out the CPU models on Linux we used *lscpu* which resulted in:
 
 * AMD Ryzen 7 3800X 8-Core Processor
 * Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8
+* Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz x 8
 
 To find out which energy or power instrumentation capabilities the system provides one can run:
 
@@ -24,12 +25,69 @@ This producess the following output for the AMD Ryzen 7 CPU:
     Adapter: PCI adapter
     Tctl:         +65.2°C  
     Tccd1:        +68.8°C  
+    
+The output of this on the Intel(R) Core(TM) i7-1065G7 is this:
+
+    coretemp-isa-0000
+    Adapter: ISA adapter
+    Package id 0:  +51.0°C  (high = +100.0°C, crit = +100.0°C)
+    Core 0:        +45.0°C  (high = +100.0°C, crit = +100.0°C)
+    Core 1:        +45.0°C  (high = +100.0°C, crit = +100.0°C)
+    Core 2:        +50.0°C  (high = +100.0°C, crit = +100.0°C)
+    Core 3:        +47.0°C  (high = +100.0°C, crit = +100.0°C)
+
+    nvme-pci-5900
+    Adapter: PCI adapter
+    Composite:    +43.9°C  
+
+    BAT0-acpi-0
+    Adapter: ACPI interface
+    in0:          16.49 V  
+
+    iwlwifi_1-virtual-0
+    Adapter: Virtual device
+    temp1:        +38.0°C  
+
+    hp-isa-0000
+    Adapter: ISA adapter
+    fan1:           0 RPM
+    fan2:           0 RPM
+
+    nvme-pci-5800
+    Adapter: PCI adapter
+    Composite:    +35.9°C  (low  =  -0.1°C, high = +76.8°C)
+                         (crit = +79.8°C)
+
+    acpitz-acpi-0
+    Adapter: ACPI interface
+    temp1:        +53.0°C
 
 >During the *sensors-detect* we found that the driver **k10temp** is linked to the AMD Family 17h thermal sensors which means this Tctl and Tccd1 are the CPU temperatures.
 
 >TCTL: This is the primary temperature reported by the CPU. Quote from [k10temp]: "Tctl is the processor temperature control value, used by the platform to control cooling systems. Tctl is a non-physical temperature on an arbitrary scale measured in degrees. It does \_not\_ represent an actual physical temperature like die or case temperature. Instead, it specifies the processor temperature relative to the point at which the system must supply the maximum cooling for the processor's specified maximum case temperature and maximum thermal power dissipation." 
 
 >The resolution on the [k10temp] website is stated to be 1/8th of a degree there is no mention about the accuracy. 
+
+> The Laptop with Intel(R) Core(TM) i7-1065G7 provides multiple sensors, like the battery voltage, two temperatures of pci connectors, the speed of the fans, acpitz-acpi-0 which is the temperature of the power interface and all the coretemps under coretemp-isa-0000
+
+Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu*
+
+
+    sudo perf stat -a -e "power/energy-cores/" /bin/ls
+
+    >> performance counter stats for 'system wide':
+    >>
+    >> 0,00 Joules power/energy-cores/
+    >>
+    >> 0,000745074 seconds time elapsed
+
+    sudo perf stat -a -e "power/energy-cores/" /bin/mkdir test
+
+    >> performance counter stats for 'system wide':
+    >>
+    >> 0,01 Joules power/energy-cores/
+    >>
+    >> 0,000770920 seconds time elapsed
 
 Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*/ Operating System: *Linux Ubuntu*
 
