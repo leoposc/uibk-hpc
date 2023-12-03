@@ -75,19 +75,19 @@ Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu
 
     sudo perf stat -a -e "power/energy-cores/" /bin/ls
 
-    >> performance counter stats for 'system wide':
+    >> Performance counter stats for 'system wide':
     >>
-    >> 0,00 Joules power/energy-cores/
+    >> 0,01 Joules power/energy-cores/                                                   
     >>
-    >> 0,000745074 seconds time elapsed
+    >> 0,001088134 seconds time elapsed
 
     sudo perf stat -a -e "power/energy-cores/" /bin/mkdir test
 
-    >> performance counter stats for 'system wide':
+    >> Performance counter stats for 'system wide':
     >>
     >> 0,01 Joules power/energy-cores/
     >>
-    >> 0,000770920 seconds time elapsed
+    >> 0,000961092 seconds time elapsed
 
 Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*/ Operating System: *Linux Ubuntu*
 
@@ -135,6 +135,23 @@ Running perf on a *AMD Ryzen 7 3800X 8-Core Processor*/ Operating System: *Linux
     >> 0,05 Joules power/energy-pkg/                                          
     >>
     >> 0,000869161 seconds time elapsed
+
+Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu* with power/energy-pkg/
+    sudo perf stat -a -e power/energy-pkg/ /bin/ls
+
+    >> Performance counter stats for 'system wide':
+    >> 
+    >> 0,02 Joules power/energy-pkg/                                                     
+    >> 
+    >> 0,001159079 seconds time elapsed
+
+    sudo perf stat -a -e power/energy-pkg/ /bin/mkdir test
+
+    >> Performance counter stats for 'system wide':
+    >> 
+    >> 0,01 Joules power/energy-pkg/                                                     
+    >> 
+    >> 0,000887226 seconds time elapsed
 
 
 
