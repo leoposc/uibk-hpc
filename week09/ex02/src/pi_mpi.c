@@ -25,10 +25,8 @@ int main(int argc, char** argv) {
     
     int size, rank;
     MPI_Init(&argc, &argv);
-    MPI_Comm comm;
-    MPI_Comm_dup(MPI_COMM_WORLD, &comm);
-    MPI_Comm_size(comm, &size);
-    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
     if(argc != 2) {
         printf("Usage: %s <sample_size>\n", argv[0]);
@@ -45,7 +43,7 @@ int main(int argc, char** argv) {
      
     // compute the global pi value
     float global_pi;
-    MPI_Reduce(&local_pi, &global_pi, 1, MPI_FLOAT, MPI_SUM, 0, comm);
+    MPI_Reduce(&local_pi, &global_pi, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
     
     if(rank == 0) {
         global_pi /= size;

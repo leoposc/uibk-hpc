@@ -136,6 +136,8 @@ Running perf on a *AMD Ryzen 7 3800X 8-Core Processor*/ Operating System: *Linux
     >>
     >> 0,000869161 seconds time elapsed
 
+>The AMD Ryzen did not support *power/energy-cores* therefore we had to run *power/energy-pkg/* on it with perf. The main diffence according to [lwn.net] is that *power/energy-cores/* measures the power consumption of all cores on socket without LLC cache and *power/energy-pkg* includes it. 
+
 Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu* with power/energy-pkg/
     sudo perf stat -a -e power/energy-pkg/ /bin/ls
 
@@ -154,11 +156,19 @@ Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu
     >> 0,000887226 seconds time elapsed
 
 
-
->The AMD Ryzen did not support *power/energy-cores* therefore we had to run *power/energy-pkg/* on it with perf. The main diffence according to [lwn.net] is that *power/energy-cores/* measures the power consumption of all cores on socket without LLC cache and *power/energy-pkg* includes it. 
-
-
 ## Exercise 2
+
+For this exercise for a problem size of 4*10<sup>8</sup> (which yields a runtime of around 8-9 seconds) where performed on the AMD Ryzen 3800x. This CPU consists of 8 physical cores and 16 total cores counting hyper threads. All three situations
+
+* physical cores only
+* hyper threading only
+* oversubscription
+
+where tested for **busy wainting** as well as **yielding when idle** and are displayed in the following graphic:
+
+![Benchmarks](ex02/power.png)
+
+Each of these violin plot distributions are calculated based on 5 runs with the same parameters. In the first setting of using only physical cores the power consumtion mean is basically the same but the yield when IDLE is way more stable (this is the case for all settings). When using hyper threading the difference becomes more significant and even more so with a slight oversubscription (20 cores). If we go high enough we see the *yield when idle* crash as well. In the run with 32 ranks the mean was even worse than the busy waiting one. We persume that in this case with the big over subscription no core is actually idle because of the constant checking and changing between threads. 
 
 #### Busy waiting: 
 

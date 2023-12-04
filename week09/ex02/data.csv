@@ -1,0 +1,41 @@
+8, busy waiting,422.69,8.674768336
+8, busy waiting,422.12,8.68733895
+8, busy waiting,429.21,8.724652154
+8, busy waiting,419.81,8.690252475
+8, busy waiting,415.46,8.65719241
+8, yield when idle,424.5,8.742186762
+8, yield when idle,424.75,8.770135309
+8, yield when idle,420.29,8.673429752
+8, yield when idle,422.66,8.682782456
+8, yield when idle,422.48,8.678205897
+16, busy waiting,441.47,8.766120395
+16, busy waiting,441.34,8.796820211
+16, busy waiting,443.46,8.843216878
+16, busy waiting,442.99,8.791012019
+16, busy waiting,440.83,8.854941795
+16, yield when idle,431.44,8.73332311
+16, yield when idle,432.59,8.755725326
+16, yield when idle,433.69,8.811750422
+16, yield when idle,430.02,8.763294962
+16, yield when idle,434.87,8.751404907
+20, busy waiting,454.41,8.825876088
+20, busy waiting,464.54,8.824010182
+20, busy waiting,465.97,8.815469307
+20, busy waiting,456.82,8.860268575
+20, busy waiting,448.75,8.891609107
+20, yield when idle,440.68,8.828989818
+20, yield when idle,435.91,8.776304043
+20, yield when idle,440.66,8.833110283
+20, yield when idle,453.53,8.882961994
+20, yield when idle,446.06,8.812639500
+32, yield when idle,482.14,8.935489944
+32, yield when idle,485.60,9.016911738 
+32, yield when idle,483.90,8.967457619
+32, yield when idle,490.96,9.190208499
+32, yield when idle,471.34,8.898134054
+32, busy waiting,477.54,8.965556658
+32, busy waiting,470.01,8.960406909
+32, busy waiting,465.31,8.922992208
+32, busy waiting,478.17,8.942137003 
+32, busy waiting,481.33,8.948683560 
+

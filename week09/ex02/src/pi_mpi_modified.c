@@ -44,9 +44,10 @@ int main(int argc, char** argv) {
         int sample_size = atoi(argv[1]);
         // compute the pi value
         pi = monte_carlo_pi(sample_size);
-    } else  {
-        printf("Process %d is running\n", rank);
-    }
+    } 
+    // else  {
+    //     printf("Process %d is running\n", rank);
+    // }
 
     MPI_Barrier(comm);
 
