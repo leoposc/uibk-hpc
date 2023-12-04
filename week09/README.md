@@ -170,22 +170,23 @@ where tested for **busy wainting** as well as **yielding when idle** and are dis
 
 Each of these violin plots are calculated based on 5 runs with the same parameters. In the first setting of using only physical cores the power consumption mean is basically the same but the yield when idle is way more stable (this is the case for all settings). When using hyper threading the difference becomes more significant and even more so with a slight oversubscription (20 cores). If we go high enough we see the *yield when idle* crash as well. In the run with 32 ranks the mean was even worse than the busy waiting one. We persume that in this case with the double over subscription no core is actually idle because of the constant checking and changing between threads. 
 
-#### Busy waiting: 
+#### Busy waiting:
 
-    >> [sudo] Passwort für leopold: [sudo] Passwort für leopold: [sudo] Passwort für 
-    >> leopold: [sudo] Passwort für leopold:
-    >> Parallel programm finished. 1 processes ran in total.
-    >> Computed 3.141459 for Pi
-    >> Time ellapsed: 5.127953
+Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*
 
+perf stat -a -e power/energy-pkg/ mpiexec -n 8 ./a.out 100000000
+
+    >> Parallel programm finished. 8 processes ran in total.
+    >> Computed 3.141195 for Pi
+    >> Time ellapsed: 4.664210
+    >> 
     >> Performance counter stats for 'system wide':
+    >> 
+    >>        298,89 Joules power/energy-pkg/                                           
+    >> 
+    >>       4,747348190 seconds time elapsed
 
-    >>     90,33 Joules power/energy-cores/                                         
 
-    >>     5,160884818 seconds time elapsed
-
-    >> ^C[mpiexec@LeosUbuntu] Sending Ctrl-C to processes as requested
-    >> [mpiexec@LeosUbuntu] Press Ctrl-C again to force abort
 
 On Intel(R) Core(TM) i7-1065G7:
 
@@ -197,22 +198,19 @@ On Intel(R) Core(TM) i7-1065G7:
 
 #### Yielding:
 
-    mpirun -np 4 ./job.sh
+perf stat -a -e power/energy-pkg/ mpiexec -n 8 ./a.out 100000000
 
-    >> [sudo] Passwort für leopold: [sudo] Passwort für leopold: [sudo] Passwort für
-    >> leopold: [sudo] Passwort für leopold:
-    >> Parallel programm finished. 1 processes ran in total.
-    >> Computed 3.141718 for Pi
-    >> Time ellapsed: 4.831106
+Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*
+
+    >> Parallel programm finished. 8 processes ran in total.
+    >> Computed 3.141711 for Pi
+    >> Time ellapsed: 3.138544
     >>
     >> Performance counter stats for 'system wide':
     >>
-    >>     74,17 Joules power/energy-cores/                                         
+    >>    79,96 Joules power/energy-pkg/                                           
     >>
-    >>     4,870104016 seconds time elapsed
-    >>
-    >> ^C[mpiexec@LeosUbuntu] Sending Ctrl-C to processes as requested
-    >> [mpiexec@LeosUbuntu] Press Ctrl-C again to force abort
+    >>    3,224764997 seconds time elapsed
     
     
 On Intel(R) Core(TM) i7-1065G7:
@@ -223,31 +221,37 @@ On Intel(R) Core(TM) i7-1065G7:
     >> 
     >> 1,924024222 seconds time elapsed
 
-The measured time is way more stable when the ranks are yielding instead of busy waiting, which does make sense since the program claims all available cores. What probably happens is that the scheduler is pausing the busy waiting threads as well to schedule other basic operating tasks. So the the execution time of the *busy waiting-program* depends on the execution time of other tasks, which certainly can differ from time to time. Bottom line is that the execution time for the *busy waiting-program* was between 5.0 and 5.4 seconds, for the *yielding-program* it was more constant around 4.8 seconds
-
 ### Oversubscribing
+
+perf stat -a -e power/energy-pkg/ mpiexec -n 16 ./a.out 110000000
 
 #### Busy waiting:
 
+Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*
 
+    >> Parallel programm finished. 16 processes ran in total.
+    >> Computed 0.000000 for Pi
+    >> Time ellapsed: 10.478665
+    >>
+    >>  Performance counter stats for 'system wide':
+    >>
+    >>             695,29 Joules power/energy-pkg/                                           
+    >>
+    >>      11,133614503 seconds time elapsed
 
 #### Yielding:
 
-    mpirun -np 8 ./job.sh
-    
-    >> Parallel programm finished. 1 processes ran in total.
-    >> Computed 3.141635 for Pi
-    >> Time ellapsed: 5.128428
-    >> 
-    >>  Performance counter stats for 'system wide':
-    >> 
-    >>             129,90 Joules power/energy-cores/                                         
-    >> 
-    >>        5,168110821 seconds time elapsed
+Running perf on a *Haswell Intel® Core™ i7-4770 CPU @ 3.40GHz × 8*
 
-^C[mpiexec@LeosUbuntu] Sending Ctrl-C to processes as requested
-[mpiexec@LeosUbuntu] Press Ctrl-C again to force abort
-
+    >> Parallel programm finished. 16 processes ran in total.
+    >> Computed 3.141687 for Pi
+    >> Time ellapsed: 3.151566
+    >> 
+    >> Performance counter stats for 'system wide':
+    >> 
+    >>     110,80 Joules power/energy-pkg/                                           
+    >> 
+    >>     3,783585641 seconds time elapsed
 
 On Intel(R) Core(TM) i7-1065G7:
 
@@ -257,6 +261,10 @@ On Intel(R) Core(TM) i7-1065G7:
     >> 
     >> 2,233864595 seconds time elapsed
 
+
+The measured time is way more stable when the ranks are yielding instead of busy waiting, which does make sense since the program claims all available cores. What probably happens is that the scheduler is pausing the busy waiting threads as well to schedule other basic operating tasks. So the the execution time of the *busy waiting-program* depends on the execution time of other tasks, which certainly can differ from time to time. Bottom line is that the execution time for the *busy waiting-program* was between 5.0 and 5.4 seconds, for the *yielding-program* it was more constant around 4.8 seconds
+
+Setting nanosleep to the maximum has a huge impact on the energy consumption. Letting the cores sleep for 999999999 nanoseconds reduces the energy consumption by about 1 / 6. At cost of a possible higher computation time.
 ## Exercise 3
 
 To enable all the hardware threads we used the following command:

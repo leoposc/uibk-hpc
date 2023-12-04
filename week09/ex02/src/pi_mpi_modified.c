@@ -44,22 +44,18 @@ int main(int argc, char** argv) {
         int sample_size = atoi(argv[1]);
         // compute the pi value
         pi = monte_carlo_pi(sample_size);
-    } 
-    // else  {
-    //     printf("Process %d is running\n", rank);
-    // }
+    }
 
-    MPI_Barrier(comm);
+    // MPI_Barrier(comm);
 
-    // MPI_Ireduce(&pi, &result, 1, MPI_FLOAT, MPI_SUM, 0, comm, &reqs);
+    MPI_Ireduce(&pi, &result, 1, MPI_FLOAT, MPI_SUM, 0, comm, &reqs);
 
-    // // while (ready == 0) {
-    //     MPI_Test(&reqs, &ready, MPI_STATUS_IGNORE);
-    //     nanosleep((const struct timespec[]){{0, 1000000000000}}, NULL);
-    // }
+    while (ready == 0) {
+        MPI_Test(&reqs, &ready, MPI_STATUS_IGNORE);
+        nanosleep((const struct timespec[]){{0, 999999999}}, NULL);
+    }
 
     
-
     if (rank == 0) {
         endtime = MPI_Wtime();
         printf("Parallel programm finished. %d processes ran in total.\n", size);
