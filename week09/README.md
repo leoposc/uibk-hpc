@@ -158,7 +158,7 @@ Running perf on a *Intel(R) Core(TM) i7-1065G7*/ Operating System: *Linux Ubuntu
 
 ## Exercise 2
 
-For this exercise for a problem size of 4*10<sup>8</sup> (which yields a runtime of around 8-9 seconds) where performed on the AMD Ryzen 3800x. This CPU consists of 8 physical cores and 16 total cores counting hyper threads. All three situations
+For this exercise each run on the AMD Ryzen 3800X had a problem size of 4*10<sup>8</sup> pi_mpi samples (which yields a runtime of around 8-9 seconds). This CPU consists of 8 physical cores and 16 total cores counting hyper threads. All three situations
 
 * physical cores only
 * hyper threading only
@@ -168,7 +168,7 @@ where tested for **busy wainting** as well as **yielding when idle** and are dis
 
 ![Benchmarks](ex02/power.png)
 
-Each of these violin plot distributions are calculated based on 5 runs with the same parameters. In the first setting of using only physical cores the power consumtion mean is basically the same but the yield when IDLE is way more stable (this is the case for all settings). When using hyper threading the difference becomes more significant and even more so with a slight oversubscription (20 cores). If we go high enough we see the *yield when idle* crash as well. In the run with 32 ranks the mean was even worse than the busy waiting one. We persume that in this case with the big over subscription no core is actually idle because of the constant checking and changing between threads. 
+Each of these violin plots are calculated based on 5 runs with the same parameters. In the first setting of using only physical cores the power consumption mean is basically the same but the yield when idle is way more stable (this is the case for all settings). When using hyper threading the difference becomes more significant and even more so with a slight oversubscription (20 cores). If we go high enough we see the *yield when idle* crash as well. In the run with 32 ranks the mean was even worse than the busy waiting one. We persume that in this case with the double over subscription no core is actually idle because of the constant checking and changing between threads. 
 
 #### Busy waiting: 
 
