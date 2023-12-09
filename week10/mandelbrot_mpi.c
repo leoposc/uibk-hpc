@@ -93,20 +93,16 @@ int main(int argc, char** argv) {
 
 	uint8_t* local_image = malloc(NUM_CHANNELS * size_x * size_y * sizeof(uint8_t));
 
-	struct timeval start, end;
-	if (rank == 0) {
-		gettimeofday(&start, NULL);
-	}
+	struct timeval start, end, mid;
+
+	gettimeofday(&start, NULL);
 
 	// comptue the local image
 	calcMandelbrot(local_image, offset_x, offset_y, size_x, size_y, totalSizeX, totalSizeY);
 
-	// measure the exeuction time
-	if (rank == 0) {
-		gettimeofday(&end, NULL);
-		double timeElapsed = (end.tv_sec + end.tv_usec * 1e-6) - (start.tv_sec + start.tv_usec * 1e-6);
-		printf("Mandelbrot set calculation for %dx%d took: %f seconds.\n", totalSizeX, totalSizeY, timeElapsed);
-	}
+	gettimeofday(&mid, NULL);
+	double time_before_collect = (mid.tv_sec + mid.tv_usec * 1e-6) - (start.tv_sec + start.tv_usec * 1e-6);
+	printf("Rank %d before collect call: %f seconds.\n", rank, time_before_collect);
 
 	// collect all the local images on rank 0
 	uint8_t* image = NULL;
@@ -115,6 +111,16 @@ int main(int argc, char** argv) {
 	}
 	MPI_Gather(local_image, size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, image,
 		size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, 0, comm);
+
+
+	// measure the exeuction time
+	gettimeofday(&end, NULL);
+	double timeElapsed = (end.tv_sec + end.tv_usec * 1e-6) - (start.tv_sec + start.tv_usec * 1e-6);
+	double maxtimeElapsed = 0;
+	MPI_Reduce(&timeElapsed, &maxtimeElapsed, 1, MPI_DOUBLE, MPI_MAX, 0, comm);
+	if (rank == 0) {	
+		printf("Mandelbrot set calculation for %dx%d took: %f seconds.\n", totalSizeX, totalSizeY, timeElapsed);
+	}
 
 	// export the collected image as .png
 	if (rank == 0) {
