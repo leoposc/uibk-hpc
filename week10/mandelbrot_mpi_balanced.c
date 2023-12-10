@@ -113,8 +113,7 @@ int main(int argc, char** argv) {
 	// number of ranks
 	const int R = size;
   
-  // calculate load balancing
-  
+  // calculate load on slabs
 	uint32_t* complexity = malloc(R*RANK_ACC_MULTIPLYER * sizeof(uint32_t));
   estimateMandelBrotComplexity(complexity, R*RANK_ACC_MULTIPLYER, R*RANK_ACC_MULTIPLYER, R*RANK_ACC_MULTIPLYER, R*RANK_ACC_MULTIPLYER);
   
@@ -124,6 +123,7 @@ int main(int argc, char** argv) {
   }
   
   
+  // distribute slabs so that each gets roughly the same complexity
   uint32_t slices[R];
   int j = 0;
   int slice_sum = 0;
@@ -138,6 +138,7 @@ int main(int argc, char** argv) {
     }
   }
 
+  // scale slab sizes to input coordinates
   for (int i = 0; i < R; i++) {
     slices[i] = totalSizeY * slices[i]/ (R*RANK_ACC_MULTIPLYER);
   }
