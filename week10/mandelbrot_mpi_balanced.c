@@ -153,12 +153,15 @@ int main(int argc, char** argv) {
 	int offset_y = 0;
   for (int i = 0; i < rank; i++) {
     offset_y += slices[i];
-    printf("adding slice: %d to rank: %d\n", slices[i], rank);
   }
 
-  printf("rank %d, size_y: %d, offset_y: %d \n", rank, size_y, offset_y);
-
-	uint8_t* local_image = malloc(NUM_CHANNELS * size_x * size_y * sizeof(uint8_t));
+	uint8_t* local_image;
+  if(rank == 0) {
+	  local_image = malloc(NUM_CHANNELS * totalSizeX * totalSizeY * sizeof(uint8_t));
+  }
+  else {
+	  local_image = malloc(NUM_CHANNELS * size_x * size_y * sizeof(uint8_t));
+  }
 
 	struct timeval start, end, mid;
 
@@ -174,10 +177,29 @@ int main(int argc, char** argv) {
 	// collect all the local images on rank 0
 	uint8_t* image = NULL;
 	if (rank == 0) {
- 		image = malloc(NUM_CHANNELS * totalSizeX * totalSizeY * sizeof(uint8_t));
+ 		image = malloc(NUM_CHANNELS * totalSizeX * totalSizeY * sizeof(uint8_t) * 4);
 	}
-	MPI_Gather(local_image, size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, image,
-		size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, 0, comm);
+  
+  for (int i = 0; i < size; ++i) {
+      if (rank == i) {
+          // Send data to the root process
+          if (rank != 0) {
+              MPI_Send(local_image, size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, 0, 0, comm);
+          }
+      }
+  }
+
+  if (rank == 0) {
+    for (int i = 1; i < size; i++) {
+      int image_offset = 0;
+      for (int j = 0; j < i; j++) {
+        image_offset += slices[j];
+      }
+      MPI_Recv(&local_image[image_offset * size_x * NUM_CHANNELS], slices[i] * size_x * NUM_CHANNELS, MPI_UINT8_T, i, 0, comm, MPI_STATUS_IGNORE);
+    }
+  }
+  
+	// MPI_Gather(local_image, size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, image, size_x * size_y * NUM_CHANNELS, MPI_UINT8_T, 0, comm);
 
 
 	// measure the exeuction time
@@ -192,7 +214,7 @@ int main(int argc, char** argv) {
 	// export the collected image as .png
 	if (rank == 0) {
 		const int stride_bytes = 0;
-		stbi_write_png("mandelbrot_mpi.png", totalSizeX, totalSizeY, NUM_CHANNELS, image, stride_bytes);
+		stbi_write_png("mandelbrot_mpi.png", totalSizeX, totalSizeY, NUM_CHANNELS, local_image, stride_bytes);
 	}
 
 	free(local_image);
