@@ -1,0 +1,53 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n002
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   n002
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+Rank 31 before collect call: 0.006399 seconds.
+Rank 0 before collect call: 0.007109 seconds.
+Rank 1 before collect call: 0.020181 seconds.
+Rank 30 before collect call: 0.058429 seconds.
+Rank 2 before collect call: 0.222682 seconds.
+Rank 29 before collect call: 0.331274 seconds.
+Rank 5 before collect call: 0.591473 seconds.
+Rank 27 before collect call: 0.613313 seconds.
+Rank 3 before collect call: 0.642534 seconds.
+Rank 4 before collect call: 0.661275 seconds.
+Rank 28 before collect call: 0.674263 seconds.
+Rank 26 before collect call: 0.850213 seconds.
+Rank 6 before collect call: 1.989003 seconds.
+Rank 25 before collect call: 2.306583 seconds.
+Rank 7 before collect call: 2.884246 seconds.
+Rank 24 before collect call: 2.924274 seconds.
+Rank 8 before collect call: 2.991889 seconds.
+Rank 23 before collect call: 3.091100 seconds.
+Rank 9 before collect call: 3.368497 seconds.
+Rank 22 before collect call: 3.410312 seconds.
+Rank 10 before collect call: 3.684400 seconds.
+Rank 21 before collect call: 3.731281 seconds.
+Rank 11 before collect call: 3.818451 seconds.
+Rank 20 before collect call: 3.978279 seconds.
+Rank 12 before collect call: 4.746289 seconds.
+[n001.intern.lcc3.intra.uibk.ac.at:1191746] 31 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1191746] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1191746] 31 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+Rank 19 before collect call: 4.930854 seconds.
+Rank 13 before collect call: 5.262079 seconds.
+Rank 18 before collect call: 5.347354 seconds.
+Rank 14 before collect call: 5.487100 seconds.
+Rank 17 before collect call: 5.529769 seconds.
+Rank 15 before collect call: 5.757562 seconds.
+Rank 16 before collect call: 5.876435 seconds.
+Mandelbrot set calculation for 3840x2160 took: 5.896907 seconds.

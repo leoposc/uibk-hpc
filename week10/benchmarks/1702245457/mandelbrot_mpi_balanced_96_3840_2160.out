@@ -1,0 +1,117 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n001
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   n001
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+[n001.intern.lcc3.intra.uibk.ac.at:1193199] 95 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1193199] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1193199] 95 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+Rank 94 before collect call: 0.000000 seconds.
+Rank 93 before collect call: 0.000000 seconds.
+Rank 92 before collect call: 0.000000 seconds.
+Rank 95 before collect call: 0.000000 seconds.
+Rank 91 before collect call: 0.000000 seconds.
+Rank 90 before collect call: 0.347926 seconds.
+Rank 72 before collect call: 0.825000 seconds.
+Rank 73 before collect call: 0.838626 seconds.
+Rank 20 before collect call: 0.845852 seconds.
+Rank 16 before collect call: 0.844038 seconds.
+Rank 23 before collect call: 0.862980 seconds.
+Rank 30 before collect call: 0.877507 seconds.
+Rank 21 before collect call: 0.878381 seconds.
+Rank 17 before collect call: 0.860145 seconds.
+Rank 59 before collect call: 0.884986 seconds.
+Rank 31 before collect call: 0.887939 seconds.
+Rank 33 before collect call: 0.887337 seconds.
+Rank 32 before collect call: 0.892619 seconds.
+Rank 11 before collect call: 0.894543 seconds.
+Rank 9 before collect call: 0.894545 seconds.
+Rank 58 before collect call: 0.890472 seconds.
+Rank 57 before collect call: 0.899206 seconds.
+Rank 34 before collect call: 0.892096 seconds.
+Rank 78 before collect call: 0.901664 seconds.
+Rank 38 before collect call: 0.904701 seconds.
+Rank 13 before collect call: 0.899384 seconds.
+Rank 56 before collect call: 0.905185 seconds.
+Rank 55 before collect call: 0.904567 seconds.
+Rank 37 before collect call: 0.904426 seconds.
+Rank 1 before collect call: 0.891334 seconds.
+Rank 39 before collect call: 0.909499 seconds.
+Rank 36 before collect call: 0.905983 seconds.
+Rank 69 before collect call: 0.910268 seconds.
+Rank 22 before collect call: 0.908013 seconds.
+Rank 54 before collect call: 0.904741 seconds.
+Rank 3 before collect call: 0.890690 seconds.
+Rank 35 before collect call: 0.909022 seconds.
+Rank 77 before collect call: 0.917047 seconds.
+Rank 40 before collect call: 0.920267 seconds.
+Rank 24 before collect call: 0.914654 seconds.
+Rank 12 before collect call: 0.920181 seconds.
+Rank 14 before collect call: 0.923880 seconds.
+Rank 53 before collect call: 0.909506 seconds.
+Rank 76 before collect call: 0.938929 seconds.
+Rank 41 before collect call: 0.945369 seconds.
+Rank 10 before collect call: 0.945968 seconds.
+Rank 52 before collect call: 0.914706 seconds.
+Rank 51 before collect call: 0.943643 seconds.
+Rank 42 before collect call: 0.953794 seconds.
+Rank 5 before collect call: 0.947335 seconds.
+Rank 15 before collect call: 0.948529 seconds.
+Rank 84 before collect call: 0.954420 seconds.
+Rank 43 before collect call: 0.957258 seconds.
+Rank 66 before collect call: 0.958844 seconds.
+Rank 0 before collect call: 0.913981 seconds.
+Rank 49 before collect call: 0.956864 seconds.
+Rank 8 before collect call: 0.956201 seconds.
+Rank 25 before collect call: 0.958156 seconds.
+Rank 4 before collect call: 0.947376 seconds.
+Rank 26 before collect call: 0.964516 seconds.
+Rank 44 before collect call: 0.956157 seconds.
+Rank 47 before collect call: 0.964506 seconds.
+Rank 65 before collect call: 0.963194 seconds.
+Rank 82 before collect call: 0.963003 seconds.
+Rank 6 before collect call: 0.955425 seconds.
+Rank 27 before collect call: 0.967757 seconds.
+Rank 85 before collect call: 0.959958 seconds.
+Rank 7 before collect call: 0.967783 seconds.
+Rank 45 before collect call: 0.967075 seconds.
+Rank 83 before collect call: 0.967956 seconds.
+Rank 50 before collect call: 0.951559 seconds.
+Rank 64 before collect call: 0.972383 seconds.
+Rank 80 before collect call: 0.982617 seconds.
+Rank 28 before collect call: 0.990284 seconds.
+Rank 2 before collect call: 0.946306 seconds.
+Rank 89 before collect call: 0.991630 seconds.
+Rank 19 before collect call: 0.991770 seconds.
+Rank 48 before collect call: 0.956822 seconds.
+Rank 63 before collect call: 0.998962 seconds.
+Rank 81 before collect call: 1.000557 seconds.
+Rank 18 before collect call: 1.004089 seconds.
+Rank 29 before collect call: 1.004075 seconds.
+Rank 75 before collect call: 0.997944 seconds.
+Rank 68 before collect call: 1.007557 seconds.
+Rank 71 before collect call: 1.008128 seconds.
+Rank 46 before collect call: 1.005977 seconds.
+Rank 62 before collect call: 1.009312 seconds.
+Rank 79 before collect call: 1.016567 seconds.
+Rank 61 before collect call: 1.037775 seconds.
+Rank 74 before collect call: 1.031965 seconds.
+Rank 70 before collect call: 1.052530 seconds.
+Rank 60 before collect call: 1.054121 seconds.
+Rank 67 before collect call: 1.072054 seconds.
+Rank 86 before collect call: 1.189441 seconds.
+Rank 88 before collect call: 1.219554 seconds.
+Rank 87 before collect call: 1.220059 seconds.
+Mandelbrot set calculation for 3840x2160 took: 1.187597 seconds.

@@ -1,0 +1,12 @@
+--------------------------------------------------------------------------
+A system call failed during shared memory initialization that should
+not have.  It is likely that your MPI job will now either abort or
+experience performance degradation.
+
+  Local host:  n001.intern.lcc3.intra.uibk.ac.at
+  System call: open(2) 
+  Error:       Permission denied (errno 13)
+--------------------------------------------------------------------------
+$!1000_timesteps_1920_size{96, 1.149103}
+[n001.intern.lcc3.intra.uibk.ac.at:3591046] 47 more processes have sent help message help-opal-shmem-mmap.txt / sys call fail
+[n001.intern.lcc3.intra.uibk.ac.at:3591046] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages

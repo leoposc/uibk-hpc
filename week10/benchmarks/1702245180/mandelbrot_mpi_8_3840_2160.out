@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n007
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   n007
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There is at least non-excluded one OpenFabrics device found,
+but there are no active ports detected (or Open MPI was unable to use
+them).  This is most certainly not what you wanted.  Check your
+cables, subnet manager configuration, etc.  The openib BTL will be
+ignored for this job.
+
+  Local host: n001
+--------------------------------------------------------------------------
+Rank 0 before collect call: 0.875208 seconds.
+Rank 7 before collect call: 0.887905 seconds.
+[n001.intern.lcc3.intra.uibk.ac.at:1188411] 7 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1188411] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1188411] 6 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+Rank 1 before collect call: 6.024279 seconds.
+Rank 6 before collect call: 6.066258 seconds.
+Rank 2 before collect call: 13.490182 seconds.
+Rank 5 before collect call: 13.498165 seconds.
+Rank 3 before collect call: 20.713925 seconds.
+Rank 4 before collect call: 20.808876 seconds.
+Mandelbrot set calculation for 3840x2160 took: 20.829673 seconds.

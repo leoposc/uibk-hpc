@@ -1,0 +1,32 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n001
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There is at least non-excluded one OpenFabrics device found,
+but there are no active ports detected (or Open MPI was unable to use
+them).  This is most certainly not what you wanted.  Check your
+cables, subnet manager configuration, etc.  The openib BTL will be
+ignored for this job.
+
+  Local host: n001
+--------------------------------------------------------------------------
+Rank 7 before collect call: 1.789103 seconds.
+[n001.intern.lcc3.intra.uibk.ac.at:1192493] 7 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1192493] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1192493] 7 more processes have sent help message help-mpi-btl-openib.txt / no active ports found
+Rank 6 before collect call: 10.177553 seconds.
+Rank 5 before collect call: 10.852239 seconds.
+Rank 3 before collect call: 11.708395 seconds.
+Rank 0 before collect call: 12.275792 seconds.
+Rank 4 before collect call: 12.779307 seconds.
+Rank 1 before collect call: 12.821101 seconds.
+Rank 2 before collect call: 13.038874 seconds.
+Mandelbrot set calculation for 3840x2160 took: 13.044831 seconds.

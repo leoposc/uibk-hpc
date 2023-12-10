@@ -1,0 +1,69 @@
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              n001
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   n001
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+Rank 1 before collect call: 0.004291 seconds.
+Rank 46 before collect call: 0.004316 seconds.
+Rank 0 before collect call: 0.005219 seconds.
+Rank 47 before collect call: 0.005209 seconds.
+Rank 2 before collect call: 0.019758 seconds.
+Rank 45 before collect call: 0.021757 seconds.
+Rank 3 before collect call: 0.100757 seconds.
+Rank 44 before collect call: 0.102424 seconds.
+Rank 4 before collect call: 0.338194 seconds.
+Rank 43 before collect call: 0.344003 seconds.
+Rank 40 before collect call: 0.363318 seconds.
+Rank 7 before collect call: 0.366748 seconds.
+Rank 5 before collect call: 0.445907 seconds.
+Rank 42 before collect call: 0.446855 seconds.
+Rank 41 before collect call: 0.457501 seconds.
+Rank 6 before collect call: 0.459200 seconds.
+Rank 8 before collect call: 0.468866 seconds.
+Rank 39 before collect call: 0.483751 seconds.
+Rank 9 before collect call: 1.230559 seconds.
+Rank 38 before collect call: 1.242594 seconds.
+Rank 10 before collect call: 1.790242 seconds.
+Rank 37 before collect call: 1.801254 seconds.
+Rank 11 before collect call: 1.963896 seconds.
+Rank 36 before collect call: 1.966476 seconds.
+Rank 12 before collect call: 1.980812 seconds.
+Rank 35 before collect call: 1.981488 seconds.
+Rank 13 before collect call: 2.179096 seconds.
+Rank 34 before collect call: 2.185261 seconds.
+Rank 33 before collect call: 2.280843 seconds.
+Rank 14 before collect call: 2.281479 seconds.
+Rank 15 before collect call: 2.456815 seconds.
+Rank 32 before collect call: 2.461028 seconds.
+Rank 31 before collect call: 2.505613 seconds.
+Rank 16 before collect call: 2.509345 seconds.
+Rank 17 before collect call: 2.643657 seconds.
+Rank 30 before collect call: 2.646610 seconds.
+Rank 18 before collect call: 3.185543 seconds.
+Rank 29 before collect call: 3.195645 seconds.
+Rank 19 before collect call: 3.405122 seconds.
+Rank 28 before collect call: 3.407483 seconds.
+Rank 20 before collect call: 3.610998 seconds.
+Rank 27 before collect call: 3.614008 seconds.
+Rank 21 before collect call: 3.686159 seconds.
+Rank 26 before collect call: 3.687662 seconds.
+Rank 22 before collect call: 3.773675 seconds.
+Rank 25 before collect call: 3.779076 seconds.
+Rank 23 before collect call: 3.930533 seconds.
+Rank 24 before collect call: 3.964247 seconds.
+Mandelbrot set calculation for 3840x2160 took: 3.985803 seconds.
+[n001.intern.lcc3.intra.uibk.ac.at:1190785] 47 more processes have sent help message help-mpi-btl-openib.txt / ib port not selected
+[n001.intern.lcc3.intra.uibk.ac.at:1190785] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[n001.intern.lcc3.intra.uibk.ac.at:1190785] 47 more processes have sent help message help-mpi-btl-openib.txt / error in device init

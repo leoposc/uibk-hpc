@@ -1,0 +1,9 @@
+Rank 7 before collect call: 1.749252 seconds.
+Rank 6 before collect call: 10.077413 seconds.
+Rank 5 before collect call: 10.444317 seconds.
+Rank 3 before collect call: 11.286345 seconds.
+Rank 0 before collect call: 11.797205 seconds.
+Rank 4 before collect call: 12.297749 seconds.
+Rank 1 before collect call: 12.322212 seconds.
+Rank 2 before collect call: 12.524674 seconds.
+Mandelbrot set calculation for 3840x2160 took: 12.534580 seconds.
