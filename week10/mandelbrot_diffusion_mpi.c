@@ -221,7 +221,7 @@ int main(int argc, char** argv) {
 
 	gettimeofday(&mid, NULL);
 	double time_before_collect = (mid.tv_sec + mid.tv_usec * 1e-6) - (start.tv_sec + start.tv_usec * 1e-6);
-	printf("Rank %d before collect call: %f seconds.\n", rank, time_before_collect);
+	printf("%d %f\n", rank, time_before_collect);
 
 	// collect all the local images on rank 0
   	if (rank != 0) {
