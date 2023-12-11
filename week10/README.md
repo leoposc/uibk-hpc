@@ -3,11 +3,27 @@
 
 ## Exercise 1
 
+The mpi implementation takes 1.987sec 
+
 ## Exercise 2
 
 For this exercise we tried two sample based static load balancing implementations. In both we subsampled a smaller image over the same domain in order to gain some knowledge of how the loads are distributed. In the frist one we defined a complexity metric and redistributed the loads based on that. For the second implementation we tried load balancing diffusion. 
 
 ### Sample based Complexity Estimation
+
+In this apprach we first computed the mandelbrot with size * 10 pixels.
+This is to have a good amount of possible load distirbutions.
+While computing this mandelbrot we counted the amount of iterations for each pixel slab.
+This we then saved into a array.
+Each rank then gets as many pixel slabs in his slab, that the iterations sum up to about total_iterations / rank.
+Since this is happening based on the rank, the last rank usually end up with a lower amount of load.
+
+That can also be seen in the following image, the load is relatively evenly distributed, but the last rank is finished way earlier.
+To smooth the distribution even further the 10*size scalar could simply be increased.
+
+This version brought us from 1.987 sec down to 1.187 so it achieved a speedup of 1.673
+
+![Execution time on the ranks](ExecTimeSingleRanks.png)
 
 ### Sample based Load Diffusion
 
