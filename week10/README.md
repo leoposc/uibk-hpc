@@ -3,7 +3,11 @@
 
 ## Exercise 1
 
-The mpi implementation takes 1.987sec 
+In this exercise, we parallelized the computation of the mandelbrot set. For that, we decomposed the 2D coordinate system into several slabs. Each rank then computes the mandelbrot set for their respective slab. In the end, the slabs are combined into a single image.
+
+This leads to load imbalance, as the computational complexity of the slabs might differ. The execution time is thus bound by the execution time of the most complex slab. In the following exercise, we try to mitigate that using load balancing.
+
+The mpi implementation takes 1.987sec.
 
 ## Exercise 2
 
