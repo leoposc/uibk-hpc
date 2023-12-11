@@ -9,6 +9,8 @@ This leads to load imbalance, as the computational complexity of the slabs might
 
 The mpi implementation takes 1.987sec.
 
+![Execution time on the ranks](ExecTimeSingleRanksNoBalance.png)
+
 ## Exercise 2
 
 For this exercise we tried two sample based static load balancing implementations. In both we subsampled a smaller image over the same domain in order to gain some knowledge of how the loads are distributed. In the frist one we defined a complexity metric and redistributed the loads based on that. For the second implementation we tried load balancing diffusion. 
@@ -36,11 +38,11 @@ In this approach as in the previous one we first created a smaller mandelbrot se
 
 $$\frac{\partial duration}{\partial t} = \Delta duration$$ 
 
-$$duration^{t+1}_{rank} = duration^{t}_{rank} + 0.2*(duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1})$$ 
+$$ duration^{t+1}_{rank} = duration^{t}_{rank} + 0.2*(duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1})$$ 
 
 In order to guide the grid diffusion we uses the duration update move the grid points appropriately:
 
-$$points^{t+1}_{rank} = points^{t}_{rank} + 0.001*\frac{duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1}}{\| duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1} \|}$$
+$$ points^{t+1}_{rank} = points^{t}_{rank} + 0.001*\frac{duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1}}{\| duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1} \|}$$
 
 For 5000 timesteps this yields a nice result for the duration diffusion but the parameter tuning (timesteps, diffusion coefficients) was hard to tune. The main issue was mass conservation for the particles which turns out is actually not easy for particle diffusion which is guided by a diffrent quatity. With some trial an error we got to a **speedup of 1.33** (around 2 was actually the best one could get since average execution time is 0.9 when calculating based on the unbalanced data). There are other more involved numerical methods in order to have mass conservation for the points (particles as well) but this was a bit to much overhead to be solvable in a week.  
 
@@ -55,6 +57,6 @@ A rather simple approch is to optimize the way the the complex plane of the Mand
 
 The downside is that (at least in the current implementation) each ranks holds the whole complex plane and is just indexing a few of them, which leads to inefficient memory usage of the single ranks. However, the bar plot shows how efficient the load is balanced between the ranks.
 
-The execution time with 96 ranks was 1.023 sec. 
+The execution time with 96 ranks was 1.023 sec 
 
 ![Benchmarks](ExecTimeSingleRanksSimple.png)
