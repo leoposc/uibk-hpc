@@ -9,6 +9,8 @@ For this exercise we tried two sample based static load balancing implementation
 
 ### Sample based Complexity Estimation
 
+![Benchmarks](ExecTimeSingleRanks.png)
+
 ### Sample based Load Diffusion
 
 In this approach as in the previous one we first created a smaller mandelbrot set on the same domain (100 times smaller) in order to measure the computational load on each of the aquidistantly chosen sections. Afterwards we used used mass conserving numerical diffusion over the time measurements on the subsampled domain. Then we used the diffusion of time to guide the diffusion of grid points along the y-axis in order to move the first aquidistantly distributed points over ranks to move them to regions where less computiation was neccessary: 
