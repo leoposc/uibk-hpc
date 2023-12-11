@@ -1,2 +1,4 @@
 mandelbrot_seq
 mandelbrot_mpi
+mandelbrot_mpi_balanced
+mandelbrot_diffusion_mpi
