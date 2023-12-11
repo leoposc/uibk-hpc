@@ -9,11 +9,7 @@ This leads to load imbalance, as the computational complexity of the slabs might
 
 The mpi implementation takes 1.987sec.
 
-<<<<<<< HEAD
 ![Execution time on the ranks](ExecTimeSingleRanksNoBalance.png)
-=======
-![Execution time on the ranks](ExecTimeNaive.png)
->>>>>>> 5f58b1c06743c5a5c7abf4b0bedcb41a82a848f9
 
 ## Exercise 2
 
