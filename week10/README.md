@@ -25,3 +25,14 @@ In order to guide the grid diffusion we uses the duration update move the grid p
 $$points^{t+1}_{rank} = points^{t}_{rank} + 0.001*\frac{duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1}}{\| duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1} \|}$$
 
 For 5000 timesteps this yields a nice result for the duration diffusion but the parameter tuning (timesteps, diffusion coefficients) was hard to tune. The main issue was mass conservation for the particles which turns out is actually not easy for particle diffusion which is guided by a diffrent quatity. With some trial an error we got to a **speedup of 1.33** (around 2 was actually the best one could get since average execution time is 0.9 when calculating based on the unbalanced data). There are other more involved numerical methods in order to have mass conservation for the points (particles as well) but this was a bit to much overhead to be solvable in a week.  
+
+![Benchmarks](ExecTimeSingleRanksDiffusion.png)
+
+
+### Simple and Stupid Sampling
+
+A rather simple approch is to optimize the way the the complex plane of the Mandelbrot set is sliced instead of computing the complexity of the operations. The idea is that the array is sliced in many vectors and each rank is computing vectors from the very left to the very right of the plane meaning one rank does not compute the neighbour vectors. 
+
+The downside is that (at least in the current implementation) each ranks holds the whole complex plane and is just indexing a few of them, which leads to inefficient memory usage of the single ranks. However, the bar plot shows how efficient the load is balanced between the ranks.
+
+![Benchmarks](ExecTimeSingleRanksSimple.png)
