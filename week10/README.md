@@ -3,13 +3,31 @@
 
 ## Exercise 1
 
+In this exercise, we parallelized the computation of the mandelbrot set. For that, we decomposed the 2D coordinate system into several slabs. Each rank then computes the mandelbrot set for their respective slab. In the end, the slabs are combined into a single image.
+
+This leads to load imbalance, as the computational complexity of the slabs might differ. The execution time is thus bound by the execution time of the most complex slab. In the following exercise, we try to mitigate that using load balancing.
+
+The mpi implementation takes 1.987sec.
+
 ## Exercise 2
 
 For this exercise we tried two sample based static load balancing implementations. In both we subsampled a smaller image over the same domain in order to gain some knowledge of how the loads are distributed. In the frist one we defined a complexity metric and redistributed the loads based on that. For the second implementation we tried load balancing diffusion. 
 
 ### Sample based Complexity Estimation
 
-![Benchmarks](ExecTimeSingleRanks.png)
+In this apprach we first computed the mandelbrot with size * 10 pixels.
+This is to have a good amount of possible load distirbutions.
+While computing this mandelbrot we counted the amount of iterations for each pixel slab.
+This we then saved into a array.
+Each rank then gets as many pixel slabs in his slab, that the iterations sum up to about total_iterations / rank.
+Since this is happening based on the rank, the last rank usually end up with a lower amount of load.
+
+That can also be seen in the following image, the load is relatively evenly distributed, but the last rank is finished way earlier.
+To smooth the distribution even further the 10*size scalar could simply be increased.
+
+This version brought us from 1.987 sec down to 1.187 so it achieved a speedup of 1.673
+
+![Execution time on the ranks](ExecTimeSingleRanks.png)
 
 ### Sample based Load Diffusion
 
@@ -25,6 +43,8 @@ In order to guide the grid diffusion we uses the duration update move the grid p
 $$points^{t+1}_{rank} = points^{t}_{rank} + 0.001*\frac{duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1}}{\| duration^{t}_{rank-1} -2\cdot duration^{t}_{rank} + duration^{t}_{rank+1} \|}$$
 
 For 5000 timesteps this yields a nice result for the duration diffusion but the parameter tuning (timesteps, diffusion coefficients) was hard to tune. The main issue was mass conservation for the particles which turns out is actually not easy for particle diffusion which is guided by a diffrent quatity. With some trial an error we got to a **speedup of 1.33** (around 2 was actually the best one could get since average execution time is 0.9 when calculating based on the unbalanced data). There are other more involved numerical methods in order to have mass conservation for the points (particles as well) but this was a bit to much overhead to be solvable in a week.  
+
+The execution time with 96 ranks was 1.554 sec
 
 ![Benchmarks](ExecTimeSingleRanksDiffusion.png)
 
