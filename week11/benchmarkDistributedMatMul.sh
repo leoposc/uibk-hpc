@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Execute job in the partition "lva" unless you have special requirements.
+#SBATCH --partition=lva
+# Name your job to be able to identify it later
+#SBATCH --job-name test
+# Redirect output stream to this file
+#SBATCH --output=output.log
+# Maximum number of tasks (=processes) to start in total
+#SBATCH --ntasks-per-node=12
+#SBATCH --nodes=6
+# Maximum number of tasks (=processes) to start per node
+# Enforce exclusive node allocation, do not share with other jobs
+#SBATCH --exclusive
+
+bin/matMulShmem --m=2552 --n=2552 --l=2552 -nl 6

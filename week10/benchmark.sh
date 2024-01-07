@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # executables
-es=('mandelbrot_mpi' 'mandelbrot_mpi_balanced')
+es=('mandelbrot_mpi_balanced')
 
 # ranks
-rs=(8 16 32 48 72 96)
+rs=(96)
 
 # results for this exeuction
 out_dir=$(date +%s)

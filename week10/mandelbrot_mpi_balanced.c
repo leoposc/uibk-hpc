@@ -15,7 +15,7 @@
 #define NUM_CHANNELS 3
 // max iterations cutoff
 #define MAX_ITER 10000
-#define RANK_ACC_MULTIPLYER 10
+#define RANK_ACC_MULTIPLYER 20
 
 #define IND(Y, X, SIZE_Y, SIZE_X, CHANNEL) ((Y) * (SIZE_X) * (NUM_CHANNELS) + (X) * (NUM_CHANNELS) + (CHANNEL))
 

@@ -1,0 +1,3 @@
+*** GASNET ERROR: Environment variable SSH_SERVERS is missing.
+*** FATAL ERROR: Error spawning SPMD worker threads. Exiting...
+/var/spool/slurm/slurmd/job25456/slurm_script: line 19: 705269 Aborted                 (core dumped) bin/matMulShmem --m=2552 --n=2552 --l=2552 -nl 6
