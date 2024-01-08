@@ -1,4 +1,10 @@
-## Chapel
+### Team: Peter Burger, Leo Schmid, Fabian Aster, Marko Zaric
+
+
+
+# Chapel
+
+## Exercise 01
 
 ### Chapel installation on LCC3
 
@@ -13,7 +19,16 @@ make
 ```
 
 
-Ex2:
+![monteCarlo](assets/montecarlo.png)
+
+
+Specifying the number of threads for running benchmarks works by setting `CHPL_RT_NUM_THREADS_PER_LOCALE=<numThreads>` to the desired number. We noticed that we have to increase the number by one, otherwise a deadlock is created when running the program with only one thread. In addition setting the environment variable to `13` leads to the same result when omitting to set the value. 
+
+![matrixmult](assets/matrixmult.png)
+
+
+
+## Exercise 02
 
 ```
 export CHPL_COMM=gasnet
@@ -28,3 +43,9 @@ make
 cd ~/uibk-hpc/week11
 make
 ```
+
+![monteCarlo](assets/montecarloDistributed.png)
+
+For both programs the parallelism did not work as expected. This is probably caused by configuring chapel falsely, since the speedup is reasonable when running the two programs on a single node (see exercise 01). Benchmarking the distributed memory version even results in a higher computation time when running on more nodes.
+
+![matrixmult](assets/matrixmultDistributed.png)
