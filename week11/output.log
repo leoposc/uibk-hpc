@@ -1,3 +1,7 @@
-*** GASNET ERROR: Environment variable SSH_SERVERS is missing.
-*** FATAL ERROR: Error spawning SPMD worker threads. Exiting...
-/var/spool/slurm/slurmd/job25456/slurm_script: line 19: 705269 Aborted                 (core dumped) bin/matMulShmem --m=2552 --n=2552 --l=2552 -nl 6
+*** WARNING: Using GASNet's mpi-conduit, which exists for portability convenience.
+    WARNING: This system appears to contain recognized network hardware: InfiniBand IBV
+    WARNING: which is supported by a GASNet native conduit, although
+    WARNING: it was not detected at configure time (missing drivers?)
+    WARNING: You should *really* use the high-performance native GASNet conduit
+    WARNING: if communication performance is at all important in this program run.
+time: 5.38425

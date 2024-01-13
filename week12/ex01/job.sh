@@ -13,4 +13,5 @@
 # Enforce exclusive node allocation, do not share with other jobs
 #SBATCH --exclusive
 
-bin/matMulShmem --m=2552 --n=2552 --l=2552 -nl 1
+#!/bin/bash
+mpirun --mca btl tcp,self -np 12 ./bin/saveBuffer
