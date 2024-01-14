@@ -29,9 +29,7 @@ int main(int argc, char **argv) {
 
     for (int i = 0; i < ITERATIONS; i++) {
         MPI_File_write_at(file, 0, buffer, BUFFER_SIZE*sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
-        printf("After write Rank %d: %s\n", rank, buffer);
         MPI_File_read_at(file, 0, buffer, BUFFER_SIZE * sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
-        printf("After read %d: %s\n", rank, buffer);
     }
     printf("Rank %d: %s\n", rank, buffer);
 

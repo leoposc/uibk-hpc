@@ -14,4 +14,4 @@
 #SBATCH --exclusive
 
 #!/bin/bash
-mpirun --mca btl tcp,self -np 12 ./bin/saveBuffer
+mpirun --mca fs_ufs_lock_algorithm 1 -np 12 ./bin/saveBufferCollective
