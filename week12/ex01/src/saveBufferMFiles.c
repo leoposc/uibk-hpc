@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     
 
     MPI_File file;
-    MPI_File_open(MPI_COMM_WORLD, filename, MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
+    MPI_File_open(MPI_COMM_SELF, filename, MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
 		MPI_File_preallocate(file, BUFFER_SIZE*sizeof(char));
 
     for (int i = 0; i < ITERATIONS; i++) {
