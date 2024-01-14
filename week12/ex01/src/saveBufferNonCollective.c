@@ -21,8 +21,6 @@ int main(int argc, char **argv) {
     MPI_File file;
     MPI_File_open(MPI_COMM_WORLD, "file.txt", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
 
-    MPI_File_set_view(file, rank * BUFFER_SIZE * sizeof(char), MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
-
     for (int i = 0; i < ITERATIONS; i++) {
         MPI_File_write_shared(file, buffer, BUFFER_SIZE*sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
         printf("After write Rank %d: %s\n", rank, buffer);
