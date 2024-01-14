@@ -16,4 +16,7 @@ $(BINDIR)/%: $(SRCDIR)/%.c
 clean:
 	rm -f $(EXECS)
 
+cleanoutput:
+	rm -f /scratch/$(USER)/output*
+
 .PHONY: all clean
