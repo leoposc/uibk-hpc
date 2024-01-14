@@ -16,7 +16,10 @@ int main(int argc, char **argv) {
     double start = MPI_Wtime();
 
     MPI_File file;
-    MPI_File_open(MPI_COMM_WORLD, "/scratch/cb761047/output.txt", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
+    char *username = getenv("USER");
+    char filename[36];
+    sprintf(filename, "/scratch/%s/output.txt", username);
+    MPI_File_open(MPI_COMM_WORLD, filename, MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
 
     // Create a buffer for each rank
     char *buffer = (char *)malloc(ARRAY_SIZE * sizeof(char));
@@ -31,6 +34,9 @@ int main(int argc, char **argv) {
     for (int iter = 0; iter < 10; iter++) {
         // Write data to file
         MPI_File_write_shared(file, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);
+
+        // set the view to the beginning of the file for reading
+        MPI_File_seek_shared(file, iter * ARRAY_SIZE * size, MPI_SEEK_SET);
 
         // Read data from file
         MPI_File_read_shared(file, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);

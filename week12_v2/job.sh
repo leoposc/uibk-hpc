@@ -14,4 +14,6 @@
 #SBATCH --exclusive
 
 # mpiexec -np 12 bin/multipleFiles
-mpiexec -np 12 bin/individualPointer --mca fs_ufs_lock_algorithm 1
+# mpiexec -np 12 bin/individualPointer --mca fs_ufs_lock_algorithm 1
+mpiexec -np 12 bin/sharedPointerNonCollective --mca fs_ufs_lock_algorithm 1
+# mpiexec -np 4 bin/sharedPointerCollective --mca fs_ufs_lock_algorithm 1

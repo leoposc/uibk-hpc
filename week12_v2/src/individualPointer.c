@@ -16,7 +16,10 @@ int main(int argc, char **argv) {
     double start = MPI_Wtime();
 
     MPI_File file;
-    MPI_File_open(MPI_COMM_WORLD, "/scratch/cb761047/output.txt", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
+    char *username = getenv("USER");
+    char filename[36];
+    sprintf(filename, "/scratch/%s/output.txt", username);
+    MPI_File_open(MPI_COMM_WORLD, filename, MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
 
     // Create a buffer for each rank
     char *buffer = (char *)malloc(ARRAY_SIZE * sizeof(char));
@@ -26,20 +29,17 @@ int main(int argc, char **argv) {
         buffer[i] = (char)rank + 'A';
     }
 
-    int chunkSize = ARRAY_SIZE * sizeof(char);
-    MPI_Offset offset;
+    
 
-    // repeat the write-read process 10 times
-    for (int iter = 0; iter < 10; iter++) {
-        offset = rank * chunkSize * (iter * 9);
-        // Write data to file
-        MPI_File_write_at(file, offset, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);
+    for (int i = 0; i < 10; i++) {
+        MPI_File_set_view(file, rank * ARRAY_SIZE * sizeof(char), MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
+        // MPI_File_sync(file);
 
-        // Read data from file
-        MPI_File_read_at(file, offset, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);
+        MPI_File_write_all(file, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);
+        // MPI_File_sync(file);
+        MPI_File_set_view(file, rank * ARRAY_SIZE * sizeof(char), MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
 
-        // Print the data for verification
-        printf("Rank %d, Iteration %d: %.*s\n", rank, iter, ARRAY_SIZE, buffer);
+        MPI_File_read_all(file, buffer, ARRAY_SIZE, MPI_CHAR, MPI_STATUS_IGNORE);
     }
 
     MPI_File_close(&file);

@@ -25,7 +25,8 @@ int main(int argc, char **argv) {
 
     // Create a file with a name based on the rank
     char filename[36];
-    sprintf(filename, "/scratch/cb761047/output_rank%d.txt", rank);
+    char *username = getenv("USER");
+    sprintf(filename, "/scratch/%s/output_rank%d.txt", username, rank);
     
     FILE *file = fopen(filename, "w");
 
@@ -47,9 +48,9 @@ int main(int argc, char **argv) {
 
     // benchmarking
     double end = MPI_Wtime();
-    // if (rank == 0) {
-    //     printf("Time taken: %f\n", end - start);
-    // }
+    if (rank == 0) {
+        printf("Time taken: %f\n", end - start);
+    }
 
     MPI_Finalize();
     return 0;
