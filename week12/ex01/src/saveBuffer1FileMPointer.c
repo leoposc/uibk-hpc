@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     printf("Rank %d: %s\n", rank, buffer);
 
     MPI_File file;
-    MPI_File_open(MPI_COMM_WORLD, "file.txt", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
+    MPI_File_open(MPI_COMM_SELF, "file.txt", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &file);
 		MPI_File_preallocate(file, BUFFER_SIZE*sizeof(char));
 
     for (int i = 0; i < ITERATIONS; i++) {
