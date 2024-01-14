@@ -11,18 +11,18 @@ int main(int argc, char **argv) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  char buffer[BUFFER_SIZE];
-  char recvBuffer[BUFFER_SIZE * size];
+  char buffer[BUFFER_SIZE * size];
+  char recvBuffer[BUFFER_SIZE];
 
   if (rank == 0) {
     for (int i = 0; i < BUFFER_SIZE*size; i++) {
-      recvBuffer[i] = 'A' + (char)rank;
+      buffer[i] = 'A' + (i / BUFFER_SIZE);
     }
   }
 
   MPI_Scatter(buffer, BUFFER_SIZE, MPI_CHAR, recvBuffer, BUFFER_SIZE, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-  printf("Rank %d: %s\n", rank, buffer);
+  printf("Rank %d: %s\n", rank, recvBuffer);
 
   MPI_File file;
   if (rank == 0) {
