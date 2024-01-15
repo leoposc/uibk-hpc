@@ -10,7 +10,7 @@ def parse_numbers_from_file_and_plot(directory_path):
     data_dict = {}
     
     # Regular expression pattern to match variables and numbers
-    pattern = r'\$!(\w+)\{([\d\.]+), ([\d\.]+)\}'
+    pattern = r'\$!(\w+)\{([\d\.]+),([\d\.]+)s\}'
     
     # Iterate over all files in the directory
     for filename in os.listdir(directory_path):
@@ -64,7 +64,7 @@ def parse_numbers_from_file_and_plot(directory_path):
           print("enter domain size")
           domain_size = float(input())
           print(values[0][1])
-          y_values = [domain_size/value[1] for value in values]
+          y_values = [domain_size*value[0]/value[1] for value in values]
           y_label = "domain-specific"
         elif(speedup == 's'):
           print(values[0][1])
