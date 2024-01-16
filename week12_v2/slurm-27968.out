@@ -1,0 +1,93 @@
+executing individualPointer_12_8
+Submitted batch job 27969
+executing individualPointer_24_8
+Submitted batch job 27970
+executing individualPointer_48_8
+Submitted batch job 27971
+executing individualPointer_96_8
+Submitted batch job 27972
+executing individualPointer_12_16
+Submitted batch job 27973
+executing individualPointer_24_16
+Submitted batch job 27974
+executing individualPointer_48_16
+Submitted batch job 27975
+executing individualPointer_96_16
+Submitted batch job 27977
+executing individualPointer_12_32
+Submitted batch job 27978
+executing individualPointer_24_32
+Submitted batch job 27979
+executing individualPointer_48_32
+Submitted batch job 27980
+executing individualPointer_96_32
+Submitted batch job 27981
+executing individualPointer_12_64
+Submitted batch job 27982
+executing individualPointer_24_64
+Submitted batch job 27983
+executing individualPointer_48_64
+Submitted batch job 27984
+executing individualPointer_96_64
+Submitted batch job 27985
+executing multipleFiles_12_8
+Submitted batch job 27986
+executing multipleFiles_24_8
+Submitted batch job 27987
+executing multipleFiles_48_8
+Submitted batch job 27988
+executing multipleFiles_96_8
+Submitted batch job 27989
+executing multipleFiles_12_16
+Submitted batch job 27990
+executing multipleFiles_24_16
+Submitted batch job 27991
+executing multipleFiles_48_16
+Submitted batch job 27992
+executing multipleFiles_96_16
+Submitted batch job 27993
+executing multipleFiles_12_32
+Submitted batch job 27994
+executing multipleFiles_24_32
+Submitted batch job 27995
+executing multipleFiles_48_32
+Submitted batch job 27996
+executing multipleFiles_96_32
+Submitted batch job 27997
+executing multipleFiles_12_64
+Submitted batch job 27998
+executing multipleFiles_24_64
+Submitted batch job 27999
+executing multipleFiles_48_64
+Submitted batch job 28000
+executing multipleFiles_96_64
+Submitted batch job 28001
+executing sharedPointerCollective_12_8
+Submitted batch job 28002
+executing sharedPointerCollective_24_8
+Submitted batch job 28003
+executing sharedPointerCollective_48_8
+Submitted batch job 28004
+executing sharedPointerCollective_96_8
+Submitted batch job 28005
+executing sharedPointerCollective_12_16
+Submitted batch job 28006
+executing sharedPointerCollective_24_16
+Submitted batch job 28007
+executing sharedPointerCollective_48_16
+Submitted batch job 28008
+executing sharedPointerCollective_96_16
+Submitted batch job 28009
+executing sharedPointerCollective_12_32
+Submitted batch job 28010
+executing sharedPointerCollective_24_32
+Submitted batch job 28011
+executing sharedPointerCollective_48_32
+Submitted batch job 28012
+executing sharedPointerCollective_96_32
+Submitted batch job 28013
+executing sharedPointerCollective_12_64
+Submitted batch job 28014
+executing sharedPointerCollective_24_64
+Submitted batch job 28015
+slurmstepd-n001: error: *** JOB 27968 ON n001 CANCELLED AT 2024-01-15T18:21:44 DUE TO TIME LIMIT ***

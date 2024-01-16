@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ARRAY_SIZE 10
 
 int main(int argc, char **argv) {
+    
+    unsigned long int array_size = 1024 * 1024 * atoi(argv[1]);
     int rank, size;
-
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -16,10 +16,10 @@ int main(int argc, char **argv) {
     double start = MPI_Wtime();
 
     // Create a buffer for each rank
-    char *buffer = (char *)malloc(ARRAY_SIZE * sizeof(char));
+    char *buffer = (char *)malloc(array_size * sizeof(char));
 
     // Populate the buffer with data (char)rankID + 'A'
-    for (int i = 0; i < ARRAY_SIZE; i++) {
+    for (unsigned long int i = 0; i < array_size; i++) {
         buffer[i] = (char)rank + 'A';
     }
 
@@ -33,14 +33,14 @@ int main(int argc, char **argv) {
     // repeat the write-read process 10 times
     for (int iter = 0; iter < 10; iter++) {
         // Write data to file
-        fwrite(buffer, sizeof(char), ARRAY_SIZE, file);
+        fwrite(buffer, sizeof(char), array_size, file);
 
         // Read data from file
         rewind(file);
-        fread(buffer, sizeof(char), ARRAY_SIZE, file);
+        fread(buffer, sizeof(char), array_size, file);
 
         // Print the data for verification
-        // printf("Rank %d, Iteration %d: %.*s\n", rank, iter, ARRAY_SIZE, buffer);
+        // printf("Rank %d, Iteration %d: %.*s\n", rank, iter, array_size, buffer);
     }
 
     fclose(file);
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     // benchmarking
     double end = MPI_Wtime();
     if (rank == 0) {
-        printf("Time taken: %f\n", end - start);
+        printf("multipleFiles::%f::%d::%ld\n", end - start, size, array_size);
     }
 
     MPI_Finalize();
