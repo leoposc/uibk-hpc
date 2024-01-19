@@ -21,11 +21,10 @@ void simulateStep(
 	std::size_t source_x
 );
 
-void showStep(
+Domain fetchFromDevice(
 	cl::sycl::queue q,
-	cl::sycl::buffer<Datatype> buf_a,
-	std::size_t size_domain,
-	std::size_t t
+	cl::sycl::buffer<Datatype> buf_device,
+	std::size_t size_domain
 );
 
 int main(int argc, char **argv) {
@@ -95,7 +94,9 @@ int main(int argc, char **argv) {
 			// since we have to print on the host device, this call will explicitly
 			// move data from the device to the host first
 			if ((t % 10000) == 0) {
-				showStep(q, buf_a, size_domain, t);
+				std::cout << "Step t=" << t << "\t";
+				printTemperature(fetchFromDevice(q, buf_a, size_domain));
+				std::cout << std::endl;
 			}
 		}
 
@@ -200,37 +201,26 @@ void simulateStep(
 	q.wait();
 }
 
-void showStep(
+Domain fetchFromDevice(
 	cl::sycl::queue q,
-	cl::sycl::buffer<Datatype> buf_a,
-	std::size_t size_domain,
-	std::size_t t)
+	cl::sycl::buffer<Datatype> buf_device,
+	std::size_t size_domain)
 {
-	// create a temporaty vector
-	Domain domain_c = Domain(size_domain);
+	Domain result = Domain(size_domain);
 
-	// use an explicit scope so we make sure the result is written into domain_c
 	{
-		// create a buffer to map between host and device
-		cl::sycl::buffer<Datatype> buf_c(domain_c.data(), cl::sycl::range<1>(size_domain));
-
-		// submit a task to read the data from a to c
+		cl::sycl::buffer<Datatype> buf_result(result.data(), cl::sycl::range<1>(size_domain));
 		q.submit([&](cl::sycl::handler& cgh){
-			auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
-			auto w_c = buf_c.get_access<cl::sycl::access::mode::write>(cgh);
+			auto r_device = buf_device.get_access<cl::sycl::access::mode::read>(cgh);
+			auto w_result = buf_result.get_access<cl::sycl::access::mode::write>(cgh);
 			cgh.parallel_for<class FetchKernel>(cl::sycl::range<1>(size_domain),
 					[=](cl::sycl::item<1> item) {
 						auto x = item.get_id(0);
-						w_c[x] = r_a[x];
+						w_result[x] = r_device[x];
 				}
 			);
-		});
-
-		// wait for the task to finish
-		q.wait();
+		}).wait();
 	}
 
-	std::cout << "Step t=" << t << "\t";
-	printTemperature(domain_c);
-	std::cout << std::endl;
+	return result;
 }
