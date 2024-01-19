@@ -13,6 +13,13 @@ void printTemperature(const Domain &domain);
 
 int verifyTemperature(const Domain &domain);
 
+void simulateStep(
+	cl::sycl::queue q,
+	cl::sycl::buffer<Datatype> buf_a,
+	cl::sycl::buffer<Datatype> buf_b,
+	std::size_t size_domain,
+	std::size_t source_x);
+
 int main(int argc, char **argv) {
 
 	std::size_t size_domain = 2048;
@@ -64,49 +71,18 @@ int main(int argc, char **argv) {
 		time_start = std::chrono::system_clock::now();
 
 		// iterate over every step in time
-		// explicitly synchronize at the end of every step
 		for (std::size_t t = 0; t < timesteps; t++) {
 
-			// submit the parallel task for a single iteration
-			q.submit([&](cl::sycl::handler& cgh) {
+			// advance the simulation for a single step in time
+			// this call is blocking. however, the data remanins on
+			// the device
+			simulateStep(q, buf_a, buf_b, size_domain, source_x);
 
-				// configure the access on the buffers. SYCL will use this information
-				// to synchronize access accordingly
-				auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
-				auto w_b = buf_b.get_access<cl::sycl::access::mode::write>(cgh);
-	
-				// specify the kernel that computes a single element of the parallel for loop
-				// this is declarative. SYCL will handle the actual placement of tasks for us.
-				// note: we have to manually do the offset
-				cgh.parallel_for<class StencilKernel>(cl::sycl::range<1>(size_domain - 2),
-					[=](cl::sycl::item<1> item) {
-						auto x = item.get_id(0) + 1;
-
-						if (x == source_x) {
-							w_b[x] = r_a[x];
-							return;
-						}
-
-						Datatype value_left = r_a[x - 1];
-						Datatype value_center = r_a[x];
-						Datatype value_right = r_a[x + 1];
-
-						w_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
-					}
-				);
-				
-			});
-
-			// wait for the task iteration to finish
-			q.wait();
-
-			// pointer swap
-			// this is valid, since we do not change the data
-			// we just change the pointers usind in the
-			// next interation
-			auto tmp = std::move(buf_a);
-			buf_a = std::move(buf_b);
-			buf_b = std::move(tmp);
+			// swap the pointers of the buffers
+			// this is a valid operation, since we do not
+			// modify the values in the buffer. we just change the order
+			// in which we access it in the next iteration
+			std::swap(buf_a, buf_b);
 
 			// since we do not have the data on the host device, this does not make sense
 			//if ((t % 10000) == 0) {
@@ -173,4 +149,49 @@ int verifyTemperature(const Domain &domain) {
 	}
 	std::cout << "Verification succeeded" << std::endl;
 	return EXIT_SUCCESS;
+}
+
+void simulateStep(
+	cl::sycl::queue q,
+	cl::sycl::buffer<Datatype> buf_a,
+	cl::sycl::buffer<Datatype> buf_b,
+	std::size_t size_domain,
+	std::size_t source_x) {
+
+	// submit the parallel task for a single iteration
+	q.submit([&](cl::sycl::handler& cgh) {
+
+		// configure the access on the buffers. SYCL will use this information
+		// to synchronize access accordingly
+		auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
+		auto w_b = buf_b.get_access<cl::sycl::access::mode::write>(cgh);
+
+		// specify the kernel that computes a single element of the parallel for loop
+		// this is declarative. SYCL will handle the actual placement of tasks for us.
+		// note: we have to manually do the offset
+		cgh.parallel_for<class StencilKernel>(cl::sycl::range<1>(size_domain - 2),
+			[=](cl::sycl::item<1> item) {
+				auto x = item.get_id(0) + 1;
+
+				if (x == source_x) {
+					w_b[x] = r_a[x];
+					return;
+				}
+
+				Datatype value_left = r_a[x - 1];
+				Datatype value_center = r_a[x];
+				Datatype value_right = r_a[x + 1];
+
+				w_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
+			}
+		);
+		
+	});
+
+	// wait for the computation to finish	
+	q.wait();
+}
+
+void showStep() {
+	
 }
