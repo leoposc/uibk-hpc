@@ -31,10 +31,14 @@ int main(int argc, char **argv) {
 
 	std::size_t size_domain = 2048;
 	std::size_t timesteps = 50000;
+	bool print_steps = false;
 	if(argc > 1) {
 		size_domain = std::stoul(argv[1]);
 		if(argc > 2) {
 			timesteps = std::stoul(argv[2]);
+			if (argc > 3 && std::stoul(argv[3]) == 1) {
+				print_steps = true;
+			}
 		}
 	}
 
@@ -83,7 +87,7 @@ int main(int argc, char **argv) {
 
 			// Periodically show the progress of the simulation. Since we have to print on
 			// the host device, we first have to fetch the data from the device.
-			if ((t % 10000) == 0) {
+			if (print_steps && (t % 10000) == 0) {
 				std::cout << "Step t=" << t << "\t";
 				printTemperature(fetchFromDevice(q, buf_a, size_domain));
 				std::cout << std::endl;
