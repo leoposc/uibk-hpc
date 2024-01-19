@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <CL/sycl.hpp>
 
 constexpr std::size_t output_resolution = 128;
 
@@ -39,33 +40,85 @@ int main(int argc, char **argv) {
 
 	std::chrono::time_point<std::chrono::system_clock> time_start, time_end;
 
-	time_start = std::chrono::system_clock::now();
+	// create the SYCL queue that handles task submission and synchronization
+	// between host and device. since we dont use any other arguments here, it
+	// will select the one that fits best. in our case, it will probably use
+	// the OpenMP backend
+	cl::sycl::queue q;
 
-	for (std::size_t t = 0; t < timesteps; t++) {
+ 	// create an explicit scope here. that way, we make sure that the data
+	// is moved from the device to the host when the computation is finished
+	// make sure to create the buffers in this scope. alternatively,
+	// we could also call some explicit routines to move the data from device
+	// to the host.
+	{
 
-		for (std::size_t x = 1; x < size_domain - 1; x++) {
-			if (x == source_x) {
-				domain_b[x] = domain_a[x];
-				continue;
-			}
+		// create the buffers used to map memory between host and device
+		// when these buffers are destructed, the data is automatically moved to the host device
+		// during that time, we cannot access the values on the host side, as the changes
+		// are only on the device
+		// initialize it with the values from the above memory regions of the host
+		cl::sycl::buffer<Datatype> buf_a(domain_a.data(), cl::sycl::range<1>(size_domain));
+		cl::sycl::buffer<Datatype> buf_b(domain_b.data(), cl::sycl::range<1>(size_domain));
 
-			Datatype value_left = domain_a[x - 1];
-			Datatype value_center = domain_a[x];
-			Datatype value_right = domain_a[x + 1];
+		time_start = std::chrono::system_clock::now();
 
-			domain_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
+		// iterate over every step in time
+		// explicitly synchronize at the end of every step
+		for (std::size_t t = 0; t < timesteps; t++) {
+
+			// submit the parallel task for a single iteration
+			q.submit([&](cl::sycl::handler& cgh) {
+
+				// configure the access on the buffers. SYCL will use this information
+				// to synchronize access accordingly
+				auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
+				auto w_b = buf_b.get_access<cl::sycl::access::mode::write>(cgh);
+	
+				// specify the kernel that computes a single element of the parallel for loop
+				// this is declarative. SYCL will handle the actual placement of tasks for us.
+				// note: we have to manually do the offset
+				cgh.parallel_for<class StencilKernel>(cl::sycl::range<1>(size_domain - 2),
+					[=](cl::sycl::item<1> item) {
+						auto x = item.get_id(0) + 1;
+
+						if (x == source_x) {
+							w_b[x] = r_a[x];
+							return;
+						}
+
+						Datatype value_left = r_a[x - 1];
+						Datatype value_center = r_a[x];
+						Datatype value_right = r_a[x + 1];
+
+						w_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
+					}
+				);
+				
+			});
+
+			// wait for the task iteration to finish
+			q.wait();
+
+			// pointer swap
+			// this is valid, since we do not change the data
+			// we just change the pointers usind in the
+			// next interation
+			auto tmp = std::move(buf_a);
+			buf_a = std::move(buf_b);
+			buf_b = std::move(tmp);
+
+			// since we do not have the data on the host device, this does not make sense
+			//if ((t % 10000) == 0) {
+			//	std::cout << "Step t=" << t << "\t";
+			//	printTemperature(domain_a);
+			//	std::cout << std::endl;
+			//}
 		}
 
-		std::swap(domain_a, domain_b);
-
-		if ((t % 10000) == 0) {
-			std::cout << "Step t=" << t << "\t";
-			printTemperature(domain_a);
-			std::cout << std::endl;
-		}
+		time_end = std::chrono::system_clock::now();
 	}
 
-	time_end = std::chrono::system_clock::now();
 	const std::chrono::duration<double> elapsed_seconds = time_end - time_start;
 
 	std::cout << "\t\t";
