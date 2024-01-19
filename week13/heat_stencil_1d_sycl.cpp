@@ -54,45 +54,35 @@ int main(int argc, char **argv) {
 
 	std::chrono::time_point<std::chrono::system_clock> time_start, time_end;
 
-	// create the SYCL queue that handles task submission and synchronization
-	// between host and device. since we dont use any other arguments here, it
-	// will select the one that fits best. in our case, it will probably use
-	// the OpenMP backend
+	// Create the SYCL queue that handles task submission and synchronization
+	// between the host and the device. Since we use the default constructor
+	// here, it will select the one that fits best. On LCC3, this should be
+	// the OpenMP backend.
 	cl::sycl::queue q;
 
- 	// create an explicit scope here. that way, we make sure that the data
-	// is moved from the device to the host when the computation is finished
-	// make sure to create the buffers in this scope. alternatively,
-	// we could also call some explicit routines to move the data from device
-	// to the host.
+	// The destructor of a SYCL buffer will move its underlying data from the
+	// device back to the host. We can enforce this by using an explicit scope.
 	{
 
-		// create the buffers used to map memory between host and device
-		// when these buffers are destructed, the data is automatically moved to the host device
-		// during that time, we cannot access the values on the host side, as the changes
-		// are only on the device
-		// initialize it with the values from the above memory regions of the host
-		cl::sycl::buffer<Datatype> buf_a(domain_a.data(), cl::sycl::range<1>(size_domain));
-		cl::sycl::buffer<Datatype> buf_b(domain_b.data(), cl::sycl::range<1>(size_domain));
+		// Create buffers to map memory between the host and the device.
+		cl::sycl::buffer<Datatype> buf_a(domain_a.data(), size_domain);
+		cl::sycl::buffer<Datatype> buf_b(domain_b.data(), size_domain);
 
 		time_start = std::chrono::system_clock::now();
-
+		
 		for (std::size_t t = 0; t < timesteps; t++) {
 
-			// advance the simulation for a single step in time
-			// this call is blocking. however, the data remanins on
-			// the device
+			// Use the device to advance the simulation for the current time step.
+			// This call is blocking. However, the data remanins on the device.
 			simulateStep(q, buf_a, buf_b, size_domain, source_x);
 
-			// swap the pointers of the buffers
-			// this is a valid operation, since we do not
-			// modify the values in the buffer. we just change the order
-			// in which we access it in the next iteration
+			// Swap the pointers of the two buffers. This is a valid operation,
+			// since we do not modify the values in the buffer. We just change the
+			// order in which we access them in the next iteration.
 			std::swap(buf_a, buf_b);
 
-			// periodically show the progress of the simulation
-			// since we have to print on the host device, this call will explicitly
-			// move data from the device to the host first
+			// Periodically show the progress of the simulation. Since we have to print on
+			// the host device, we first have to fetch the data from the device.
 			if ((t % 10000) == 0) {
 				std::cout << "Step t=" << t << "\t";
 				printTemperature(fetchFromDevice(q, buf_a, size_domain));
@@ -166,38 +156,30 @@ void simulateStep(
 	std::size_t size_domain,
 	std::size_t source_x)
 {
-
-	// submit the parallel task for a single iteration
 	q.submit([&](cl::sycl::handler& cgh) {
-
-		// configure the access on the buffers. SYCL will use this information
-		// to synchronize access accordingly
 		auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
 		auto w_b = buf_b.get_access<cl::sycl::access::mode::write>(cgh);
 
-		// specify the kernel that computes a single element of the parallel for loop
-		// this is declarative. SYCL will handle the actual placement of tasks for us.
-		// note: we have to manually do the offset
-		cgh.parallel_for<class StencilKernel>(cl::sycl::range<1>(size_domain - 2),
-			[=](cl::sycl::item<1> item) {
-				auto x = item.get_id(0) + 1;
+		// Specify the kernel that computes a single element of the parallel loop.
+		// SYCL will handle the parallelization for us. Since we do not consider
+		// the elements 0 and size_domain - 2, we manually have to set the offset.
+		cgh.parallel_for<class StencilKernel>(size_domain - 2, [=](cl::sycl::id<1> idx) {
+			auto x = (std::size_t) idx + 1;
 
-				if (x == source_x) {
-					w_b[x] = r_a[x];
-					return;
-				}
-
-				Datatype value_left = r_a[x - 1];
-				Datatype value_center = r_a[x];
-				Datatype value_right = r_a[x + 1];
-
-				w_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
+			if (x == source_x) {
+				w_b[x] = r_a[x];
+				return;
 			}
-		);
-		
+
+			Datatype value_left = r_a[x - 1];
+			Datatype value_center = r_a[x];
+			Datatype value_right = r_a[x + 1];
+
+			w_b[x] = value_center + 0.2 * (value_left + value_right + (-2.0 * value_center));
+		});
 	});
 
-	// wait for the computation to finish	
+	// Wait for the computation to finish on the device.
 	q.wait();
 }
 
@@ -208,18 +190,26 @@ Domain fetchFromDevice(
 {
 	Domain result = Domain(size_domain);
 
+	// By using an explicit scope here, we make sure that the
+	// result is synchronized on the host.
 	{
-		cl::sycl::buffer<Datatype> buf_result(result.data(), cl::sycl::range<1>(size_domain));
+
+		// The buffer used to map memory between device and host.
+		cl::sycl::buffer<Datatype> buf_result(result.data(), size_domain);
+
 		q.submit([&](cl::sycl::handler& cgh){
 			auto r_device = buf_device.get_access<cl::sycl::access::mode::read>(cgh);
 			auto w_result = buf_result.get_access<cl::sycl::access::mode::write>(cgh);
-			cgh.parallel_for<class FetchKernel>(cl::sycl::range<1>(size_domain),
-					[=](cl::sycl::item<1> item) {
-						auto x = item.get_id(0);
-						w_result[x] = r_device[x];
-				}
-			);
-		}).wait();
+
+			// Specify the kernel that simply copies the data from one buffer
+			// to another buffer.
+			cgh.parallel_for<class CopyKernel>(size_domain, [=](cl::sycl::id<1> x) {
+				w_result[x] = r_device[x];
+			});
+		});
+
+		// Wait for the copy to finish on the device.
+		q.wait();
 	}
 
 	return result;
