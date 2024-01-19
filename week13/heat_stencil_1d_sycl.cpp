@@ -18,7 +18,15 @@ void simulateStep(
 	cl::sycl::buffer<Datatype> buf_a,
 	cl::sycl::buffer<Datatype> buf_b,
 	std::size_t size_domain,
-	std::size_t source_x);
+	std::size_t source_x
+);
+
+void showStep(
+	cl::sycl::queue q,
+	cl::sycl::buffer<Datatype> buf_a,
+	std::size_t size_domain,
+	std::size_t t
+);
 
 int main(int argc, char **argv) {
 
@@ -70,7 +78,6 @@ int main(int argc, char **argv) {
 
 		time_start = std::chrono::system_clock::now();
 
-		// iterate over every step in time
 		for (std::size_t t = 0; t < timesteps; t++) {
 
 			// advance the simulation for a single step in time
@@ -84,12 +91,12 @@ int main(int argc, char **argv) {
 			// in which we access it in the next iteration
 			std::swap(buf_a, buf_b);
 
-			// since we do not have the data on the host device, this does not make sense
-			//if ((t % 10000) == 0) {
-			//	std::cout << "Step t=" << t << "\t";
-			//	printTemperature(domain_a);
-			//	std::cout << std::endl;
-			//}
+			// periodically show the progress of the simulation
+			// since we have to print on the host device, this call will explicitly
+			// move data from the device to the host first
+			if ((t % 10000) == 0) {
+				showStep(q, buf_a, size_domain, t);
+			}
 		}
 
 		time_end = std::chrono::system_clock::now();
@@ -156,7 +163,8 @@ void simulateStep(
 	cl::sycl::buffer<Datatype> buf_a,
 	cl::sycl::buffer<Datatype> buf_b,
 	std::size_t size_domain,
-	std::size_t source_x) {
+	std::size_t source_x)
+{
 
 	// submit the parallel task for a single iteration
 	q.submit([&](cl::sycl::handler& cgh) {
@@ -192,6 +200,37 @@ void simulateStep(
 	q.wait();
 }
 
-void showStep() {
-	
+void showStep(
+	cl::sycl::queue q,
+	cl::sycl::buffer<Datatype> buf_a,
+	std::size_t size_domain,
+	std::size_t t)
+{
+	// create a temporaty vector
+	Domain domain_c = Domain(size_domain);
+
+	// use an explicit scope so we make sure the result is written into domain_c
+	{
+		// create a buffer to map between host and device
+		cl::sycl::buffer<Datatype> buf_c(domain_c.data(), cl::sycl::range<1>(size_domain));
+
+		// submit a task to read the data from a to c
+		q.submit([&](cl::sycl::handler& cgh){
+			auto r_a = buf_a.get_access<cl::sycl::access::mode::read>(cgh);
+			auto w_c = buf_c.get_access<cl::sycl::access::mode::write>(cgh);
+			cgh.parallel_for<class FetchKernel>(cl::sycl::range<1>(size_domain),
+					[=](cl::sycl::item<1> item) {
+						auto x = item.get_id(0);
+						w_c[x] = r_a[x];
+				}
+			);
+		});
+
+		// wait for the task to finish
+		q.wait();
+	}
+
+	std::cout << "Step t=" << t << "\t";
+	printTemperature(domain_c);
+	std::cout << std::endl;
 }
