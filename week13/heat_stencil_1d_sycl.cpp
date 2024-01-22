@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 		for (std::size_t t = 0; t < timesteps; t++) {
 
 			// Use the device to advance the simulation for the current time step.
-			// This call is blocking. However, the data remanins on the device.
+			// This call is blocking. However, the data remains on the device.
 			simulateStep(q, buf_a, buf_b, size_domain, source_x);
 
 			// Swap the pointers of the two buffers. This is a valid operation,
