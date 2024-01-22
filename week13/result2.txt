@@ -1,0 +1,204 @@
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 3.86233 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@.                                                              X
+Step t=20000	X                                                              :@@:                                                              X
+Step t=30000	X                                                              +@@+                                                              X
+Step t=40000	X                                                             .^@@^.                                                             X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 4.23984 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 13.8294 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                              .@@.                                                              X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 11.4238 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 18.8457 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                               @@                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 18.0123 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.02865 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@.                                                              X
+Step t=20000	X                                                              :@@:                                                              X
+Step t=30000	X                                                              +@@+                                                              X
+Step t=40000	X                                                             .^@@^.                                                             X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.35976 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.72456 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                              .@@.                                                              X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.97323 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 4.09199 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                               @@                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 4.25385 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.09891 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@.                                                              X
+Step t=20000	X                                                              :@@:                                                              X
+Step t=30000	X                                                              +@@+                                                              X
+Step t=40000	X                                                             .^@@^.                                                             X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.18197 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.25409 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                              .@@.                                                              X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.31537 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 2.94908 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                               @@                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 3.54301 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.04699 seconds
+Computing heat-distribution for room size N=16384 for T=50000
+Heat Source is at 8192
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@.                                                              X
+Step t=20000	X                                                              :@@:                                                              X
+Step t=30000	X                                                              +@@+                                                              X
+Step t=40000	X                                                             .^@@^.                                                             X
+		X                                                             .X@@X.                                                             X
+Verification succeeded
+Computation took 2.39099 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.75661 seconds
+Computing heat-distribution for room size N=32768 for T=50000
+Heat Source is at 16384
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                              .@@.                                                              X
+		X                                                              .@@.                                                              X
+Verification succeeded
+Computation took 2.52866 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 3.22995 seconds
+Computing heat-distribution for room size N=65536 for T=50000
+Heat Source is at 32768
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                               @@                                                               X
+Step t=20000	X                                                               @@                                                               X
+Step t=30000	X                                                               @@                                                               X
+Step t=40000	X                                                               @@                                                               X
+		X                                                               @@                                                               X
+Verification succeeded
+Computation took 3.23905 seconds

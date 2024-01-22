@@ -1,0 +1,272 @@
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.76397 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                ..-::=+^X%@@@@@@@@@@@@%#^*=::-...                                               X
+Step t=20000	X                                         ...--::==+*^X#@@@@@@@@@@@@@@@@@@%X^*++=::--...                                         X
+Step t=30000	X                                    ....---::=++*^X##@@@@@@@@@@@@@@@@@@@@@@%#X^*++=:::--....                                    X
+Step t=40000	X                               .....---:::==+**^XX#%@@@@@@@@@@@@@@@@@@@@@@@@%##X^**+==:::---.....                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.46337 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.82264 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                        .:=^%@@@@@@%^=:..                                                       X
+Step t=20000	X                                                    ..-:=*X@@@@@@@@@@X*+:-..                                                    X
+Step t=30000	X                                                  ..-:=+^#@@@@@@@@@@@@#^+=:-..                                                  X
+Step t=40000	X                                               ...-::=*^X%@@@@@@@@@@@@%#^*=::-...                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.84256 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 1.96953 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                            :^@@@@^:.                                                           X
+Step t=20000	X                                                          .:*@@@@@@*:.                                                          X
+Step t=30000	X                                                         .:+#@@@@@@#+:.                                                         X
+Step t=40000	X                                                       ..:=^%@@@@@@%^=:..                                                       X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 2.21708 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 2.57764 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                              ^@@^.                                                             X
+Step t=20000	X                                                             :@@@@:                                                             X
+Step t=30000	X                                                            .+@@@@+.                                                            X
+Step t=40000	X                                                           .:^@@@@^:.                                                           X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 3.19574 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.80794 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                ..-::=+^X%@@@@@@@@@@@@%#^*=::-...                                               X
+Step t=20000	X                                         ...--::==+*^X#@@@@@@@@@@@@@@@@@@%X^*++=::--...                                         X
+Step t=30000	X                                    ....---::=++*^X##@@@@@@@@@@@@@@@@@@@@@@%#X^*++=:::--....                                    X
+Step t=40000	X                               .....---:::==+**^XX#%@@@@@@@@@@@@@@@@@@@@@@@@%##X^**+==:::---.....                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.854 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.72125 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                        .:=^%@@@@@@%^=:..                                                       X
+Step t=20000	X                                                    ..-:=*X@@@@@@@@@@X*+:-..                                                    X
+Step t=30000	X                                                  ..-:=+^#@@@@@@@@@@@@#^+=:-..                                                  X
+Step t=40000	X                                               ...-::=*^X%@@@@@@@@@@@@%#^*=::-...                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.84799 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 1.88568 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                            :^@@@@^:.                                                           X
+Step t=20000	X                                                          .:*@@@@@@*:.                                                          X
+Step t=30000	X                                                         .:+#@@@@@@#+:.                                                         X
+Step t=40000	X                                                       ..:=^%@@@@@@%^=:..                                                       X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 1.81926 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 2.09075 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                              ^@@^.                                                             X
+Step t=20000	X                                                             :@@@@:                                                             X
+Step t=30000	X                                                            .+@@@@+.                                                            X
+Step t=40000	X                                                           .:^@@@@^:.                                                           X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 2.18012 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.59352 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                ..-::=+^X%@@@@@@@@@@@@%#^*=::-...                                               X
+Step t=20000	X                                         ...--::==+*^X#@@@@@@@@@@@@@@@@@@%X^*++=::--...                                         X
+Step t=30000	X                                    ....---::=++*^X##@@@@@@@@@@@@@@@@@@@@@@%#X^*++=:::--....                                    X
+Step t=40000	X                               .....---:::==+**^XX#%@@@@@@@@@@@@@@@@@@@@@@@@%##X^**+==:::---.....                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 2.00149 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.71665 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                        .:=^%@@@@@@%^=:..                                                       X
+Step t=20000	X                                                    ..-:=*X@@@@@@@@@@X*+:-..                                                    X
+Step t=30000	X                                                  ..-:=+^#@@@@@@@@@@@@#^+=:-..                                                  X
+Step t=40000	X                                               ...-::=*^X%@@@@@@@@@@@@%#^*=::-...                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 1.82779 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 1.98295 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                            :^@@@@^:.                                                           X
+Step t=20000	X                                                          .:*@@@@@@*:.                                                          X
+Step t=30000	X                                                         .:+#@@@@@@#+:.                                                         X
+Step t=40000	X                                                       ..:=^%@@@@@@%^=:..                                                       X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 1.74097 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 1.85948 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                              ^@@^.                                                             X
+Step t=20000	X                                                             :@@@@:                                                             X
+Step t=30000	X                                                            .+@@@@+.                                                            X
+Step t=40000	X                                                           .:^@@@@^:.                                                           X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 1.87666 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 1.79727 seconds
+Computing heat-distribution for room size N=1024 for T=50000
+Heat Source is at 512
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                ..-::=+^X%@@@@@@@@@@@@%#^*=::-...                                               X
+Step t=20000	X                                         ...--::==+*^X#@@@@@@@@@@@@@@@@@@%X^*++=::--...                                         X
+Step t=30000	X                                    ....---::=++*^X##@@@@@@@@@@@@@@@@@@@@@@%#X^*++=:::--....                                    X
+Step t=40000	X                               .....---:::==+**^XX#%@@@@@@@@@@@@@@@@@@@@@@@@%##X^**+==:::---.....                               X
+		X                            .....----::==++**^^X#%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%#XX^**++==:::---......                           X
+Verification succeeded
+Computation took 2.09095 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 2.1559 seconds
+Computing heat-distribution for room size N=2048 for T=50000
+Heat Source is at 1024
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                        .:=^%@@@@@@%^=:..                                                       X
+Step t=20000	X                                                    ..-:=*X@@@@@@@@@@X*+:-..                                                    X
+Step t=30000	X                                                  ..-:=+^#@@@@@@@@@@@@#^+=:-..                                                  X
+Step t=40000	X                                               ...-::=*^X%@@@@@@@@@@@@%#^*=::-...                                               X
+		X                                              ..--:=+*^X%@@@@@@@@@@@@@@%X^*+=:--...                                             X
+Verification succeeded
+Computation took 2.1214 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 2.10002 seconds
+Computing heat-distribution for room size N=4096 for T=50000
+Heat Source is at 2048
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                            :^@@@@^:.                                                           X
+Step t=20000	X                                                          .:*@@@@@@*:.                                                          X
+Step t=30000	X                                                         .:+#@@@@@@#+:.                                                         X
+Step t=40000	X                                                       ..:=^%@@@@@@%^=:..                                                       X
+		X                                                       .-=*X@@@@@@@@X*=-..                                                      X
+Verification succeeded
+Computation took 2.32702 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 2.21048 seconds
+Computing heat-distribution for room size N=8192 for T=50000
+Heat Source is at 4096
+Initial:	X                                                                @                                                               X
+Step t=0	X                                                               =@                                                               X
+Step t=10000	X                                                              ^@@^.                                                             X
+Step t=20000	X                                                             :@@@@:                                                             X
+Step t=30000	X                                                            .+@@@@+.                                                            X
+Step t=40000	X                                                           .:^@@@@^:.                                                           X
+		X                                                           .=X@@@@X=.                                                           X
+Verification succeeded
+Computation took 2.22344 seconds
